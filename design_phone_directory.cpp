@@ -34,36 +34,53 @@ directory.release(2);
 // Number 2 is available again, return true.
 directory.check(2);
 */
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+using namespace std;
 
 class PhoneDirectory {
-public:
-    /** Initialize your data structure here
-        @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
-    PhoneDirectory(int maxNumbers) {
+	public:
+		int maxNumbers;
+		vector<bool> flags;
+	public:
+		PhoneDirectory(int maxNumbers):flags(maxNumbers, 1) {
+			this->maxNumbers = maxNumbers;	
+		}
 
-    }
+		int get() {
+			for(int i = 0; i < maxNumbers; ++i){
+				if(check(i)){
+					switchOff(i);
+					return i;
+				}
+			}
+			return -1;
+		}
 
-    /** Provide a number which is not assigned to anyone.
-        @return - Return an available number. Return -1 if none is available. */
-    int get() {
+		bool check(int number) {
+			if(number >= maxNumbers){
+				return false;
+			}
+			return flags[number]==1;
+		}
 
-    }
 
-    /** Check if a number is available or not. */
-    bool check(int number) {
-
-    }
-
-    /** Recycle or release a number. */
-    void release(int number) {
-
-    }
+		void release(int number) {
+			turnOn(number);
+		}
+	private:
+		void turnOn(int index){
+			if(index >= maxNumbers){
+				return;
+			}
+			flags[index] = 1;
+		}
+		void switchOff(int index){
+			if(index >= maxNumbers){
+				return;
+			}
+			flags[index] = 0;
+		}
 };
 
-/**
- * Your PhoneDirectory object will be instantiated and called as such:
- * PhoneDirectory obj = new PhoneDirectory(maxNumbers);
- * int param_1 = obj.get();
- * bool param_2 = obj.check(number);
- * obj.release(number);
- */
