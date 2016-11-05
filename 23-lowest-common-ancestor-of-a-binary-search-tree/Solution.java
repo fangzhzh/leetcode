@@ -9,13 +9,6 @@
  */
 import java.util.*;
 public class Solution {
-
-	public class TreeNode {
-		int val;
-		TreeNode left;
-		TreeNode right;
-		TreeNode(int x) { val = x; }
-	}
 	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 		if( root == null 
 				|| p == null
@@ -44,17 +37,14 @@ public class Solution {
 			if(set.contains(cur.val)) {
 				lca = cur;
 			}
-			if(cur.val < p.val) {
+			if(cur.val < q.val) {
 				cur = cur.right;
-			} else if(cur.val > p.val) {
+			} else if(cur.val > q.val) {
 				cur = cur.left;
 			} else {
 				break;
 			}
 		}
 		return lca;
-	}
-	public int main(){
-		return 0;
 	}
 }
