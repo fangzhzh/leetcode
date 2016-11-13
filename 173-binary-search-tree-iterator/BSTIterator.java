@@ -15,7 +15,9 @@ public class BSTIterator {
 		return !stack.isEmpty();
 	}
 
-	/** @return the next smallest number */
+	/** @return the next smallest number 
+     * If the returned TreeNode doesn't have a right branch, it is O(1). If it has a right branch, it will traversal until its right child's left-most TreeNode. Now, considering the code under "// traversal right branch". After I use next() to go through the entire tree once, this part of code will traversal each node with a right child once. The total run time of this part is O(n). And since I go through the entire tree, the average next() run time is O(n) / n = O(1)
+     * */
 	public int next() {
 		TreeNode node = stack.pop();
 		if(node.right != null) {
