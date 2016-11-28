@@ -1,4 +1,9 @@
-public List<List<Integer>> levelOrder2(TreeNode root) {
+/* Make use of the nature of queue: FIFO
+ * The size of queue is the size of nodes in last level when entering next level
+ * Loop one level with help of round. 
+ *
+ */
+public List<List<Integer>> levelOrder(TreeNode root) {
 	List<List<Integer>> results = new ArrayList<>();
 	Queue<TreeNode> q = new LinkedList<>();
 	q.add(root);
