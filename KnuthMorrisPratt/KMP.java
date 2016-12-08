@@ -1,5 +1,5 @@
 public clas KMP {
-	int[] b;
+	int[] b; // at lease pattern.length()+1
 	String str, pattern;
 	void kmpPreprocess() { // call this before calling kmpSearch
 		int i = 0; j = -1; 
