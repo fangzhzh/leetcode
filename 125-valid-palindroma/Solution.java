@@ -1,24 +1,26 @@
+import java.util.*;
 public class Solution{
-    public bool isPalindropme(String s) {
+    public boolean isPalindrome(String s) {
         if(s.isEmpty()) return true;
         s = s.toLowerCase();
-        int low = 0, high = s.lenght()-1;
+        int low = 0, high = s.length()-1;
         while(low < high) {
-            if(!Charactor.isAlphabet(s.charAt(low))) {
+            if(!Character.isLetterOrDigit(s.charAt(low))) {
                 low++;
             }
-            if(!Charactor.isAlphabet(s.charAt(high))) { 
+            if(!Character.isLetterOrDigit(s.charAt(high))) { 
                 high--;
             }
-            if(Charactor.isAlphabet(s.charAt(low))
-                    && Charactor.isAlphabet(s.charAt(high))){
-                if( s.charAt(low) != s.charAt(high))
+
+            if(Character.isLetterOrDigit(s.charAt(low)) && Character.isLetterOrDigit(s.charAt(high))){
+                if( s.charAt(low) != s.charAt(high)) {
                     return false;
+                }
                 else {
                     low++;
                     high--;
                 }
-
+            }
         }
         return true;
     }
