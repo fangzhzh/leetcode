@@ -1,3 +1,4 @@
+
 // brutal force: O(n^2)
 class Solution {
     fun twoSum(nums: IntArray, target: Int): IntArray {
@@ -16,6 +17,7 @@ class Solution {
         return intArrayOf()
     }
 }
+
 
 // better, O(N)
 class Solution {

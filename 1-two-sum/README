@@ -1,0 +1,24 @@
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+
+## why we can't sort
+If the question is asking for values, we can sort find the two values using two pointers.
+
+But the question is asking indices.
+
+## Solution: brutal force
+Two scan by index, it's very simple to understand and come up with.
+
+## Solution map
+It's also intuitive to use a value to index map. In this approach, we will scan once and calculate the value and get the index.
+
+Though the first thoght is building the map, and use the map. It fails because it has a assumption that the given array has no duplicated elements, but it's not true.
+
+The correct way is to scan and build the map. It also will only keep the first occurrence of duplicated element.
+
+When you check an element `value`, you check the `map(target-value)`
+
+
+
