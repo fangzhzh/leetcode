@@ -1,3 +1,5 @@
+## question
+
 implement strStr().
 
 Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
@@ -51,6 +53,8 @@ This approach has to
         }
 ```
 
+The time complex is O(n*m), m is haystack.length and n is needle.length.
+
 ## Solution3.java
 Let take a look at the solution, it's super smart, 
 - it take care of the empty string
@@ -69,3 +73,22 @@ I'll definitely to try this in other string solution to remove an extra edge emp
             }
         }
 ```
+
+
+## others
+
+### KMP
+### Robin-Karp
+```
+|powerMax...0 of 31|
+|source.       |
+|-window--|
+	|-window--|
+| targetr |
+```
+### important
+- powerMax
+- module
+
+
+The index of string is too complex and prone to error.
