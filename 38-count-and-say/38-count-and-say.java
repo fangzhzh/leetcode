@@ -4,7 +4,8 @@
  * [38] Count and Say
  */
 
- class Solution {
+// last char and counting
+class Solution {
     public String countAndSay(int n) {
         return helper("1", n-1);
     }
@@ -39,6 +40,7 @@
 
 
 
+// two loop and counting
 class Solution1 {
     public String countAndSay(int n) {
         return helper("1", n-1);
@@ -86,5 +88,13 @@ Given an integer n where 1 ≤ n ≤ 30, generate the nth term of the count-and-
 Note: Each term of the sequence of integers will be represented as a string.
  */
 
- This question is simple in idea, and medium in implementation.
- It's not a funcy problem but you need be 100% careful to write a write code without compiler and run.
+ /**
+  * 
+## This question is simple in idea, and medium in implementation.
+- the basic idea idea is to count the last char and concat the string,
+    + two pointers to counter
+    + last char to counter
+
+    It's not a funcy problem but you need be 100% careful to write a write code without compiler and run.
+    Either way, we have to handle the edage cases.
+  */
