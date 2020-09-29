@@ -60,5 +60,10 @@ class Solution {
  * 
  * 
  * - rdm.nextInt(1) must == 0, but it keeps calculate until all the samples are in.
+ * rdm.nextInt(3) = 1/3 for every possieble index
+ * 
+ * - my initial confusion is that the first rdm.nextInt(1)==0 is obvois 100%
+ * - but as the above explaination, the possibility of i in n, is 1/n
+ * 
  * 
  */
