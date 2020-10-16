@@ -36,4 +36,6 @@ class Solution {
  * - O(n), might be duplicate operations.
  * 
  * Refer Solution2.java
+ * - the same idea of Remove Duplicates from sorted Array
+ * - find the left, find the right,  swap
  */

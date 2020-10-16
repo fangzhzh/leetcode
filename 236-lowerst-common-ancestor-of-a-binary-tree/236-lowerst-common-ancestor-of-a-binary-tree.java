@@ -53,7 +53,7 @@ class Solution {
 /**
  * 
  * ## Analysis:
- * - find one from left, another from right
+ * - find one/two/null from left, another/tow/null from right
  * - if left != null, right != null, the root is the lca
  * - if left == null, right is the lca
  * - if right == null, left is the lca

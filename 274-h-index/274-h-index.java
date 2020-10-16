@@ -51,3 +51,7 @@ class Solution {
     }
  *  
  * */
+
+/**
+ *  ## counting / bucket algorithm to decrease the time complexity to O(N)
+ */

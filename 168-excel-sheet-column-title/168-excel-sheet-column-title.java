@@ -34,7 +34,7 @@ class Solution {
 
 /**
  * of course a better solution, everytime, we do n-1, then
- * divident + 'A' is A, 25 is 'A', we don't have to specially consider the 26 case.
+ * divident + 'A' is A, 25 is 'Z', we don't have to specially consider the 26 case.
  * Check the Solution.java
  */
 // @lc code=end

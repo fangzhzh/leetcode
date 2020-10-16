@@ -43,15 +43,15 @@ class Solution {
     }
 
     private int partition(int[] nums, int low, int high) {
-        int left = low;
-        for(int i = left; i < high; i++) {
+        int pivot = low;
+        for(int i = pivot; i < high; i++) {
             if(nums[i] <= nums[high]) {
-                swap(nums, i, left);
-                left++;
+                swap(nums, i, pivot);
+                pivot++;
             }
         }
-        swap(nums, left, high);
-        return left;
+        swap(nums, pivot, high);
+        return pivot;
     }
     private void swap(int[] nums, int i, int j) {
         int tmp = nums[i];
@@ -97,15 +97,15 @@ class Solution {
     }
 
     private int partition(int[] nums, int low, int high) {
-        int left = low;
-        for(int i = left; i < high; i++) {
+        int pivok = low;
+        for(int i = pivok; i < high; i++) {
             if(nums[i] > nums[high]) {
-                swap(nums, i, left);
-                left++;
+                swap(nums, i, pivok);
+                pivok++;
             }
         }
-        swap(nums, left, high);
-        return left;
+        swap(nums, pivok, high);
+        return pivok;
     }
     private void swap(int[] nums, int i, int j) {
         int tmp = nums[i];

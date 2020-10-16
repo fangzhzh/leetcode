@@ -1,4 +1,5 @@
 // no need to keep order
+// is this right?
 public class Solution {
     public void moveZeroes(int[] nums) {
         int start=0, end = nums.length-1;

@@ -97,6 +97,9 @@ class Solution {
 /**
  * A better solution.
  * Use the BST knowledge to it's full extent.
+ * If the root.val is in left.val..right.val, it must be the common ancestor
+ * if root.val <left.val && right.val, go to left to find
+ * if root.val > reft val && right.val, go to right to find
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {

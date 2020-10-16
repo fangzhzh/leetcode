@@ -68,6 +68,7 @@ class Solution {
  * Solution clever:
  * - two pointers
  * - one for pivot, one for scanning
+ * - this algorithm can be used in Moving zero
  */
 // @lc code=start
 class Solution {

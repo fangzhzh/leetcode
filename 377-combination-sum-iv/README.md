@@ -35,7 +35,7 @@ They forms the combinations of nums in all posibilities.
 
 
 ```
-   1 - 1 - 0
+   1 - 1 - 1- 0
        /
      1 - 2 - 0
    ／ 
@@ -51,7 +51,7 @@ They forms the combinations of nums in all posibilities.
 ```
 
 
-## keywards
+## keyw0rds
 - combination
 - order
 

@@ -41,6 +41,13 @@ Explanation: All root-to-leaf paths are: 1->2->5, 1->3
  *     }
  * }
  */
+/**
+ * ## analysis
+ * - iterative
+ * - Time O(n)  
+ * - Space O(n)
+ *   
+ */
 class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> result = new ArrayList<>();
@@ -75,3 +82,13 @@ class Solution {
  * Typical pre-DFS, the trick here is remain the trace of traversal, so I keep an array and a temporary path
  * Important information is the definition of leaf which means no left and no right.
  */
+
+/**
+ * ## another approach:
+ * - recursive
+ */
+private preTraversal(List<String> result, String path, TreeNode node) {
+    if(node.left == null && node.right == null) result.add(path+root.val);
+    if(node.left != null) preTraversal(result, path+node.val+"->", node.left);
+    if(node.right != null) preTraversal(result, path+node.val+"->", node.right);
+}

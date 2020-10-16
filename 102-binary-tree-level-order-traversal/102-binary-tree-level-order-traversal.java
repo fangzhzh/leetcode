@@ -26,6 +26,11 @@
  *     }
  * }
  */
+/**
+ * ## anaylysis
+ * - Time O(N)
+ * - Space O(N)
+ */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
         LinkedList<TreeNode> queue = new LinkedList();

@@ -64,7 +64,7 @@ class Solution {
 /**
  * # analysis
  * It's ascending, so it's so obvious that it needs binary search
- * O(ln) is better than O(n)
+ * O(lgn) is better than O(n)
  * 
  * The binary search just needs some time to write.
  */

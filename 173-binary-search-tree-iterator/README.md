@@ -68,8 +68,8 @@ this approach is edge case to edge case
 - to the far left
 - to step visit
 
-The better solution is generalize the solution, it doesn't care specifically whether a note is left or right. It cares whether it's null. 
-- cur is null?
+The better solution is generalize the solution, it doesn't care specifically whether a node is left or right. It cares whether it's null. 
+- cur is null and stack is not empty?
 - no, stack.push(cur) && cur = cur.left
 - yes, pop(), cur = cur.right
 

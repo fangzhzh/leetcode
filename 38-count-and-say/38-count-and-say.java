@@ -95,6 +95,6 @@ Note: Each term of the sequence of integers will be represented as a string.
     + two pointers to counter
     + last char to counter
 
-    It's not a funcy problem but you need be 100% careful to write a write code without compiler and run.
+    It's not a funcy problem but you need be 100% careful to write a correct code without compiler and IDE 
     Either way, we have to handle the edage cases.
   */
