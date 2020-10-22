@@ -38,3 +38,21 @@ public int maxProfit(int[] prices) {
     }
     return max - min;
 }
+
+/**
+ * compacter version, but the first version should have better runtime since comparation is fater than write value
+ * Though the first version don't have to check the zero case because the loop will handle it.
+ */
+class Solution {
+    public int maxProfit(int[] prices) {
+        int profit = 0;
+        int min = Integer.MAX_VALUE;
+        for(int i = 0; i < prices.length; i++) {
+            if(prices[i] < min) {
+                min = prices[i];
+            }
+            profit = Math.max(profit, prices[i] - min);
+        }
+        return profit;
+    }
+}
