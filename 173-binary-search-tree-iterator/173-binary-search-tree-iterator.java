@@ -14,6 +14,13 @@
  *     }
  * }
  */
+
+ /**
+  * In order DFS, this value is `visit`, this problem breaks the iterative dfs, 
+  * recursive should be able do the same with yield, a google search no. 
+  * java yield is for thread.
+  * python yield is generator instead.
+  */
 class BSTIterator {
     private Stack<TreeNode> stack = new Stack();
     private TreeNode cur = null;
@@ -23,7 +30,7 @@ class BSTIterator {
     
     /** @return the next smallest number */
     public int next() {
-        while(!stack.isEmpty() || cur != null) {
+        while(hasNext()) {
             if(cur != null) {
                 stack.push(cur);
                 cur = cur.left;
