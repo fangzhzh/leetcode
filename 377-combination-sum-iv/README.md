@@ -51,7 +51,7 @@ They forms the combinations of nums in all posibilities.
 ```
 
 
-## keyw0rds
+## keywords
 - combination
 - order
 
