@@ -81,3 +81,60 @@ class Solution {
  * queue for quick iteration a data structure based on some linking relationship, like binary tree, linkedList, graph
  * 
  */
+
+
+/**
+ * Another solution, but the idea are same
+ * out: for out edge
+ * list<Integer> array for out graph, because the course are basically 0..numCourses-1
+ * 
+ * It had a visited, and removed later because it's useless, why?
+ * visitied is to defense revisit, but the out does the same job.
+ */
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int []out = new int[numCourses];
+
+        List<Integer>[] graph = new ArrayList[numCourses];
+        int[]ans = new int[numCourses];
+        // build graph
+        for(int i = 0; i < prerequisites.length; i++) {
+            out[prerequisites[i][0]]++;
+            if(graph[prerequisites[i][1]] == null) {
+                graph[prerequisites[i][1]] = new ArrayList<>();
+            }
+            List<Integer> list = graph[prerequisites[i][1]];
+            list.add(prerequisites[i][0]);
+        }
+
+        // sort
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < numCourses; i++) {
+            if(out[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        if(queue.isEmpty()) {
+            return new int[0];
+        }
+        int idx = 0;
+        while(!queue.isEmpty()) {
+            int cur = queue.poll();
+            ans[idx++] = cur;
+            if(graph[cur] == null) {
+                continue;
+            }
+            for(int dep : graph[cur]) {
+                out[dep]--;
+                if(out[dep] == 0) {
+                    queue.offer(dep);
+                }
+            }
+        }
+        if(!queue.isEmpty() || idx != numCourses) {
+            return new int[0];
+        }
+
+        return ans;
+    }
+}
