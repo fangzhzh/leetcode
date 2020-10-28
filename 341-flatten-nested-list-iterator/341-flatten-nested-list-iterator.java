@@ -92,4 +92,42 @@ public class NestedIterator implements Iterator<Integer> {
     */
 // @lc code=end
 
+/**
+ * This solution is better than the first one because it removed some heavy check logic
+ * `if(!node.isInteger() && node.getList().size() == 0) ` this code is to handle some edge case, 
+ * but it's not neccessary. It just means the only thinking process is not general enough.
+ * 
+ * The main point here is isInteger, we don't need to chek empty list, emptry stack, etc.
+ * The only valid point for `hasNext()` is that whetherthe first element of stack is integer.
+ * True if it's so, other wise, keeps flatting.
+ */
+public class NestedIterator implements Iterator<Integer> {
+    Stack<NestedInteger> stack = new Stack<>();
+    public NestedIterator(List<NestedInteger> nestedList) {
+        for(int i = nestedList.size()-1; i >= 0; i--) {
+            stack.push(nestedList.get(i));
+        }
+    }
 
+    @Override
+    public Integer next() {
+        return stack.pop().getInteger();
+    }
+
+    @Override
+    public boolean hasNext() {
+        while(!stack.isEmpty()) {
+            if(stack.peek().isInteger()) {
+                return true;
+            }
+            NestedInteger node = stack.pop();
+            if(!node.isInteger()) {
+                for(int i = node.getList().size()-1; i >= 0; i--) {
+                    NestedInteger tmp = node.getList().get(i);
+                    stack.push(tmp);
+                }
+            }
+        }
+        return false;
+    }
+}

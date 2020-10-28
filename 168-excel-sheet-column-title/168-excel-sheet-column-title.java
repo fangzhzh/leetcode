@@ -39,4 +39,30 @@ class Solution {
  */
 // @lc code=end
 
-
+/**
+ * enough example analysis
+ * 1    ->  A
+ * 2    ->  B
+ * 26   -> Z
+ * 27   -> AA
+ * 28   -> AB
+ * divide, reminder and divident
+ * because we need to `reminder + 'A'` so that we must shift the reminder to left one bit
+ * so that 'A' + 0 => 'A'
+ * 
+ * Base 26, digits are 0...25
+ * 
+ */
+class Solution {
+    public String convertToTitle(int n) {
+        int tmp = n;
+        StringBuilder ans = new StringBuilder();
+        while(tmp > 0) {
+            tmp = tmp - 1;
+            int reminder = tmp % 26;
+            ans.append((char)(reminder + 'A'));
+            tmp /= 26;
+        }
+        return ans.reverse().toString();
+    }
+}

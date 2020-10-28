@@ -14,5 +14,39 @@ public class Solution extends Relation {
         }
         return find;
     }
+
+    
+}
+
+public class Solution extends Relation {
+    /**
+     * @param n a party with n people
+     * @return the celebrity's label or -1
+     */
+    public int findCelebrity(int n) {
+        // Write your code here
+        int cele = 0;
+        for(int i = 0; i < n; i++) {
+            if(cele == i) {
+                continue;
+            }
+            if(knows(cele, i)) {
+                cele = i;
+            }
+        }
+        for(int i = 0; i < n; i++) {
+            if(i == cele) {
+                continue;
+            }
+            if(!knows(i, cele)) {
+                return -1;
+            }
+            if(knows(cele, i)) {
+                return -1;
+            }
+
+        }
+        return cele;
+    }
 }
 
