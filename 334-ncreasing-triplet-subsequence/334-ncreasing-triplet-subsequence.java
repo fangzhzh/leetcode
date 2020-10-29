@@ -66,3 +66,23 @@ class Solution {
  * 
  * - After it's fail, it's obvious that it must be a scan for every possible path
  */
+
+ /**
+  * How come the previous solution is so complex implemented and I didn't try to find another solution?
+  *
+  * The new solution take advantage of the fact:
+  * Check whether small and equall than min, if yes, reset small;
+  * if no, check small and equal than mid,  if yes, reset mid;
+  * if no, it's a number greater than small and mid
+  */
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int min = Integer.MAX_VALUE, mid = Integer.MAX_VALUE;
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] <= min) min = nums[i];
+            else if(nums[i] <= mid) mid = nums[i];
+            else return true;
+        }
+        return false;
+    }
+}

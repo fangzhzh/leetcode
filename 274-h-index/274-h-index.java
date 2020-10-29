@@ -31,9 +31,8 @@ class Solution {
 
 /**
  * # analysis
- * - at leave h in the right, N-h not more than h, 
- *      + it's kind of binary search, but it's not middle
- *      + merge sort, but also it's not a easy way to find the h
+ * - if we find the idx, then at least h paper in the right, all other N-h has less than h
+ *      + it's kind of binary search, but it's not middle, what's the condition of matching
  * 
  * [3,0,6,1,5]
  * 
@@ -55,3 +54,44 @@ class Solution {
 /**
  *  ## counting / bucket algorithm to decrease the time complexity to O(N)
  */
+
+/**
+ *      3   0   6   1   5 
+ * 0:                   0
+ * 1:               1   1
+ * 2:                   0
+ * 3:   1               1
+ * 4:                   0
+ * 5:           1       2
+ * 
+ * then count = 0;
+ * scan from 5..0
+ * in idx = 3, count >= i
+ * 
+ */
+
+/**
+ *
+ * Bucket sort, or bin sort, is a sorting algorithm that works by distributing the elements of an array into a number of buckets. Each bucket is then sorted individually, either using a different sorting algorithm, or by recursively applying the bucket sorting algorithm. It is a distribution sort, a generalization of pigeonhole sort, and is a cousin of radix sort in the most-to-least significant digit flavor
+ */
+class Solution {
+    public int hIndex(int[] citations) {
+        int len = citations.length;
+        int []bucket = new int[len+1];
+        for(int i = 0; i < len; i++) {
+            if(citations[i] >= len) {
+                bucket[len]++;
+            } else {
+                bucket[citations[i]]++;
+            }
+        }
+        int count = 0;
+        for(int i = len; i >=0; i--) {
+            count += bucket[i];
+            if(count >= i) {
+                return i;
+            }
+        }
+        return 0;
+    }
+}
