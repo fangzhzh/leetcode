@@ -63,14 +63,17 @@ class Solution {
 // @lc code=end
 
 /**
- ## analysisi
+ ## analysis
  ### kth largest
-brutal force, sort and index, o(nlgn).
-then it's selection which based on select sort, Hoare selection algorithm.
-The basic idea is every scan sort the whole array into two part, left less than, right greater than
 
-Other solutions(in this folder) are all good, but all of them are calculate the right side which is not necessary.
-
+- first, brutal force, sort and index, o(nlgn).
+- second, priority queue, kO(lnk)
+- third, selection which based on select sort, Hoare selection algorithm.
+The basic idea is every scan sort the whole array --into two part--, left less than, right greater than
+- This code use Lomuto instead of Hoarse, the different are:
+- Lomuto partition algorithm Puts all of them to the left region
+- Hoare's algorithm evenly distributes them between left & right regions
+- Other solutions(in this folder) are all good, but all of them are calculate the right side which is not necessary.
 Kth largest, it's length-k smallest.
  */
 
