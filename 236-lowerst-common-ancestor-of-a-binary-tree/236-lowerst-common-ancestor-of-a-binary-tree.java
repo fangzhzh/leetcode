@@ -58,3 +58,23 @@ class Solution {
  * - if left == null, right is the lca
  * - if right == null, left is the lca
  */
+
+ /**
+  * Same solution, but in different writting flow
+  * 
+  */
+class Solution {
+  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+      if(root == null)  return null;
+      if(root.val == p.val || root.val == q.val) return root;
+      TreeNode left = lowestCommonAncestor(root.left, p, q);
+      TreeNode right = lowestCommonAncestor(root.right, p, q);
+      if(left != null && right != null) return root;
+      else if(right == null) return left;
+      else return right;
+
+  }
+}
+
+Your runtime beats 100 % of java submissions
+Your memory usage beats 8.14 % of java submissions (41.4 MB)

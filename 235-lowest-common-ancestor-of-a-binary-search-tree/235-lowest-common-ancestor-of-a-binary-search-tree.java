@@ -100,6 +100,9 @@ class Solution {
  * If the root.val is in left.val..right.val, it must be the common ancestor
  * if root.val <left.val && right.val, go to left to find
  * if root.val > reft val && right.val, go to right to find
+ * 
+ * Your runtime beats 100 % of java submissions
+ * This algorithm is master piece
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -117,3 +120,25 @@ class Solution {
 // @lc code=end
 
 
+/**
+ * Another recursive solution.
+ * It doesn't use too much BST, but it takes advantage of the LCA knowledge
+ * 
+ * parent -> left, right
+ * if left is not null, right is not null, parent is the LCA,
+ * else if left is null, right is LCA,
+ * else the left is LCA.
+ * 
+ * Your runtime beats 54.74 % of java submissions
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null)  return null;
+        if(root.val == p.val || root.val == q.val) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left != null && right != null) return root;
+        else if(right == null) return left;
+        else return right;
+    }
+}
