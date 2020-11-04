@@ -11,7 +11,7 @@ Given nums = [-2, -1, 2, 1], k = 1,return 2. (because the subarray [-1, 2] sums 
  * Analysis: O(n)
  * sum and map, why it works
  * 
- * solution involves sun and subarray sum, map is needed for the idx of sum
+ * solution involves sum and subarray sum, map is needed for the idx of sum
  * 
  * because it needs max sub, so we'll need keep the furthest idx of a sum
  */

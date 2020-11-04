@@ -16,6 +16,10 @@ Follow up:
 If you have figured out the O(n) solution, try coding another solution of which the time complexity is O(n log n). 
   */
 // @lc code=start
+/**
+ * 
+ * O(n^2) is not two pointers, it's two loop, lol
+ */
 class Solution {
     //O(n^2)
     public int minSubArrayLen(int s, int[] nums) {
@@ -51,9 +55,11 @@ class Solution {
 
 /**
  * ## analysis
- * O(n^2)
+ * two pointers O(n)
+ * Why is O(n)?
+ * j is not always intialized for every i, it goes parallel with i, only come after i.
+ * worst case only n times totally, O(n+n) = O(n)
  * ### Improvement:
- * - two pointers
  * - binary search
  * 
  */
@@ -80,4 +86,30 @@ class Solution {
     }
 }
 
+/**
+ * Another try, this solution totally ignored the condition of ">=s", so it's wrong answer
+ * regarding all the substring problem,
+ * checking the notes: software engineer basic code -> Questions -> Most 'substring' problems
+ */
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        // sum
+        int sum = 0, len = nums.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < len; i++) {
+            nums[i] += sum;
+            sum = nums[i];
+            map.put(sum, i);
+         }
+        // scan
+        int min = Integer.MAX_VALUE;
+        for(int i = len-1; i >= 0; i--) {
+            if(map.containsKey(nums[i] - s)) {
+                min = Math.min(min, i - map.get(nums[i]-s));
+            }
+        }
 
+        return min==Integer.MAX_VALUE?0:min;
+       
+    }
+}
