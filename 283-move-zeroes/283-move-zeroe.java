@@ -35,7 +35,26 @@ class Solution {
  * Analysis:
  * - O(n), might be duplicate operations.
  * 
- * Refer Solution2.java
+ * Refer Solution2.java, edit: Solution2 is not correct since it's not keeping the order.
  * - the same idea of Remove Duplicates from sorted Array
  * - find the left, find the right,  swap
  */
+
+/**
+ * Another two pointers,
+ * moving all non-zero to left by help of slow pointer, then fill the right with 0.
+ * */ 
+class Solution {
+    public void moveZeroes(int[] nums) {
+        // two pointers
+        int left = 0;
+        for(int v : nums) {
+            if(v != 0) {
+                nums[left] = v;
+                left++;
+            }
+        }
+        for(;left<nums.length;left++) nums[left] = 0;
+
+    }
+}
