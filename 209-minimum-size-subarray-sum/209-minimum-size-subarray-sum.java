@@ -66,7 +66,7 @@ class Solution {
 
 class Solution {
     // two pointer
-    // O(n^2)
+    // O(n)
     public int minSubArrayLen(int s, int[] nums) {
         if(nums == null || nums.length == 0) {
             return 0;
@@ -111,5 +111,32 @@ class Solution {
 
         return min==Integer.MAX_VALUE?0:min;
        
+    }
+}
+
+
+
+/**
+ * 
+ * The slice windows template
+ * 
+ */
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int left = 0, right = 0, sum = 0;
+        int min = Integer.MAX_VALUE;
+        while(right < nums.length) {
+            sum += nums[right];
+            right++;
+            while(sum >= s) {
+                if(right - left < min) {
+                    min = right - left;
+                }
+                sum -= nums[left];
+                left++;
+            }
+        }
+        return min == Integer.MAX_VALUE ? 0 : min;
+
     }
 }

@@ -63,5 +63,6 @@ fun lengthOfLongestSubstring(s: String): Int {
         i++
 
     }
-    return max=
+    return max
 }
+
