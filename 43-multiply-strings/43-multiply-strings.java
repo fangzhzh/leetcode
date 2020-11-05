@@ -89,9 +89,45 @@ class Solution {
  * ## analysis, solution without long
  * - O(n*m)
  * 
- * But if long is allowed, the problem will be easier. Refer to Solution1.
+ * But if long is allowed, the problem will be easier. Refer to Solution1. long will be TLE
  * 
  * Solution2 is also genius, it makes use of the array and indices, but not easy to think of.
  */
 
 
+/**
+ * n1 * n1 = ans, so len(ans) = at most len(n1) + len(n2), example, 9*9
+ * 
+ * to fill ans[i+j+1] and you will get a same sequence as 13*13=169
+ * 
+ * int ans[], we get the result in first round, mod, divide in second round
+ * then get ride of leading 0
+ */
+class Solution {
+    public String multiply(String num1, String num2) {
+        int m = num1.length(), n = num2.length();
+        int ans[] = new int[m+n];
+        int ibase = 0;
+        for(int i = m -1; i >= 0; i--) {
+            for(int j = n - 1; j >= 0; j--) {
+                ans[i+j+1] += (num1.charAt(i) - '0') * (num2.charAt(j)-'0');
+            }   
+        }
+        int carry = 0;
+        for(int i = m+n-1; i >= 0; i--) {
+            int tmp = (ans[i]+carry)  % 10;
+            carry = (ans[i]+ carry) / 10;
+            ans[i] = tmp;
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for(; i < ans.length; i++) {
+            if(ans[i] != 0) break;
+        }
+        for(; i < ans.length; i++) {
+            sb.append(ans[i]);
+        }
+        return sb.length() != 0 ? sb.toString() : "0";
+        
+    }
+}
