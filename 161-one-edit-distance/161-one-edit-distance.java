@@ -67,3 +67,57 @@ public class Solution {
         // write your code here
     }
 }
+
+/**
+ * another try
+ * use wrong to calculate
+ * 
+ * it has to take care of the i++, j++, boundary, long, short
+ */
+public class Solution {
+    /**
+     * @param s: a string
+     * @param t: a string
+     * @return: true if they are both one edit distance apart or false
+     */
+    public boolean isOneEditDistance(String s, String t) {
+        if(s.compareTo(t)==0) {
+            return false;
+        }
+        int m = s.length(), n = t.length();
+        if(Math.abs(m-n) > 1) {
+            return false;
+        }
+        int dif = 0;
+        int i = 0, j = 0;
+        String longStr, shortStr;
+        if(m > n) {
+            longStr = s;
+            shortStr = t;
+        } else {
+            longStr = t;
+            shortStr = s;
+        }
+        while(j < shortStr.length()) {
+            if(dif > 1) {
+                return false;
+            }
+            if(longStr.charAt(i) != shortStr.charAt(j)) {
+                dif++;
+                i++;
+                if(m==n) {
+                    j++;
+                }
+            }
+            if(longStr.charAt(i) == shortStr.charAt(j)) {
+                i++;
+                j++;
+            }
+        }
+        if(m-i+n-j == 1) {
+            dif = 1;
+        }
+        return (dif==1);
+        // write your code here
+    }
+}

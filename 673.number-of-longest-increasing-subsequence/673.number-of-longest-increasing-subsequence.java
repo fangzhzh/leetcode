@@ -67,14 +67,61 @@ class Solution {
                 newAns.add(newList);
             }
         }
-        if(newAns.size() == 0) {
-            List<Integer> newList = new ArrayList<>();
-            newList.add(nums[idx]);
-            newAns.add(newList);
         }
         ans.addAll(newAns);
         helper(ans, nums, idx+1);
     }
 }
+
+
 // @lc code=end
+
+
+/**
+ * another try, dp
+ * len[i] the length of Longest Increasing Subsequence ending nums[i]
+ * cnt[i] the count of Longest Increasing Subsequence ending nums[i]
+ * 
+ * 
+1) the maximum increasing / decreasing length ends at the current element,
+2) its own value ,
+3) the total number of maximum length,
+and each time when we visit a element, we will use its 2) to update 1) and 3), 
+the only difference is for array we use iteration while for tree we use recursion......
+Also, for **substring problem**, we usually use only one for loop because for each index, we only care about the relationship between its two neighbors, 
+while for subsequence problem, we use two for loops , because for each index, any other indexes can do something...
+ */
+class Solution {
+    public int findNumberOfLIS(int[] nums) {
+        int len = nums.length;
+        if(nums == null || len == 0) {
+            return 0;
+        }
+        int[] length = new int[len];
+        int[] cnt = new int[len];
+        int ans = 0, maxLen = 0;
+        for(int i = 0; i < len; i++) {
+            length[i] = 1;
+            cnt[i] = 1;
+            for(int j = 0; j < i; j++) {
+                if(nums[i] > nums[j]) {
+                    if(length[i] == length[j]+1) {
+                        cnt[i] += cnt[j];
+                    } else if(length[i] < length[j]+1) {
+                        length[i] = length[j] + 1;
+                        cnt[i] = cnt[j];
+                    }
+                }
+            }
+
+            if(maxLen == length[i]) ans += cnt[i];
+            if(maxLen < length[i]) {
+                maxLen = length[i];
+                ans = cnt[i];
+            }
+
+        }
+        return ans;
+    }
+}
 
