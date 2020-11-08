@@ -28,7 +28,7 @@ Output: 5->4->3->2->1->NULL
  */
 
  /**
-  * recursive
+  * recursive, node == null, return parent
   */
 class Solution {
     public ListNode reverseList(ListNode head) {
@@ -67,6 +67,8 @@ class Solution {
 /**
  * ## iterative
  * - take care of the cur, and iterate
+ * cur.next = pre; 
+ * don't update next in current loop
  *  */  
 class Solution {
     public ListNode reverseList(ListNode head) {
