@@ -91,3 +91,39 @@ class Solution {
 // @lc code=end
 
 
+/**
+ * two pointers, another try.
+ * With two pointers in mind, it's easy t come up a `slow` and `fast`
+ * But looking at the fast, it's increase in every branch, but not used after the loop
+ * 
+ * for(int j = ?; j < len; j++ ) {
+ *  // update the slow
+ * }
+ * return slow
+ * 
+ */
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums == null || nums.length == 0) {
+            return 0;
+        }
+        int slow = 0, fast = 0, len = nums.length;
+        while(fast < len) {
+            if(fast == 0) {
+                nums[slow] = nums[fast];
+                slow++;
+                fast++;
+            } else {
+                if(nums[fast] == nums[fast-1]) {
+                    fast++;
+                } else {
+                    nums[slow] = nums[fast];
+                    slow++;
+                    fast++;
+                }
+            }
+        }
+        return slow;
+    }
+}

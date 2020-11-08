@@ -59,6 +59,16 @@ class Solution {
  * - 所以到了第 i + 2 次，它可能最终留下的概率 = 之前留下的概率 * 这次留下的概率
  * 
  * 
+ * {1,2,3,3,3} and pick(3)
+ * the third is rdm.next(3) = 1 / 3
+ * the sedond rdm.next(2) is 1/2, but it's we have to diminish 1/3, so that (1-1/3)*1/2 = 1/3
+ * the first rdm.next(1) = 1/1, and 1 - (1-1/3)*1/2 - 1/3 = 1/3
+ * 
+ * we don't quit when we fint the fist rdm.next(cnt), but continues to calculate
+ * when we finish all rdm.nextInt(cnt) == 0 then ret = i, the every element is 1/3 possibility,
+ * purely random.
+ * 
+ * 
  * - rdm.nextInt(1) must == 0, but it keeps calculate until all the samples are in.
  * rdm.nextInt(3) = 1/3 for every possieble index
  * 
@@ -67,3 +77,27 @@ class Solution {
  * 
  * 
  */
+class Solution {
+    int[] nums;
+    Random rdm;
+    public Solution(int[] nums) {
+        this.nums = nums;
+        rdm = new Random();
+    }
+    
+    public int pick(int target) {
+        int ret = -1;
+        int cnt = 0;
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] != target) {
+                continue;
+            }
+            cnt++;
+            if(rdm.nextInt(cnt) == 0) {
+                ret = i;
+            }
+        }
+        return ret;
+       
+    }
+}
