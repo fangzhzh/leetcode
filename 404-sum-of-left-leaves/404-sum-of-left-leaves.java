@@ -58,6 +58,21 @@ class Solution {
 }
 // @lc code=end
 
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+        return sumOfLeftLeaves(root, 0, false);
+    }
+    int sumOfLeftLeaves(TreeNode root, int sum, boolean fromLeft) {
+        if(root == null) {
+            return 0;
+        }
+        if(root.left == null && root.right == null && fromLeft) {
+            sum += root.val;
+        }
+        return sum + sumOfLeftLeaves(root.left, sum, true)
+            + sumOfLeftLeaves(root.right, sum, false);
+    }
+}
 
 /**
  * Another solution in DFS
