@@ -53,4 +53,33 @@ class Solution {
 }
 // @lc code=end
 
+/**
+ * backpacking:
+ * add and traversal
+ * the typical flow:
+ * - list add current element(list having current element)
+ * - helper (idx+1)
+ * - list remove current element(list not having current element)
+ * - helper (idx+1)
+ */
+class Solution {
+  public List<List<Integer>> subsets(int[] nums) {
+      List<List<Integer>> result = new ArrayList<>();
+      List<Integer> current = new ArrayList<>();
+      helper(result, nums, current, 0);
+      return result;
+  }
 
+  private void helper(List<List<Integer>> result, int[] nums, 
+      List<Integer> current, int idx) {
+      if(idx >= nums.length) {
+          result.add();
+          return;
+      }
+      // List<Integer> list = new ArrayList<>(current);
+      current.add(nums[idx]);
+      helper(result, nums, new ArrayList<>(current), idx + 1);
+      current.remove(current.size() -1);
+      helper(result, nums, new ArrayList<>(current), idx + 1);
+  }
+}

@@ -35,6 +35,7 @@ Output:
  *      + but duplicated nums in this nums
  *      + if the next element is equal to the current one, 
  *      + we don't do the remove current and add the next because it will introduces duplicate sets
+ *      + we just find the next non-equal idx
  *  - if this part is clear, the coding is clear to write
  */
 // @lc code=start
