@@ -36,6 +36,8 @@ Explanation: The square root of 8 is 2.82842..., and since
  *  + (ret < mid) to right or left?
  *  + example: 10/5 = 2, (2<5) and we know it should go to left, 
  *  + so ret < mid left, 
+ * 
+ * OMG, I felt for every trap again.
  */
 class Solution {
     public int mySqrt(int x) {
