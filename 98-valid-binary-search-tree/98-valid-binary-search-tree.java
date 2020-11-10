@@ -80,7 +80,6 @@ class Solution {
  * ## Solution 2: Recursive
  * This solution is not correct because the pre need to be persisit during the traversal
  * 
- */
 class Solution {
     public boolean isValidBST(TreeNode root) {
         return inorder(root, null);
@@ -102,6 +101,7 @@ class Solution {
         return true;
     }
 }
+ */
 
 
 
@@ -139,4 +139,24 @@ class Solution {
  */
 
 
-
+/**
+ * recursive, also the idea of max, min
+ * It's hard to understand the logic updating the max, min.
+ * BST, left children must less than root, right children must great than root.
+ * 
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, Long.MAX_VALUE, Long.MIN_VALUE);
+    }
+    boolean isValidBST(TreeNode root, long max, long min) {
+        if(root == null) {
+            return true;
+        }
+        if(root.val >= max || root.val <= min) {
+            return false;
+        }
+        return isValidBST(root.left, root.val, min) && 
+        isValidBST(root.right, max, root.val);
+    }
+}
