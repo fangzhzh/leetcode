@@ -59,12 +59,12 @@ class Solution {
 
 /**
  * ## solution 2, DP
- * - dp(n) represents whether the s[0, n] is segmented
+ * - dp(i) represents whether the s[0, i-1] is segmented for string ending in i-1
+ * - dp[0] is true
+ * - dp[i] = dp[i-k] && s.substring(i-k, i), 0<=k<i
  */
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-               // dp[i] = dp[i-n] && s.substring(i, i+n) in workDict
-        // backpack
         int len = s.length();
         boolean []dp = new boolean[len+1];
         dp[0]=true;

@@ -89,3 +89,58 @@ class Solution {
 // @lc code=end
 
 
+/**
+ * BFS
+ * put the begin in to the queue,
+ * then level traversal the queue, for every word,
+ * scan and put all its neighbours into a queue, until we find the end
+ *      + how to find the neighbors, instead of caculating distance betwin two word, in the wordList
+ *      + we literally try to every char to 'a' to 'z' and get O(26 * lengh(s)) new condidate
+ *      + check whether these new word in wordList O(length(s))
+ * 
+ *      + loop wordList then O(n), where O(n) > O(length(beginWord))
+ * 
+ * But it's TLE until, until we create a wordDic set, set.contains O(1) 
+ * is way better than O(lgN) List.contains.
+ */
+
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        int depth = 0;
+        Set<String> visited = new HashSet<>();
+        Set<String> wordDic = new HashSet<>();
+        for(String word: wordList) {
+            wordDic.add(word);
+        }
+
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            depth++;
+            for(int i = 0; i < size; i++) {
+                String tmp = queue.poll();
+                visited.add(tmp);
+                System.out.println("visit:" + tmp);
+                for (int j = 0; j < tmp.length(); j++) {
+                    char[] chars = tmp.toCharArray();
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        chars[j] = ch;
+                        String word = new String(chars);
+                        if (wordDic.contains(word)) {
+                            if(visited.contains(word)) {
+                                continue;
+                            }
+                            if(word.compareTo(endWord)==0) {
+                                return depth+1;
+                            }
+                            queue.offer(word);
+                            wordDic.remove(word);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
