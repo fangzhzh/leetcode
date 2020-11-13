@@ -90,6 +90,9 @@ class Solution {
 /**
  * dp[i][j] matching? when ending at s[i-1] and p[i-1]
  * - base case:
+ *      + origin: dp[0][0]: they do match, so dp[0][0] = true
+ *      + first row: dp[0][j]: except for String p starts with *, otherwise all false
+ *      + first col: dp[i][0]: can't match when p is empty. All false.
  *      + dp[0][0] = true empty matching empty string
  *      + dp[i][0] 1 <= i <= sLen, false, s not matching empty
  *      + dp[0][j] i <= j <= pLen, is p[j-1] == '*', then dp[0][j] == dp[0][j-1]
@@ -97,8 +100,10 @@ class Solution {
  *      + dp[i][j] 
  *          - s[i-1] == p[i-1] || p[i-1] =='?' then dp[i][j] = dp[i-1][j-1]
  *          - p[i-1] == '*', dp[i][j] = dp[i][j-1] || dp[i-1][j], 
- *              + s[0..i] matching p[0..j-1], p just move to '*'
- *              + sp[0..i-1] matching p[0..j], s continue to match '*'
+ *              + s[0..i] matching p[0..j-1], p just move to '*', 
+ *                  - * matches no character in S
+ *              + sp[0..i-1] matching p[0..j], s continue to match '*', 
+ *                  - * matches a 1 character (most recent) in S and we can continue to use * to match more previous characters
  * 
  * then, the result is dp[sLen][pLen];
  * 
