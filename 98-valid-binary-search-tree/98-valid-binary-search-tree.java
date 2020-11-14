@@ -160,3 +160,28 @@ class Solution {
         isValidBST(root.right, max, root.val);
     }
 }
+
+
+/**
+ * 
+ * isValidBST(node, min, max) is a eaiser for mind walking
+ * inoder & result & check
+ * inoder & in place check
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+    private boolean isValidBST(TreeNode node, TreeNode min, TreeNode max) {
+        if(node == null) {
+            return true;
+        }
+        if(max != null && node.val >= max.val) {
+            return false;
+        } 
+        if(min != null && node.val <= min.val) {
+            return false;
+        }
+        return isValidBST(node.left, min, max) && isValidBST(node.right, max, min);
+    }
+}

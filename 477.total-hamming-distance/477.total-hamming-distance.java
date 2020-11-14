@@ -109,3 +109,24 @@ class Solution {
         return cnt_total;
     }
 }
+
+/**
+ * 10^3 = 2^10=> 10^9=2^30
+ * (n >> 1) & 1 == 1 is a genious way go check the ith bit
+ * bitCnt 1 and (len-bitCnt) 0, so the diff is bitCnt * (len-bitCnt), primary math.
+ */
+class Solution {
+    public int totalHammingDistance(int[] nums) {
+        int sum = 0;
+        for(int i = 0; i < 30; i++) {
+            int bitCnt = 0;
+            for(int n : nums) {
+                if((n >> i & 1) == 1) {
+                    bitCnt ++;
+                }
+            }
+            sum += (bitCnt * (nums.length - bitCnt));
+        }
+        return sum;
+    }
+}
