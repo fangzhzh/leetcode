@@ -131,3 +131,45 @@ class Solution {
 }
 // @lc code=end
 
+
+/**
+ * second try
+ * - first, I forget the minimum, and just want to return s.substring(left, right);
+ * - then, then small length is (right-left+1); right++; if right ++ behind the second while loop
+ * - otherwise, it gonna be right++, minLen = (right - left)
+ */
+
+class Solution {
+  public String minWindow(String s, String t) {
+      int[] state = new int[256];
+      int cnt = 0;
+      for(int i = 0; i < t.length(); i++) {
+          state[t.charAt(i)]++;
+          cnt++;
+      }
+      int left = 0, right = 0;
+      int minLen = Integer.MAX_VALUE, minStart = 0;
+      while(right < s.length()) {
+          char c = s.charAt(right);
+          if(state[c] > 0) {
+              cnt--;
+          }
+          state[c]--;
+          while(cnt==0) {
+              if(right - left + 1 < minLen) {
+                  minLen = right - left + 1;
+                  minStart = left;
+              }
+              char cl = s.charAt(left);
+              state[cl]++;
+              if(state[cl] > 0) {
+                  cnt++;
+              }
+              left++;
+          }
+          right++;
+      }
+      if(minStart+minLen > s.length()) return "";
+      return s.substring(minStart, minStart + minLen);
+  }
+}
