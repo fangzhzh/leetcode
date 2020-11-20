@@ -42,6 +42,8 @@ Only need one meeting room
  *     + yes, remove the smallest and replace with A.end
  *     + no, new room with A.end
  * - the number of ends is the number of meeting room needed.
+ * 
+ * check 218 skylin problem, same priority queue pattern
  */
 public class Solution {
     /**

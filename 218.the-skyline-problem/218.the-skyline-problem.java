@@ -38,6 +38,9 @@ Notes:
  *  - check map lastkey
  *      + not equal to prevMax, a new critical point, add (h[0], cur) 
  *      + and update last <= cur
+ * 
+ * check 253 meeting room ii problem, same priority queue pattern
+ * 
  */
 class Solution {
     public List<List<Integer>> getSkyline(int[][] buildings) {
