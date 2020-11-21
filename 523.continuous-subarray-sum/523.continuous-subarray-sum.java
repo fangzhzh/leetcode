@@ -13,8 +13,10 @@ class Solution {
             sum += nums[i];
             if(k != 0) sum = sum % k;
             Integer prev = map.get(sum);
-            if(prev != null && i - prev > 1)  {
-                return true;
+            if(prev != null )  {
+                if(i - prev > 1) {
+                    return true;
+                }
             } else {
                 map.put(sum, i);
             }
