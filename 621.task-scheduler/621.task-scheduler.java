@@ -49,3 +49,50 @@ class Solution {
 }
 // @lc code=end
 
+class Solution {
+    // The word selection leads to priortyQueue
+    // how to tell which one is first regarding dynamic rule in PQ
+    // - priority itself?
+    // - retrival from PQ then somehow make condition
+    //      + k = n; cache; while(k>0) { pq.poll(); cache.addback();k--}, add pq.add(cache);
+    public int leastInterval(char[] tasks, int n) {
+        // map
+        Map<Character, Integer> map = new HashMap<>();
+        for(char t : tasks) {
+            map.put(t, map.getOrDefault(t, 0) + 1);
+        }
+        PriorityQueue<Map.Entry<Character, Integer>> pq = new PriorityQueue<>(tasks.length, 
+        (a,b)-> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());
+        pq.addAll(map.entrySet());
+        
+        int cnt=0;
+        while(!pq.isEmpty()) {
+            int k = n+1;
+            List<Map.Entry> cached = new ArrayList<>();
+            while(k > 0 && !pq.isEmpty()) {
+                Map.Entry<Character, Integer> entry = pq.poll();
+                // System.out.println("entry:" + entry.getKey() +":" + entry.getValue());
+                entry.setValue(entry.getValue()-1);
+                cached.add(entry);
+                k--;
+                cnt++;
+            }
+            for(Map.Entry<Character, Integer> entry : cached) {
+                if(entry.getValue() > 0) {
+                    pq.add(entry);
+                }
+            }
+            if(pq.isEmpty()) break;
+            // System.out.println(k + " spaces");
+            cnt += k;
+        }
+        return cnt;
+        
+        // pq
+        // map -> pq
+        // list
+        
+    }
+    
+}
+
