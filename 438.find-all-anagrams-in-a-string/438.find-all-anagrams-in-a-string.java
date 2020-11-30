@@ -82,3 +82,138 @@ class Solution {
 }
 // @lc code=end
 
+/**
+ * Slicing window is good, and the first thought once you know it
+ *
+ * but how about a good brutal force? 
+ *
+ * for 0..sLen-pLen, it checks every substring(i, i+pLen) whether is Anagram
+ * not fance, but a clear solution
+ * 
+ * The gem of the is Anagram is still the track to track down the occurrency of every char
+ * 
+ * 
+ */
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        // intutitive
+        int sLen = s.length(), pLen = p.length();
+        List<Integer> ans = new ArrayList<>();
+        for(int i = 0; i < sLen-pLen+1; i++) {
+            String sp = s.substring(i, i+pLen);
+            if(isAnagram(sp, p)) {
+                ans.add(i);
+            }
+        }
+        return ans;
+    }
+
+    boolean isAnagram(String a, String b) {
+        int[]track = new int[128];
+        for(int i = 0;i < a.length(); i++) {
+            track[a.charAt(i)]++;
+            // map.put(a.charAt(i), map.getOrDefault(a.charAt(i), 0)++);
+        }
+        for(int i = 0;i < b.length(); i++) {
+            track[b.charAt(i)]--;
+            if(track[b.charAt(i)] < 0) return false;
+        }
+        return true;
+
+    }
+
+    boolean isAnagram(String a, String b) {
+        int[]tracka = new int[128];
+        for(int i = 0;i < a.length(); i++) {
+            tracka[a.charAt(i)]++;
+            // map.put(a.charAt(i), map.getOrDefault(a.charAt(i), 0)++);
+        }
+        int[]trackb = new int[128];
+        for(int i = 0;i < b.length(); i++) {
+            trackb[b.charAt(i)]--;
+        }
+        return Arrays.equals(tracka, trackb);
+
+    }
+
+}
+
+/**
+ * a slightly improved version is keep a track for long string and compare in place
+ *
+ * the tracks keeps a track for s[i, j)
+ *  - if valid, add i to ans
+ *  - if no valid, slicing window left to i+1, and update traces accordingly
+ */
+
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        // intutitive
+        int sLen = s.length(), pLen = p.length();
+        List<Integer> ans = new ArrayList<>();
+        int[] tracks = new int[26];
+        int[] trackp = new int[26];
+        for(int i = 0; i < pLen; i++) {
+            trrackp[p.charAt(i)]++;
+        }
+        int j = 0;
+        for(int i = 0; i < sLen; i++) {
+            while(j < sLen && j-i+1 < pLen)
+                tracks[s.charAt(j)]++;
+            }
+            if(Arrays.equals(tracks, trackp)) {
+                ans.add(i);
+            }
+            tracks[s.chartAt(i)]--;
+        }
+        return ans;
+    }
+}
+
+
+/**
+ * Still want to mention my native version after fail to make sense of the slicing windows one
+ * idea is the same, but checking anagram by set
+ * 
+ * 
+ * It fails in such ways
+ *      - set can't test the case: 'aaab', 'aab', because once you remove the a from set,
+ *       -  it will not match the second a
+ *      - create a hshset every time
+ *
+ *
+ *  Hashset doesn't fit the occurency of chars in a string, especially fail duplicate scenrio.
+ */
+
+ class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        // intutitive
+        int sLen = s.length(), pLen = p.length();
+        List<Integer> ans = new ArrayList<>();
+        for(int i = 0; i < sLen-pLen+1; i++) {
+            String sp = s.substring(i, i+pLen);
+            if(isAnagram(sp, p)) {
+                ans.add(i);
+            }
+        }
+        return ans;
+    }
+
+    boolean isAnagram(String a, String b) {
+        Set<Character> set = new HashSet();
+       for(int i = 0;i < b.length(); i++) {
+            set.add(b.charAt(i));
+        }   
+        for(int i = 0;i < a.length(); i++) {
+            if(set.contains(a.charAt(i))) {
+                set.remove(a.charAt(i));
+            } else {
+                return false;
+            }
+        }
+        return true;
+
+    }
+ }
