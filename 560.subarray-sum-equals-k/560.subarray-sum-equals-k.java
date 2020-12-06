@@ -46,15 +46,15 @@ Constraints:
  * for(i in i..len) {
  *  for(j in i..len)
  * }
- * 
  * mean iterator solution space for start from i
- * 
+ * -------------------
  * for(i in i..len) {
  *  for(j in 0..i)
  * }
  * 
  * mean iterator solution space for ending at i
- * 
+ * -----------------
+  *
  * for this question, if we use ending at i, it will generate a lot of duplicate answer
  * because for every i, we scan 0..i, so for len we will scan 
  * 0..1, 0..2, 0..3, 0..len

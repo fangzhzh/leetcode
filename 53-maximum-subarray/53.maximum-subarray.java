@@ -92,3 +92,31 @@ class Solution {
         return max;
     }
 }
+
+/**
+ * spent some time to reasoning why this question is not fix slicing window
+ * At last, it turns out it can be a slicing window problem, but only different is
+ * It doesnt really need the left part of index to keep the valid condition like the 
+ * sum < 0 part, the left sudently jump to the rightO52
+ */
+
+ class Solution {
+    public int maxSubArray(int[] nums) {
+        int left = 0, right =0;
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        while(right < nums.length) {
+            if(sum < 0) {
+                sum = nums[right];
+                left = right;
+            } else {
+                sum += nums[right];
+            }
+            if(max < sum) {
+                max = sum;
+            }
+            right++;
+        }
+        return max;
+    }
+}
