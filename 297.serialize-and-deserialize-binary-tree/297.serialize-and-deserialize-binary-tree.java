@@ -105,9 +105,13 @@ public class Codec {
 // @lc code=end
 
 
+/**
+ * meta recursive:
+ * core issue is find the root, then build left and right 
+ */
 
 /**
- * another recursive code,concise and less prone to fail
+ * Pre order
  */
 
 public class Codec {
@@ -140,14 +144,151 @@ public class Codec {
     }
     TreeNode buidlTree(Queue<String> queue) {
         String val = queue.poll();
-        System.out.println(val);
         if(val.equals(NULL)) {
             return null;
-        } else {
-            TreeNode node = new TreeNode(Integer.valueOf(val));
-            node.left = buidlTree(queue);
-            node.right = buidlTree(queue);
-            return node;
+        } 
+        TreeNode node = new TreeNode(Integer.valueOf(val));
+        node.left = buidlTree(queue);
+        node.right = buidlTree(queue);
+        return node;
+    }
+}
+
+
+/**
+ * in order is not able to deserialise
+ */
+ public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+
+    private void serialize(TreeNode root, StringBuilder sb) {
+        if(root == null) {
+            sb.append("#").append(",");
+            return;
         }
+        serialize(root.left, sb);
+        sb.append(root.val).append(",");
+        serialize(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    /** 
+     * No doable for in order
+
+     */
+    public TreeNode deserialize(String data) {
+
+    }
+
+}
+
+
+/**
+ * post order, find the root and build left and right.
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+
+    private void serialize(TreeNode root, StringBuilder sb) {
+        if(root == null) {
+            sb.append("#").append(",");
+            return;
+        }
+        serialize(root.left, sb);
+        serialize(root.right, sb);
+        sb.append(root.val).append(",");
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] tree = data.split(",");
+        Stack<String> stack = new Stack<> ();
+        stack.addAll(Arrays.asList(tree));
+        return buildTree(stack);
+    }
+
+    private TreeNode buildTree(Stack<String> stack) {
+        if(stack.isEmpty()) {
+            return null;
+        }
+        String nodeValue = stack.pop();
+        if(nodeValue.equals("#")) {
+            return null;
+        }
+
+        TreeNode node = new TreeNode(Integer.valueOf(nodeValue));
+        node.right = buildTree(stack);
+        node.left = buildTree(stack);
+        return node;
+    }
+}
+
+
+/**
+ * level traversal
+ *
+ */
+ public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        TreeNode node;
+        while(!queue.isEmpty()) {
+            node = queue.poll();
+            if(node == null) {
+                sb.append("#").append(",");
+            } else {
+                sb.append(node.val).append(",");
+                queue.offer(node.left);
+                queue.offer(node.right);
+            }
+        }
+        return sb.toString();
+    }
+
+   
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if(data.length() == 0) return null;
+        String[]tree = data.split(",");
+        if(tree[0].equals("#")) return null;
+        Queue<TreeNode> queue = new LinkedList<> ();
+        TreeNode root = new TreeNode(Integer.valueOf(tree[0]));
+        queue.offer(root);
+        for(int i = 1; i < tree.length; i++) {
+            TreeNode node = queue.poll();
+            String c = tree[i];
+            if(c.equals("#")) {
+                node.left = null;
+            } else {
+                node.left = new TreeNode(Integer.valueOf(c));
+                queue.offer(node.left);
+            }
+
+            i++;
+            c = tree[i];
+            if(c.equals("#")) {
+                node.right = null;
+            } else {
+                node.right = new TreeNode(Integer.valueOf(c));
+                queue.offer(node.right);
+            }
+        }
+        return  root;
     }
 }
