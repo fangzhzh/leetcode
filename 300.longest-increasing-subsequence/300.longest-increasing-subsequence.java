@@ -89,6 +89,7 @@ class Solution {
  * why better than O(N^2) recursive version, it cut unneccesary calculation.
  *
  * Soln 2: Dynamic programming: DP
+ * bottom up
  * state: dp[i] LIS till nums[i]
  * init: dp[i] = 1
  * transiton: dp[i] = if(nums[i] > num[j]) dp[j] + 1; else dp[j];
@@ -99,13 +100,11 @@ class Solution {
         if(len == 0) return 0;
         int[] dp = new int[len];
         Arrays.fill(dp, 1);
-        int max = 0;
+        int max = 1;
         for(int i = 1; i < len; i++) {
             for(int j = 0; j < i; j++) {
                 if(nums[i] > nums[j]) {
-                    dp[i] = dp[j] + 1;
-                } else {
-                    dp[i] = dp[j];
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
                 max = Math.max(max, dp[i]);
             }
