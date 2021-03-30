@@ -46,8 +46,78 @@ Constraints:
 
 
 // @lc code=start
+/**
+ * Solution 1: recursive
+ * 
+ * 
+ */
+class Solution {
+    int max = 0;
+    public int maxSubArray(int[] nums) {
+        maxSubArray(nums, nums.length-1);
+        return max;
+    }
+    private int maxSubArray(int[] nums, int idx) {
+        if(idx == 0) return nums[idx];
+        int sum = maxSubArray(nums, idx-1);
+        int result;
+        if(sum > 0) {
+            result = sum + nums[idx];
+        } else {
+            result = nums[idx];
+        }
+        max = Math.max(max, result);
+        return result;
+    }
+}
 
 /**
+ * Solution 2: dp version
+ * one dimension state array
+ * 
+ * dp[i] mean the max value ending in ith
+ */
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length+1];
+        dp[0] = 0;
+        int max = Integer.MIN_VALUE;
+        for(int i = 1; i <= nums.length; i++) {
+            dp[i] = Math.max(dp[i-1]+nums[i-1], nums[i-1]);
+            if(max < dp[i]) {
+                max = dp[i];
+            }
+        }
+        return max;
+    }
+}
+
+/**
+ * Solution 2.1: DP with one dimension state array
+ */
+ class Solution {
+    public int maxSubArray(int[] nums) {
+        int len = nums.length;
+        if(len == 0) return 0;
+        int max = nums[0];
+        int[] dp = new int[len];
+        for(int i = 0; i < len; i++) {
+            dp[i] = nums[i];
+        }
+
+        for(int i = 1; i < len; i++) {
+            if(dp[i-1] > 0) {
+                dp[i] = dp[i-1] + nums[i];
+            } 
+            max = Math.max(dp[i], max);
+        }
+        return max;
+    }
+}
+
+/**
+ * Solution 3: DP with state compression 
  * get from leetcode discuss
  * https://leetcode.com/problems/maximum-subarray/discuss/20210/O(n)-Java-solution
  * 
@@ -73,27 +143,7 @@ class Solution {
 
 
 /**
- * and dp version
- * 
- * dp[i] mean the max value ending in ith
- */
-
-class Solution {
-    public int maxSubArray(int[] nums) {
-        int[] dp = new int[nums.length+1];
-        dp[0] = 0;
-        int max = Integer.MIN_VALUE;
-        for(int i = 1; i <= nums.length; i++) {
-            dp[i] = Math.max(dp[i-1]+nums[i-1], nums[i-1]);
-            if(max < dp[i]) {
-                max = dp[i];
-            }
-        }
-        return max;
-    }
-}
-
-/**
+ * Solution not 4: why slicing window not working
  * spent some time to reasoning why this question is not fix slicing window
  * At last, it turns out it can be a slicing window problem, but only different is
  * It doesnt really need the left part of index to keep the valid condition like the 
