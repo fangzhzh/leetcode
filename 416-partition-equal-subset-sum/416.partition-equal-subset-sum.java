@@ -83,13 +83,14 @@ class Solution {
 // @lc code=end
 
 /**
- * backpacking 
+ * back pack, dp
  * 
  * the sum analysis is as same as before
  * 
- * dp[i][j]
+ * the definition of dp[i][j] is whether the first item can fill the j backpack
  * 
- * whether nums[0...i] sum to j
+ * dp[i][j] means
+ * whether nums[0...i], elements between can be taken or not, might sum to j
  * 
  * nums[0..n][0] <= true, take nothing from array
  * 
@@ -152,5 +153,45 @@ class Solution {
             return false;
         }
         return helper(nums, target, idx+1, sum + nums[idx]) || helper(nums, target, idx+1, sum);
+    }
+}
+
+/**
+ * Solution bacpack 
+ * try to solve this doable problem by 0-1 backpack technic, but the roadblock is the ???
+ * Can't decide what value dp[i][j][0] should be between dp[i-1][j][0] and dp[i-1][j][1]
+ * because it's not max, min, average, it has no specific rule to help us decide the value
+ * 
+ * The definition of dp[i][j][2] is wrong becaust it means first i items with j backpack, 
+ * what's the biggest value we can pack into the backpack which can't lead to the doable problem.
+ *
+ * so the correct definition of dp[i][j] is whether the first item can fill j backpack
+ */
+ class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        int len = nums.length;
+        for(int i = 0; i < len; i++) {
+            sum += nums[i];
+        }
+        if(sum % 2 != 0) return false;
+        int half = sum/2;
+        int[][][] dp = new int[len+1][half+1][2];
+        for(int i = 0; i <= len ; i++) {
+            dp[i][0][0] = 0;
+        }
+        for(int i = 0; i <= half; i++) {
+            dp[0][i][0] = 0;
+        }
+        for(int i = 1; i <= len; i++) {
+            for(int j = 1; j <= half; j++) {
+                if(j < nums[i-1]) {
+                    dp[i][j][0] = select(dp[i-1][j][0], dp[i-1][j][1]);//???
+                } else {
+                    dp[i][j][0] = dp[i-1][j][1];
+                }
+            }
+        }
+        return dp[len][half];
     }
 }
