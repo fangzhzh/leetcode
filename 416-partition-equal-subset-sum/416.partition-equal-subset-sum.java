@@ -195,3 +195,31 @@ class Solution {
         return dp[len][half];
     }
 }
+
+
+/**
+ * space compression version
+ */
+ class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        int len = nums.length;
+        for(int i = 0; i < len; i++) {
+            sum += nums[i];
+        }
+        if(sum % 2 != 0) return false;
+        int half = sum/2;
+        boolean[]dp = new boolean[half+1];
+        dp[0] = true;
+        // for(int i = 0; i <=half; i++)
+        for(int i = 0; i < len; i++) {
+            for(int j = half; j >= 0; j--) {
+                if(j >= nums[i]) {
+                    dp[j]=dp[j] || dp[j-nums[i]];
+                }
+            }
+        }
+        return dp[half];
+        
+    }
+}
