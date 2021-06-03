@@ -113,3 +113,42 @@ boolean compare(Map<Character, Integer> map, String s, String t) {
 }
 
 }
+
+// map for char -> int, but 26 chars is enough
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        /** 思维：
+         *  map for char -> int
+         * iterate the word, if map[word[i]] > map[word[i+1]] , false
+         * can be optimised into an 26 array because only 26 chars
+        */
+        int[] orderArray = new int[26];
+
+        for(int i = 0; i < order.length(); i++) {
+            orderArray[order.charAt(i)-'a'] = i;
+        }
+        for(int i = 0; i < words.length-1; i++) {
+            if(!compare(words[i], words[i+1], orderArray)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean compare(String word1, String word2, int[] orderArray) {
+        int i = 0;
+        for(; i < word1.length(); i++) {
+            if(i >= word2.length()) return false;
+            int order1 = orderArray[word1.charAt(i)-'a'];
+            int order2 = orderArray[word2.charAt(i)-'a'];
+            if(order1 > order2) {
+                return false;
+            } else if(order1 < order2){
+                return true;
+            }
+
+        }
+        if(i < word1.length()) return false;
+        return true;
+    }
+}
