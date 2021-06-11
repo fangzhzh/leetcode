@@ -1,5 +1,24 @@
 # leetcode
 
-file name will change from number to question name.
+## 递归
 
-need all question offline access.
+## 分治
+
+## Linked List
+
+## Binary Tree
+
+## Binary Search 
+
+## Stack
+
+## Hash
+
+## Dynamic programming
+
+## String
+
+## Binary
+
+
+## Miscs
