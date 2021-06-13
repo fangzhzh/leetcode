@@ -5,7 +5,7 @@
 ## 分治
 
 ## Linked List
-
+[palindrome-linked-list](./234-palindrome-linked-list/234.md)
 ## Binary Tree
 
 ## Binary Search 
