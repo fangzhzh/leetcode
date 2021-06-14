@@ -9,14 +9,13 @@ Binary Tree, Binary Search tree
 ## Binary Tree
 
 ### representation of a tree
+
+![representation of a tree](./graphs/binaryTreeRepresent.drawio.svg)
+
 * LinkedList
 ```mermaid
 
 graph LR
-  subgraph design;
-	root0[root]-..-left0[left];
-	root0[root]-..-right0[left];
-  end;	
   subgraph PostOrder ;
 	right2[right] --> root2[root];
 	left2[left] --> right2[right];
@@ -51,6 +50,8 @@ graph LR
 ```
 
 ### Tree Traveral
+
+![traversal](./graphs/binaryTreeTraversal.drawio.svg)
 
 ```
 /* binary tree travesal */
@@ -127,69 +128,69 @@ General signature of DFS solution
     }
 
 // usually we denote BST using inOrder traversal
-void inOrderDFS(Node root) {
-    if(root == null)
-        return;
+    void inOrderDFS(Node root) {
+        if(root == null)
+            return;
 
-    Stack<Node> stack = new Stack<>();
-    Node p = root;
+        Stack<Node> stack = new Stack<>();
+        Node p = root;
 
-    while(!stack.isEmpty() || p != null){
-        if(p != null){ // if it is not null, push to stack and go down the tree to left
-            stack.push(p);
-            p = p.left;
-        } else { // if no left child pop stack, process the node then let p point to the right
-            Node temp = (Node)stack.pop();
-            visit(temp);
-            p = temp.right;
+        while(!stack.isEmpty() || p != null){
+            if(p != null){ // if it is not null, push to stack and go down the tree to left
+                stack.push(p);
+                p = p.left;
+            } else { // if no left child pop stack, process the node then let p point to the right
+                Node temp = (Node)stack.pop();
+                visit(temp);
+                p = temp.right;
+            }
         }
     }
-}
 
 // post-Order
 // post-order is widely use in mathematical expression. It is easier to write a program to parse a post-order expression. Here is an example
 // in-order is also ok, but need to fiture out the priority of operation, post-order honor the operator priority already.
 
-terativePostorder(node)
-  s ← empty stack
-  lastNodeVisited ← null
-  while (not s.isEmpty() or node ≠ null)
-    if (node ≠ null)
-      s.push(node)
-      node ← node.left
-    else
-      peekNode ← s.peek()
-      // if right child exists and traversing node
-      // from left child, then move right
-      if (peekNode.right ≠ null and lastNodeVisited ≠ peekNode.right)
-        node ← peekNode.right
-      else
-        visit(peekNode)
-        lastNodeVisited ← s.pop()
+    iterativePostorder(node)
+        s ← empty stack
+        lastNodeVisited ← null
+        while (not s.isEmpty() or node ≠ null)
+            if (node ≠ null)
+            s.push(node)
+            node ← node.left
+            else
+            peekNode ← s.peek()
+            // if right child exists and traversing node
+            // from left child, then move right
+            if (peekNode.right ≠ null and lastNodeVisited ≠ peekNode.right)
+                node ← peekNode.right
+            else
+                visit(peekNode)
+                lastNodeVisited ← s.pop()
 
-void postDFS(Node root) {
-    Node node = root;
-    Stack<Node> stack = new Stack<>();
-    Node lastVisited = null;
-    while(!stack.isEmpty() || node != null) {
-        if(node != null) {
-            stack.push(node);
-            node = node.left;
-        } else {
-            Node peekNode = stack.peek();
-    	  // if right child exists and traversing node
-	      // from left child, then move right
-            if(peekNode.right != null && lastVisited != peekNode.right) {
-                node = peekNode.right;
+    void postDFS(Node root) {
+        Node node = root;
+        Stack<Node> stack = new Stack<>();
+        Node lastVisited = null;
+        while(!stack.isEmpty() || node != null) {
+            if(node != null) {
+                stack.push(node);
+                node = node.left;
             } else {
-                visit(peekNode);
-                lastVisited = stack.pop();
+                Node peekNode = stack.peek();
+            // if right child exists and traversing node
+            // from left child, then move right
+                if(peekNode.right != null && lastVisited != peekNode.right) {
+                    node = peekNode.right;
+                } else {
+                    visit(peekNode);
+                    lastVisited = stack.pop();
+                }
             }
         }
+
+
     }
-
-
-}
 
 ```  
 
