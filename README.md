@@ -17,6 +17,8 @@
 * [876. 链表的中间结点]
 ## Binary Tree
 * [二叉树](./binaryTree.md)
+* [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+* [104. 二叉树的最大深度](./104.maximum-depth-of-binary-tree/104.md)
 ## Binary Search 
 
 ## Stack

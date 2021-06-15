@@ -1,11 +1,13 @@
 # Tree
 Binary Tree, Binary Search tree
 
+二叉树是一种有向无环图
 ## API
 * `preTraveral(root).forEach(x-> visit(x))`
 * `inTraveral(root).forEach(x-> visit(x))`
 * `postTraveral(root).forEach(x-> visit(x))`
 * `levelTraveral(root).forEach(x-> visit(x))`
+
 ## Binary Tree
 
 ### representation of a tree
@@ -50,8 +52,10 @@ graph LR
 ```
 
 ### Tree Traveral
+树有多种traversal的方法，其中dfs可以实现前序，中序，后序。大部分情况下，你需要首先了解父节点和子节点的依赖关系。
 
 ![traversal](./graphs/binaryTreeTraversal.drawio.svg)
+
 
 ```
 /* binary tree travesal */
@@ -67,7 +71,7 @@ For the recursive solution, the main point is to find out what need to happen to
 
 
 ### Breadth First Search
-level 
+**level traversal**
 
 ```java
 void bfs(Node root) {
@@ -194,4 +198,12 @@ General signature of DFS solution
 
 ```  
 
+## Specia Binary Tree
 
+### 完全二叉树
+
+### 完美二叉树
+### 退化的链 
+
+
+## BST使用场景
