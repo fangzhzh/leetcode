@@ -47,6 +47,36 @@ int binarySearch(int[] nums, int target) {
 
 ![二分查找](./graphs/binarySearch.drawio.svg)
 
+## 代码示例
+
+```java
+int lower_bound(int[] numbers, int target) {
+    int left = 0, right = nums.length;
+    while(left < right) {
+        int mid = left + (right - left) / 2;
+        if(nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+}
+
+int upper_bound(int[]nums, int target) {
+    int left = 0, right = nums.length;
+    while(left < right) {
+        int mid = left + (right - left) / 2;
+        if(nums[mid] <= target) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+}
+```
+
 
 
 
