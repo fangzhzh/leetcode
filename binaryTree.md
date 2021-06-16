@@ -8,6 +8,14 @@ Binary Tree, Binary Search tree
 * `postTraveral(root).forEach(x-> visit(x))`
 * `levelTraveral(root).forEach(x-> visit(x))`
 
+## The most important thing for Binary three's problem
+Finding out the relationshipt between the parent node and children nodes
+
+![relationship analysis](../graphs/104.drawio.svg)
+
+If it's a top down recursive, the recursive itself should work.
+But if it's bottom up recurisve, sometimes we need a hashmap to store children's information for parent.
+
 ## Binary Tree
 
 ### representation of a tree
