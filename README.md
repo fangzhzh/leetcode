@@ -25,6 +25,7 @@
     * [100. 相同的树](./100.same-tree)
     * [101. 对称二叉树](./101.symmetric-tree)
 ## Binary Search 
+* [二分查找](./binarySearch.md)
 
 ## Stack
 
