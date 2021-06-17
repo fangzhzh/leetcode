@@ -1,4 +1,4 @@
 This is a repo for all my computer science knowledge, including algorithm, system design and more.
 
-* [algorithm](./algorithem)
+* [algorithm](./algorithm)
 * [system design](./systemDesign)
