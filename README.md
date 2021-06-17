@@ -28,6 +28,7 @@
 * [二分查找](./binarySearch.md)
 
 ## Stack
+* [栈](./stack.md)
 
 ## Hash
 
