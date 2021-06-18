@@ -32,7 +32,7 @@
 * [栈](./stack.md)
 
 ## Hash/double pointers
-* [哈希表和双指针]](./hashTwoPointers.md)
+* [哈希表和双指针](./hashTwoPointers.md)
     * []
 ## Dynamic programming
 
