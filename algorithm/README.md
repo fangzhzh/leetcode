@@ -31,8 +31,9 @@
 ## Stack
 * [栈](./stack.md)
 
-## Hash
-
+## Hash/double pointers
+* [哈希表和双指针]](./hashTwoPointers.md)
+    * []
 ## Dynamic programming
 
 ## String
