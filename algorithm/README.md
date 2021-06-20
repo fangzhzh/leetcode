@@ -35,10 +35,16 @@
 * [哈希表和双指针](./hashTwoPointers.md)
     * []
 ## Dynamic programming
-
+# [动态规划](./dynamicProgramming.md)
 ## String
 
 ## Binary
 
 
 ## Miscs
+* int加减乘除的题目处理溢出
+
+    处理溢出情况，通常要处理下次迭代溢出， x > MAX_VALUE || x < MIN_VALUE
+    比如，7 整数反转这个题目，每次迭代就是 x *= 10， 所以 这里的条件是
+    res < Integer.MIN_VALUE/10 || res > Integer.MAX_VALUE / 10
+

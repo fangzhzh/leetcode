@@ -1,6 +1,64 @@
 # 栈
-栈是实现了FILO的数据结构
+栈是实现了LIFO的数据结构
 
+thinking out of box的栈技巧，不需要有什么push进什么(literally push)，可以为virtual push, processed push。
+
+举个例子：
+* 20-valid-parentheses
+
+```java
+switch(c) {
+                case '(':
+                case '[':
+                case '{':
+                stack.push(c);
+                break;
+                case ')':
+                if(stack.isEmpty() || stack.peek() != '(') {
+                    return false;
+                } else {
+                    stack.pop();
+                }
+                break;
+                case '}':
+                if(stack.isEmpty() || stack.peek() != '{') {
+                    return false;
+                } else {
+                    stack.pop();
+                }
+                break;
+                case ']':
+                if(stack.isEmpty() || stack.peek() != '[') {
+                    return false;
+                } else {
+                    stack.pop();
+                }
+
+```
+
+因为我们看到')'，栈顶是'('才是valid，实际上，如果我们在'('直接push')',比对就不这么verbose了
+
+```java
+switch(c) {
+                case '(':
+                stack.push(')');
+                break;
+                case '[':
+                stack.push(']');
+                break;
+                case '{':
+                stack.push(});
+                break;
+                case ')':
+                case '}':
+                case ']':
+                if(stack.isEmpty() || stack.peek() != c) {
+                    return false;
+                } else {
+                    stack.pop();
+                }
+
+```
 ## 单栈
 
 利用FILO的性质，一个栈信息足够的题。
