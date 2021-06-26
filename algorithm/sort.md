@@ -58,8 +58,38 @@ Applying heapify procedure to index 0:
 The heapify procedure calls itself recursively to build heap in top down manner.
 ```
 ![上浮建堆过程](./graphs/bottom_up_heapify.drawio.svg)
+```
+public void swim (int index) {
+    while (index > 1 && nums[index/2] > nums[index]) {
+        swap(index/2,index);//交换
+        index = index/2;
+    }
+}
+```
 
 ![下沉建堆过程](./graphs/top_down_heapify.drawio.svg)
+
+```
+
+public void sink (int[] nums, int index,int len) {
+        while (true) {
+            //获取子节点
+            int j = 2 * index;
+            if (j < len-1 && nums[j] < nums[j+1]) {
+                j++;
+            }
+            //交换操作，父节点下沉，与最大的孩子节点交换
+            if (j < len && nums[index] < nums[j]) {
+                swap(nums,index,j);
+            } else {
+                break;
+            } 
+            //继续下沉
+            index = j;
+        }
+    }
+```
+
 
 建堆我们这里提出两种方法，利用上浮操作，也就是不断插入元素进行建堆，另一种是利用下沉操作，遍历父节点，不断将其下沉，进行建堆，我们一起来看吧。
 
