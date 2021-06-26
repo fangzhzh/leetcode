@@ -1,7 +1,6 @@
 # leetcode
 ## 算法复盘
-* 1 完全没有思路
-    * 参考 SSH 方法
+* 1 完全没有思路 SSH方法
     * Similar：找到解决过的相似题目：
     * Smaller：解决一道更简单的题目
     * High level：假定子问题已经被解决
@@ -14,6 +13,7 @@
 
 ## 递归
 * [394. 字符串解码](./394.decode-string/394.md)
+* [排序算法](./sort.md)
 ## 分治
 
 ## Linked List
