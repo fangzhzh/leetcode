@@ -12,6 +12,7 @@
     * 一般情况下是思路不够清晰，一些细的关键点没有想清楚，或者对于编程语言的熟悉不够
 
 ## 递归
+* [递归](./recursive.md)
 * [394. 字符串解码](./394.decode-string/394.md)
 * [排序算法](./sort.md)
 ## 分治
@@ -53,7 +54,20 @@
 ## Binary
 
 
+## graph
+### 深度优先搜索是一种在回退之前尽可能深入每个分支的遍历算法。深度优先+回溯
+![深度优先+回溯 backtracking](./dfsBacktracking.md)
+[1087. Brace Expansion](./1087.brace-expansion)
+### 广度优先搜索是一种先访问所有同层结点，再继续深入下一层的遍历算法，用于得到无权图的最短路径。
+[1087. Brace Expansion](./1087.brace-expansion)
+### Toplogic
 ## Miscs
+* 一些符号的读法
+    * a' a prime
+    * () parentheses
+    * [] bracket
+    * {} curly bracket/braces
+    * 
 * int加减乘除的题目处理溢出
 
     处理溢出情况，通常要处理下次迭代溢出， x > MAX_VALUE || x < MIN_VALUE
