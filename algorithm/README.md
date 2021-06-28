@@ -56,10 +56,12 @@
 
 ## graph
 ### 深度优先搜索是一种在回退之前尽可能深入每个分支的遍历算法。深度优先+回溯
-![深度优先+回溯 backtracking](./dfsBacktracking.md)
-[1087. Brace Expansion](./1087.brace-expansion)
+* [深度优先+回溯 backtracking](./dfsBacktracking.md)
+
+* [1087. Brace Expansion](./1087.brace-expansion)
 ### 广度优先搜索是一种先访问所有同层结点，再继续深入下一层的遍历算法，用于得到无权图的最短路径。
-[1087. Brace Expansion](./1087.brace-expansion)
+* [1087. Brace Expansion](./1087.brace-expansion)
+
 ### Toplogic
 ## Miscs
 * 一些符号的读法
