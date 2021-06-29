@@ -44,8 +44,8 @@
 ## Stack
 * [栈](./stack.md)
 
-## Hash/double pointers
-* [哈希表和双指针](./hashTwoPointers.md)
+## Hash/double pointers/sliding windows
+* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
     * []
 ## Dynamic programming
 # [动态规划](./dynamicProgramming.md)

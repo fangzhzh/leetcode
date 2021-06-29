@@ -68,3 +68,64 @@ void moveZeros(int[] nums) {
 ```
 
 ![moveZeros图解](./graphs/moveZeros.drawio.svg)
+
+### 滑动窗口
+双指针用法里有一种用法，很重要，很常用的，然后有了自己的名字。滑动窗口。
+
+一般滑动窗口用来把一个brutal force的O(n^2),o(n^3)的问题，简化为O(n)
+
+
+
+* 数组或者字符串的subrange，最长，最短，某个value
+* 有比较简单的方案 O(N²), O(2^N) or some other large time complexity
+
+Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies a given condition **exactly**.
+
+
+滑动窗口也是一种动态规划
+* 最优子结构
+* 子问题重叠
+
+![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
+
+
+* Fast/Slow 快慢指针
+
+    快指针按照条件grow窗口。对Minimum Window Substring问题，快指针grow窗口知道找到一个valid，即找到所有的字符。
+
+    慢指针shrink窗口。找到窗口以后，慢指针往前移动，直到窗口里的内容invalid，也就是不再有所有字符的窗口。
+
+    在找到时记录一下。
+
+* Fast/Catchup  快追指针
+
+    这个很像快慢指针，但是慢指针是直接跳到快指针的位置。
+
+    比如Max Consecutive Sum问题，[1, 2, 3, -7, 7, 2, -12, 6]
+
+    当当前和变为负数的时候，慢指针直接跳到快指针的位置。
+
+* Fast/Lagging 快拖指针
+
+    慢指针拖到快指针后边一个或者两个的位置，记录着一路过来的选择。
+
+    House Robber
+
+* Front/Back 前后指针
+
+    two sum
+
+
+#### To Sumup
+* Fast/Slow
+    * BitFLip
+    * Minimum Window Substring
+    * Consecutive Subarray Sum
+*  Fast/Catchup
+    *  Max Consecutive sum
+    * buy/sell stocks
+* Fast/Lag
+    * House Robber
+* Front/Back
+    * Rain water
+    * Sorted Two sum
