@@ -64,6 +64,13 @@
 
 ### Toplogic
 ## Miscs
+* 递归和动态规划的一些共同点
+递归相关的词汇，recursive, top down, buttom up, BFS, DFS, DFS+backtrack,DFS+(pre-order, in-order+postorder + level)
+
+dp相关的词汇， top down, buttom up, tabulation or memoization, sliding window
+
+dp+recursive，leetcode半壁江山
+
 * 一些符号的读法
     * a' a prime
     * () parentheses
