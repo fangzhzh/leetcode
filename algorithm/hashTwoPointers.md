@@ -82,9 +82,13 @@ void moveZeros(int[] nums) {
 Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies a given condition **exactly**.
 
 
-滑动窗口也是一种动态规划
+滑动窗口也是一种~~动态规划~~贪心算法
 * 最优子结构
-* 子问题重叠
+* ~~子问题重叠~~，没有子问题重叠,图中把字符串重叠/数组选择重叠，但这不是子问题重叠
+    * 子问题重叠，意味着F(i), F(j)有共同子问题f(k)，F(k)对两个调用着exactly相同结果
+    * 滑动窗口可能不同的窗口会选择出相同的字符串，但是他们的左右指针指向并不同，所以并不能说是子问题
+* 滑动窗口更像是贪心，每次选出最优解    
+
 
 ![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
 
