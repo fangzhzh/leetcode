@@ -85,11 +85,16 @@
 * [1087. Brace Expansion](./1087.brace-expansion)
 
 ### Toplogic
+## 矩阵
+矩阵也是一个大项目，虽然题型并不多，旋转，顺时针，逆时针，对角线。
+
+[矩阵](matrix.md)
 ## Miscs
+
 * 递归和动态规划的一些共同点
 递归相关的词汇，recursive, top down, buttom up, BFS, DFS, DFS+backtrack,DFS+(pre-order, in-order+postorder + level)
 
-dp相关的词汇， top down, buttom up, tabulation or memoization, sliding window
+dp相关的词汇， top down, buttom up, tabulation or memoization
 
 dp+recursive，leetcode半壁江山
 
