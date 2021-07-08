@@ -5,6 +5,9 @@ hashmap的使用通常是tow pass，第一遍build map,第二遍使用
 
 但是有时候one pass hash也很好，一遍build一遍使用，可避免在处理某个元素的时候，从hashmap里取出自己
 
+HashMap可以存字符，也可以存字符位置，也可以存-1表示某种状态
+
+* LC387. 字符串中的第一个唯一字符
 
 ## two pointers
 
