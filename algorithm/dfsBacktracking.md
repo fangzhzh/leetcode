@@ -1,7 +1,24 @@
 # DFS
+* 695. 岛屿的最大面积
+* 394. 字符串解码
+* 495. 目标和
+* 547. 省份数量
+* 1087. Brace Expansion
 
-深度优先搜索是一种在回退之前尽可能深入每个分支的遍历算法。深度优先+回溯
 
+深度优先搜索是一种在回退之前尽可能深入**每个分支**的遍历算法。深度优先+回溯
+
+我们对选择列表进行遍历，当找到一个可能解的开始，我们对这个“开始”进行深度优先的决策树遍历+回溯
+
+```
+function DFSProblem:
+    定义路径，定义选择状态
+    定义result
+    for 可能解 in 选择列表
+        backtrack(选择列表，路径(可能解+选择状态), result)
+    end
+    return result
+```
 
 解决一个回溯问题，实际上就是一个决策树的遍历过程
 
@@ -33,10 +50,20 @@ void traverse(TreeNode root) {
 }
 ```
 
+        
+backtrack里做选择，撤销选择的部分，
+* 如果是sum，可以用`backtrack(路径, 选择列表, sum+1)`，就完成了做选择和撤销选择的操作
+* 如果是字符串，可以用`backtrack(路径, 选择列表, str+"i")`，但是这种用法不同创建新字符串，效率很差
+    * `sb.append(char)`
+    * `backtrack(路径, 选择列表, sb)`
+    * `sb.deleteCharAt(sb.length()-1)`
+
+
+
 
 for example, 1087. 花括号展开
  {a,b}c{d,e}f to ["acdf","acef","bcdf","bcef"]
 
  ![1087. Brace Expansion](./graphs/1087.drawio.svg)
 
-![394字符串街吗](./graphs/394.drawio.svg),
+![394字符串街吗](./graphs/394.drawio.svg)
