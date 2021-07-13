@@ -1,4 +1,3 @@
-
 # 动态规划
 ## 核心问题
 
@@ -68,8 +67,6 @@ It is a directed graph, containing one vertex for each distinct sub problem.
 
 
 
-
-
 * Top-down(with memoization)
 ```java
 MEMOIZED-CUT_ROD(p,n)
@@ -91,7 +88,6 @@ MEMOIZED-CUT-ROD-AUX(p,n,r)
 ```
 
 Depth-first search of the subproblem graph
-
 
 
 * Bottom-up

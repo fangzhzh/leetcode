@@ -1,4 +1,5 @@
 # hashmap and two pointers
+## HashMap
 O(1) find 所以HashMap会被用在很多需要查找的场景
 
 hashmap的使用通常是tow pass，第一遍build map,第二遍使用
@@ -11,7 +12,13 @@ HashMap可以存字符，也可以存字符位置，也可以存-1表示某种�
 
 ## two pointers
 
-双指针的走法有相向而行，快慢指针(同向而行)
+两个指针解决问题。相向或同向。
+
+双指针问题的关键是定义好两个指针的含义，题目一般要求将一个数据从一种状态变为另一种状态，比如无序变有序
+
+* [0, left) 题目要求下需要处理并处理过的数据
+* [left, length) 题目要求里不需要处理的数据
+* [left, rigth] 未知的数据
 
 ### 283. 移动零
 
@@ -35,10 +42,10 @@ int partition(int[] nums, int left, int right) {
     // find the partition point
 }
 ```
+
 * [0, left) < pivot
 * [left, length) > pivot
 * [left, rigth] 需要处理
-
 
 The idea is to find a partition so that all elements before the partition  less than nums[partition], all elements after the partition are greater than nusm[partition].
 

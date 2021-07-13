@@ -12,21 +12,22 @@
     * 一般情况下是思路不够清晰，一些细的关键点没有想清楚，或者对于编程语言的熟悉不够
 * 题目总结和回顾
     * 每类题目要总结出API
-## [排序算法与其无处不在的应用](./sort.md)
+## 排序算法
+* [排序算法与其无处不在的应用](./sort.md)
+
 ## 递归
-* [递归](./recursive.md)
+* [递归基础与API](./recursive.md)
 ## 分治
 
 ## Linked List
-
 链表可以先提出使用额外空间的暴力解，拿到基本分，再优化到常数空间的解
-
-###  [链表基础，快慢指针](./LinkedList.md)
-### [移动链表节点总结](./LinkedListMoving.md)
+* [链表基础与API](./LinkedList.md)
+* [快慢指针](./LinkedListFastSlow.md)
+* [移动链表节点总结](./LinkedListMoving.md)
 ## Binary Tree
-* [二叉树](./binaryTree.md)
+* [二叉树基础与API](./binaryTree.md)
 ## Binary Search 
-* [二分查找](./binarySearch.md)
+* [二分查找与API](./binarySearch.md)
 
 ## Stack
 * [栈与经典题目的图解](./stack.md)
@@ -34,13 +35,15 @@
 ## Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
 
-## [动态规划](./dynamicProgramming.md)
-## [String](./string.md)
-
-## Binary Search
-
-## [图论](./graph.md)
-## [矩阵](./matrix.md)
+## 动态规划
+* [动态规划基础](./dynamicProgramming.md)
+## 字符串
+* [字符串](./string.md)
+* [字符串扫描并操作](./stringScanAndModify.md)
+## 图论
+* [图论基础](./graph.md)
+## 矩阵
+* [矩阵及API](./matrix.md)
 
 
 ## Miscs

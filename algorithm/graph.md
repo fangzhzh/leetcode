@@ -32,6 +32,7 @@
 ### Toplogic
 只针对有向图
 
+### 最短路径Dijstra
 ### 并查集
 [并查集](./unionFindSet.md)
 

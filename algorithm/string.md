@@ -2,32 +2,7 @@
 
 字符串的问题千变万化，可能会是dp， stack，dfs，栈，回文，这里会列一些经典问题
 
-## 字符串扫描+操作
 
-**res = last_res + last_modify(res)**
-For stack we need to store last_res and last_modify, but for some question like 1190, the last modify is always reverse, then we need only one stack.
-
-```java
-private String stringScanAndModify(String s) {
-        // res = last_res + last_modify(res)
-        // stack[[last_res, last_modify], [last_res, last_modify]]
-        Stack<String> stack = new Stack<>();
-        StringBuilder res = new StringBuilder();
-        for(int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if(c == ?) { // 进栈开始条件
-                stack.push(res.toString());
-                res.setLength(0);
-            } else if(c == ')') { // 出栈条件
-                last_modify(res);
-                res = last_res + last_modify(res);
-            } else {
-                res.append(c);
-            }
-        }
-        return res.toString();
-    }
-```
 
 * [394.字符串解码](./394.decode-string/394.md)
     * res = last_res + mult * last_res
