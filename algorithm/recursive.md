@@ -8,16 +8,14 @@
     * 父依赖子 top down, DFS+memo / stack + memo / dynamic programming
     * 子依赖父 bottom up, BFS+memo / queue / dynamic programming
 
-## top down
-
+ tabulation or memoization
+ 
+ ## top down
 
 ## buttom up
-
-
 ## BFS
 
 ## DFS
-
 ## LEVEL
 
 

@@ -1,4 +1,6 @@
 # Sort
+
+排序用来优化运行时间，当一个题目提到能不能O(logN)，那么肯定就是要排序来减少O(n)
 ## Merge Sort
 
 ## Quick Sort

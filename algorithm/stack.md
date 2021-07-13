@@ -85,7 +85,7 @@ switch(c) {
 
 ![155最小栈](./graphs/155_min_stack.drawio.svg)
 
-* 225. 用队列实现
+* 225.用队列实现
 我们有两个FIFO的栈，如果模拟出一个LIFO的栈呢,如何把队列首尾变成栈的顶和尾
 
 ![225. 用队列实现栈](./graphs/225.stack_using_queue.drawio.svg)
