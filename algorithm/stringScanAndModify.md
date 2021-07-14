@@ -4,8 +4,6 @@
 
 **res = last_res + last_modify(res)**
 
-
-
 ## 栈解法模板
 
 这样的题目，我们一般需要两个栈，一个储存上次的字符串，另一个上次的操作。但是如果有的题目操作都是一样的话，我们只需要一个栈
@@ -33,5 +31,5 @@ private String stringScanAndModify(String s) {
     }
 ```
 
-* [394. 字符串解码](./394.decode-string/394.md)
-* 1190. 反转每对括号间的子串
+* [394.字符串解码](./394.decode-string/394.md)
+* 1190.反转每对括号间的子串

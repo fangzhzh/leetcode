@@ -79,31 +79,31 @@ void moveZeros(int[] nums) {
 
 ![moveZeros图解](./graphs/moveZeros.drawio.svg)
 
-### 滑动窗口
+## 滑动窗口
 双指针用法里有一种用法，很重要，很常用的，然后有了自己的名字。滑动窗口。
 
-一般滑动窗口用来把一个brutal force的O(n^2),o(n^3)的问题，简化为O(n)
-
-
-
-* 数组或者字符串的subrange，最长，最短，某个value
-* 有比较简单的方案 O(N²), O(2^N) or some other large time complexity
-
-Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies a given condition **exactly**.
-
-
-滑动窗口也是一种~~动态规划~~贪心算法
-* 最优子结构
-* ~~子问题重叠~~，没有子问题重叠,图中把字符串重叠/数组选择重叠，但这不是子问题重叠
-    * 子问题重叠，意味着F(i), F(j)有共同子问题f(k)，F(k)对两个调用着exactly相同结果
-    * 滑动窗口可能不同的窗口会选择出相同的字符串，但是他们的左右指针指向并不同，所以并不能说是子问题
-* 滑动窗口更像是贪心，每次选出最优解    
-
+* 一般滑动窗口用来把一个brutal force的O(n^2),o(n^3)的问题，简化为O(n),或者O(n^2)
+* 数组或者字符串的subrange，最长，最短，某个value，符合某个条件的
 
 ![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
 
 
+### 滑动窗口API
+Window: 窗口,一个数据结构表示的当前string/数组的已经考察过的一部分。有时是array，有时用map，看题解空间
+
+
+两个指针，一个指向窗口开头，一个指向窗口结尾。
+
+一些变量，跟踪当前的最好方案。
+
+#### 核心问题
+* 何时缩小窗口
+* 何时增大窗口
+
+### 滑动窗口的类别
 * Fast/Slow 快慢指针
+
+     **[s↝↝↝↝↝↝↝↝f     ]**
 
     快指针按照条件grow窗口。对Minimum Window Substring问题，快指针grow窗口知道找到一个valid，即找到所有的字符。
 
@@ -113,6 +113,8 @@ Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies
 
 * Fast/Catchup  快追指针
 
+     **[s↝_________↝f     ]**
+
     这个很像快慢指针，但是慢指针是直接跳到快指针的位置。
 
     比如Max Consecutive Sum问题，[1, 2, 3, -7, 7, 2, -12, 6]
@@ -121,16 +123,20 @@ Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies
 
 * Fast/Lagging 快拖指针
 
+    **[     s↝f↝            ]**
+
     慢指针拖到快指针后边一个或者两个的位置，记录着一路过来的选择。
 
     House Robber
 
 * Front/Back 前后指针
 
+    **[s↝↝↝        ↜↜↜↜f]**
+
     two sum
 
 
-#### To Sumup
+#### To Sum up
 * Fast/Slow
     * BitFLip
     * Minimum Window Substring
@@ -143,3 +149,126 @@ Find Some kind of **Optimal**, **longest**, **shortest** sequence that satisfies
 * Front/Back
     * Rain water
     * Sorted Two sum
+
+
+#### 滑动窗口模板
+滑动窗口模板有两种，一种是flexible的窗口，一种是fix的窗口
+
+```java
+// flexible的窗口
+// minimum/maxmum
+int findSubstring(String s){
+        int[] track = new int[256];// map
+        int counter; // check whether the substring is valid
+        int begin=0, end=0; //two pointers, one point to tail and one  head
+        int len; //the length of substring
+        int d; // 结果
+        for() { /* initialize the hash map(track) here */ }
+
+        while(end<s.length()()){
+
+            if(track[s[end]] ?){  /* modify counter here */ }
+            track[s[end]]-- // track[s[end]]++
+
+            while(/* counter condition */){ // 找到一个符合条件的解
+                 
+                 /* update d here if finding minimum*/
+
+                //increase begin to make it invalid/valid again
+                if(track[s[begin]] ?){ /*modify counter here*/ }
+                track[s[begin]]++ // track[s[begin]]--
+                begin++
+            }  
+
+            /* update d here if finding maximum*/
+            end++;
+        }
+        return d;
+  }
+```
+#### 例题题解
+
+* 438.找到字符串中所有字母异位词
+
+
+```java
+class Solution {
+    // 相似: 49 group-anagram
+    public List<Integer> findAnagrams(String s, String p) {
+        //"cbaebabacd"
+        //        ^-^
+        // first thing, how to verify the anagram
+        // data structure to store the windows info to verify anagram
+        // p map: char->counter, 
+        // s map: char -> counter, maintaining a valid subset of anagram of p.
+        // findAnagramsFlexiWindow(s, p)
+        return findAnagramsFixedWindow(s, p);
+    }
+
+    // 1. find valid window, and compare the right-left == p.length
+    private List<Integer> findAnagramsFlexiWindow(String s, String p) {
+
+        int[] pmap = new int[26];
+        int[] smap = new int[26];
+        for(int i = 0; i < p.length(); i++) {
+            char c = p.charAt(i);
+            pmap[c-'a']++;
+        }
+
+        List<Integer> ans = new ArrayList<>();
+        int left = 0;
+        for(int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            smap[c-'a']++;
+
+            while(smap[c-'a'] > pmap[c-'a']) {
+                char cleft = s.charAt(left);
+                smap[cleft-'a']--;
+                left++;
+            }
+            if(right - left + 1 == p.length()) {
+                ans.add(left);
+            }
+        }
+        return ans;
+
+    }
+
+    // 2. fixed window, compare every scan to validate
+    private  List<Integer> findAnagramsFixedWindow(String s, String p) {
+
+        int[] pmap = new int[26];
+        int[] smap = new int[26];
+        for(int i = 0; i < p.length(); i++) {
+            char c = p.charAt(i);
+            pmap[c-'a']++;
+        }
+        List<Integer> ans = new ArrayList<>();
+        int left = 0;
+        //"cbaebabacd"
+        for(int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            smap[c-'a']++;
+            if(right - left + 1 >= p.length()) {
+                if(compareArray(smap, pmap)) {
+                    ans.add(left);
+                }
+                smap[s.charAt(left)-'a']--;
+                left++;
+            }
+        }
+        return ans;
+    }
+
+    private boolean compareArray(int[] pmap, int[] smap) {
+        for(int i = 0; i < 26; i++) {
+            if(pmap[i] != smap[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+![438.找到字符串中所有字母异位词图解](./438.minimum-window-substring.drawio.svg)
