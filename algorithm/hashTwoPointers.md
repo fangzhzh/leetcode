@@ -272,3 +272,37 @@ class Solution {
 ```
 
 ![438.找到字符串中所有字母异位词图解](./graphs/438.minimum-window-substring.drawio.svg)
+
+
+`cbaebabacd`
+
+`abc`
+
+intial [[a:1], [b:1], [c:1]], counter: 3
+
+| outer | innter | left char | right char | current  value | counter|
+| ---- | --- | --- | --- | --- | ---| 
+|outer| |c |c| 0|counter = 2|
+|outer| |c |b| 0|counter = 1|
+|outer| |c |a| 0|counter = 0|
+|   | inner check|c|a| 0|0|
+|    |inner|c | a| 1| counter 1|
+|outer|  |b|e| -1|counter = 1|
+|outer|  |b|b| -1|counter = 1|
+|outer|  |b|a| -1|counter = 1|
+|outer|  |b|b| -2|counter = 1|
+|outer|  |b|a| -2|counter = 1|
+|outer|  |b|c| 0|counter = 0|
+|    |inner check|b|c| -2|0|
+|    |inner|b ++|c| -1| counter 0|
+|    |inner check|a|c| -2|0|
+|    |inner|a ++|c| -1| counter 0|
+|    |inner check|e|c| -1|0|
+|    |inner|e ++|c| 0| counter 0|
+|    |inner check|b|c| -1|0|
+|    |inner|b ++|c| 0| counter 0|
+|    |inner check|a|c| -1|0|
+|    |inner|a ++|c| 0| counter 0|
+|    |inner check|b|c| 0|0|
+|    |inner|b ++|c| 1| counter 1|
+|outer|  |a|d| -1|counter = 1|
