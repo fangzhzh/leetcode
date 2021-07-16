@@ -27,7 +27,7 @@ while(fast != null && fast.next != null) {
 ```
 
 
-快慢指针不同初始值和检查条件
+## 快慢指针不同初始值和检查条件
 
 ```java
 public ListNode middleNode(ListNode head) {
@@ -37,7 +37,7 @@ public ListNode middleNode(ListNode head) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        System.out.println("head check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
+        System.out.println("head, check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
 
         slow = head;
         fast = head;
@@ -45,7 +45,15 @@ public ListNode middleNode(ListNode head) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        System.out.println("head check next, slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
+        System.out.println("head, check next, slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
+
+        slow = head;
+        fast = head.next;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        System.out.println("head.next, check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
 
         slow = head;
         fast = head.next;
@@ -59,26 +67,50 @@ public ListNode middleNode(ListNode head) {
         return slow;
 }
 
-## Odd [1,2,3,4,5]
-head check next.next slow:3 fast:5
-head check next, slow:3 fast:5
-head.next check next slow:3 fast:-1
-
-## Even [1,2,3,4,5,6]
-head check next.next slow:3 fast:5
-head check next, slow:4 fast:-1
-head.next check next slow:3 fast:6
 
 ```
 
+### 初始条件 slow=0, fast=0
+#### Odd [1,2,3,4,5]
+* head check next.next slow:3 fast:5
+* head check next, slow:3 fast:5
+#### Even [1,2,3,4,5,6]
+* head check next.next slow:3 fast:5
+* head check next, slow:4 fast:-1
+
+
+| num| fast | 跳法 |  slow | fast |
+|-----|------|-------| ------| -----|
+| even | head | head, head.next 乐观跳 | right | null |
+| odd | head | head, head.next 乐观跳| mid | last |
+| even | head | head.next, head.next.next 悲观跳| left | penultimate |
+| odd | head | head.next, head.next.next 悲观跳| mid | last |
+
+
+
+![初始0,0 快慢指针slow，fast最终位置图示](./graphs/slowFastPosition00.drawio.svg)
+
+
+
+### 初始条件 slow=0, fast=1
+
+### Odd [1,2,3,4,5]
+* head.next chec next.next slow:2 fast:4, wrong
+* head.next check next slow:3 fast:-1
+
+### Even [1,2,3,4,5,6]
+* head.next check next.next slow:3 fast:6
+* head.next check next slow:3 fast:6
+
+
 | num| fast | check |  slow | fast |
 |-----|------|-------| ------| -----|
-| even | head | head, head.next | mid, right | null |
-| odd | head | head, head.next | mid, right | last |
-| even | head | head.next, head.next.next | mid, left | penultimate |
-| odd | head | head.next, head.next.next | mid, left | last |
 | even | head.next | head, head.next | mid, left | null |
 | odd | head.next | head, head.next | mid, left | last |
+| even | head.next | head.next, head.next.next | mid, left | null |
+| odd | head.next | head.next, head.next.next | mid, left | last |
+
+![初始0,1 快慢指针slow，fast最终位置图示](./graphs/slowFastPosition01.drawio.svg)
 
 ```mermaid
 flowchart TB
