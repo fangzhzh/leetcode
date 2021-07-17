@@ -34,43 +34,6 @@ But if it's bottom up recurisve, sometimes we need a hashmap to store children's
 
 ![representation of a tree](./graphs/binaryTreeRepresent.drawio.svg)
 
-* LinkedList
-```mermaid
-
-graph LR
-  subgraph PostOrder ;
-	right2[right] --> root2[root];
-	left2[left] --> right2[right];
-  end;
-  subgraph InOrder;
-	left --> root;
-	root --> right;
-  end;
-  subgraph PreOrder;
-	root1[root] --> left1[left];
-	left1[left] --> right1[right];
-  end;
-
-```
-* Array
-```mermaid
-
-graph LR
-  subgraph PostOrder;
-	left2[left] -.- right2[right];
-	right2[right] -.- root2[root];
-  end;
-  subgraph InOrder;
-	left -.- root;
-	root -.- right;
-  end;
-  subgraph PreOrder;
-	root1[root] -.- left1[left];
-	left1[left] -.- right1[right];
-  end;
-
-```
-
 ### Tree Traveral
 树有多种traversal的方法，其中dfs可以实现前序，中序，后序。大部分情况下，你需要首先了解父节点和子节点的依赖关系。
 
