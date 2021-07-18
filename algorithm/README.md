@@ -31,8 +31,9 @@
 
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
-## 📚 Stack
-* [栈与经典题目的图解](./stack.md)
+## 📚 Stack Queue Deque
+* [栈列表API](./stackQueueAPI.md)
+* [栈列表与经典题目的图解](./stackQueue.md)
 
 ## 📏Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
