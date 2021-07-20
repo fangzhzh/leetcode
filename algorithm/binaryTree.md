@@ -23,7 +23,9 @@ Binary Tree, Binary Search tree
 ## The most important thing for Binary three's problem
 Finding out the relationshipt between the parent node and children nodes
 
-![relationship analysis](../graphs/104.drawio.svg)
+找出父节点和子节点 之间的关系
+
+![relationship analysis](./graphs/104.drawio.svg)
 
 If it's a top down recursive, the recursive itself should work.
 But if it's bottom up recurisve, sometimes we need a hashmap to store children's information for parent.
@@ -101,6 +103,7 @@ General signature of DFS solution
         while(!stack.isEmpty()){
             Node node = (Node)stack.pop();
 
+            // 这个取法很重要，特别是有的题目里，要求改变指针指向，left和right可以cache原左右指针
             Node left = node.getLeft();
             Node right = node.getRight();
 

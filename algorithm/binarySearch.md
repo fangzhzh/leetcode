@@ -54,10 +54,11 @@ int lower_bound(int[] numbers, int target) {
     int left = 0, right = nums.length;
     while(left < right) {
         int mid = left + (right - left) / 2;
-        if(nums[mid] < target) {
-            left = mid + 1;
-        } else {
+        // 大于等于target，收缩右边界
+        if(nums[mid] >= target) {
             right = mid;
+        } else {
+            left = mid + 1;
         }
     }
     return left;
@@ -67,6 +68,7 @@ int upper_bound(int[]nums, int target) {
     int left = 0, right = nums.length;
     while(left < right) {
         int mid = left + (right - left) / 2;
+        // 小于等于target，收缩左边界
         if(nums[mid] <= target) {
             left = mid + 1;
         } else {
