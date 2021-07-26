@@ -27,7 +27,7 @@ Finding out the relationshipt between the parent node and children nodes
 
 ![relationship analysis](./graphs/104.drawio.svg)
 
-If it's a top down recursive, the recursive itself should work.
+If it's a top down recursive, the recursive itself can carry all information from parent to child.
 But if it's bottom up recurisve, sometimes we need a hashmap to store children's information for parent.
 
 ## Binary Tree

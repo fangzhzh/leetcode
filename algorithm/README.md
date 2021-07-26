@@ -55,6 +55,7 @@
 * [字符串扫描并操作](./stringScanAndModify.md)
 ## 🗺️ 图论
 * [图论基础](./graph.md)
+* [图论DFS错题本](./graphDFSProblemNotes.md)
 ## 📱 矩阵
 * [矩阵及API](./matrix.md)
 
