@@ -30,8 +30,10 @@
 广度优先搜索是一种先访问所有同层结点，再继续深入下一层的遍历算法，用于得到无权图的最短路径。
 * [1087. Brace Expansion](./1087.brace-expansion)
 
-### Toplogic
-只针对有向图
+### Toplogic Sorting 拓扑排序
+只针对有向无环图 Directed Acyclic Graph
+[拓扑排序](./topoligicSorting.md)
+
 
 ### 最短路径Dijstra
 ### 并查集
