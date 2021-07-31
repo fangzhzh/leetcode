@@ -51,7 +51,10 @@ A standalone Key Generation Service(KGS) generates random 6-8 letters before han
 
 ### Partitioning and Replication
 
-Hash based partitioning
+* Hash based partitioning
+根据Hash的结果来随机的分配URL到不同的server，仍然会出现非常不平均的分配。此处，我们可以用Consistent Hashing
+
+![](./graphs/ConsistentHashing.drawio.svg)
 
 ### Cache
 
@@ -63,3 +66,12 @@ Hash based partitioning
 LRU
 
 ~[shortUrl cache](./graphs/shortenUrlCaches.drawio.svg)
+
+
+## Purging or DB cleanup
+怎么处理 Expirated Data，
+* 访问并删除
+* clean up service
+
+![clean up service](./graphs/cleanupService.drawio.svg)
+    

@@ -12,7 +12,8 @@
 [设计facebook Live](./facebookLive.md)
 ## Design a URL Shortening service like TinyURL
 [TinyURL](./tinyURL.md)
-
+## Design a Pastebin
+[PasteBin](./designPasteBin.md)
 
 ## Some usefull knowledge
 ### base encodeing
