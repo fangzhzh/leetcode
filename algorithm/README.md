@@ -41,10 +41,11 @@
 
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
-## 📚 Stack Queue Deque
+## 📚 栈，队列，Stack Queue Deque
 * [栈列表API](./stackQueueAPI.md)
 * [栈列表与经典题目的图解](./stackQueue.md)
-
+### 单调栈
+* [单调栈API](./monotoneStackAPI.md)
 ## 📏Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
 
@@ -53,6 +54,9 @@
 ## 🔡 字符串
 * [字符串](./string.md)
 * [字符串扫描并操作](./stringScanAndModify.md)
+
+## 数组Array
+* [数组及其API][./arrayAPI.md]
 ## 🗺️ 图论
 * [图论基础](./graph.md)
 * [图论DFS错题本](./graphDFSProblemNotes.md)

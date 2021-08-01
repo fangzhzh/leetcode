@@ -6,28 +6,11 @@
 * [139. Word Break](https://leetcode-cn.com/problems/word-break)
 * [348. Design Tic-Tac-Toe](https://leetcode-cn.com/problems/design-tic-tac-toe)
 * [380. Insert Delete GetRandom O(1)](https://leetcode-cn.com/problems/insert-delete-getrandom-o1)
-
-### Array
 * [953. Verifying an Alien Dictionary](https://leetcode-cn.com/problems/verifying-an-alien-dictionary/)
-* [1268. Search Suggestions System](https://leetcode-cn.com/problems/search-suggestions-system)
-* [973. K Closest Points to Origin](https://leetcode-cn.com/problems/k-closest-points-to-origin)
-* [348. Design Tic-Tac-Toe](https://leetcode-cn.com/problems/design-tic-tac-toe)
-* [1428. Leftmost Column with at Least a One](https://leetcode-cn.com/problems/leftmost-column-with-at-least-a-one)
-* [380. Insert Delete GetRandom O(1)](https://leetcode-cn.com/problems/insert-delete-getrandom-o1)
-* [636. Exclusive Time of Functions  中等](https://leetcode-cn.com/problems/exclusive-time-of-functions)
-* [238. Product of Array Except Self  中等](https://leetcode-cn.com/problems/product-of-array-except-self)
-* [1539. Kth Missing Positive Number  简单](https://leetcode-cn.com/problems/kth-missing-positive-number)
-* [827. Making A Large Island](https://leetcode-cn.com/problems/making-a-large-island)
-* [746. Min Cost Climbing Stairs](https://leetcode-cn.com/problems/min-cost-climbing-stairs)
 
 ### String
-* [953. Verifying an Alien Dictionary](https://leetcode-cn.com/problems/verifying-an-alien-dictionary/)
-* [1268. Search Suggestions System](https://leetcode-cn.com/problems/search-suggestions-system)
-* [139. Word Break](https://leetcode-cn.com/problems/word-break)
-* [211. Design Add and Search Words Data Structure](https://leetcode-cn.com/problems/design-add-and-search-words-data-structure)
 * [157. Read N Characters Given Read4  简单](https://leetcode-cn.com/problems/read-n-characters-given-read4)
 * [158. Read N Characters Given Read4 II   困难](https://leetcode-cn.com/problems/read-n-characters-given-read4-ii-call-multiple-times)
-* [415. Add Strings](https://leetcode-cn.com/problems/add-strings)
 ### Trie
 * [1268. Search Suggestions System](https://leetcode-cn.com/problems/search-suggestions-system)
 * [139. Word Break](https://leetcode-cn.com/problems/word-break)
