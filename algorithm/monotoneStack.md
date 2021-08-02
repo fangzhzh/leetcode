@@ -86,3 +86,61 @@ int[] nextGreaterElement(int<Integer> nums) {
 next greater element 的栈里从下往上存储着所有的greater elemenent，我们在扫描的时候，只需要关心当前的元素能看到的下一个next greater element。
 
 本类题目，我们要求上坡，那么就需要知道一道坡的底在哪里。寻找满足p[j] > p[i] 的最长区间。 虽然我们希望找到的是p的单增区间，但元素比较时是逆序遍历p的，所以我们构造好单调栈需要是单减的；
+```
+例题：
+给出一个数组，元素是+1或者-1。找出和大于零的最长的天数
+[1,1,-1,-1,-1,-1,1]
+
+```
+
+```java
+class Solution {
+    public int longestWPI(int[] hours) {
+        //[0, 1,2,1,0,-1,-2,-1]
+        int[] presum = new int[hours.length+1];
+        presum[0] = 0;
+        for(int i = 1; i <= hours.length; i++) {
+            presum[i] = presum[i-1]+hours[i-1];
+            System.out.println(String.format("presum %1d result %2d", i, presum[i]));
+
+        }
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < presum.length; i++) {
+            if(stack.isEmpty() || presum[i] < presum[stack.peek()]) {
+                stack.push(i);
+                System.out.println(String.format("stack pushed %1d with value%2d", i, presum[i]));
+
+            }
+        }
+
+        int ans = 0;
+        for(int i  = presum.length-1; i>=0; i--) {
+            // presum[i]-presum[j] ==> sum(array, j, i)
+            while(!stack.isEmpty() && presum[i] - presum[stack.peek()] > 0]) {
+                ans = Math.max(ans, i - stack.pop());
+            }
+            System.out.println(String.format("%1d result %2d", i, ans);
+        }
+        return ans;
+
+}
+
+source: [1,1,-1,-1,-1,-1,1]
+
+presum: [0,1,2,1,0,-1,-2,-1]
+
+stack pushed 0 with value 0
+stack pushed 5 with value-1
+stack pushed 6 with value-2
+7 result  1
+6 result  0
+5 result  0
+4 result  0
+3 result  3
+2 result  0
+1 result  0
+0 result  0
+
+```
+
+
