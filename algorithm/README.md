@@ -63,7 +63,8 @@
 ## 📱 矩阵
 * [矩阵及API](./matrix.md)
 
-
+## 数学 Math
+* [数学题目基础及API](./mathAPI.md)
 ## Miscs
 
 * 递归和动态规划的一些共同点
@@ -95,3 +96,6 @@ dp+recursive，leetcode半壁江山
 
 ## 面经
 [FB面经](./FB面经.md)
+
+## 模板
+![模板API](./codeAPI.md)

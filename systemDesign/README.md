@@ -15,9 +15,17 @@
 ## Design a Pastebin
 [PasteBin](./designPasteBin.md)
 
+## Design Instagram
+[设计Instagram](./designInstagram.md)
 ## Some usefull knowledge
 ### base encodeing
 
 * base36 ([a-z,0-9])
 * base62([a-z,A-Z,0-9])
 * base64([base63 + /])
+
+### Size
+1000 = 1K
+1000K = 1M
+10000M = 1G
+10000G = 1T

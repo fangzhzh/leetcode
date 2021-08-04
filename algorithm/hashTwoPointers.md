@@ -89,16 +89,13 @@ void moveZeros(int[] nums) {
 
 
 ### 滑动窗口API
-Window: 窗口,一个数据结构表示的当前string/数组的已经考察过的一部分。有时是array，有时用map，看题解空间
-
-
-两个指针，一个指向窗口开头，一个指向窗口结尾。
-
-一些变量，跟踪当前的最好方案。
+* Window: 窗口,一个数据结构表示的当前string/数组的已经考察过的一部分。有时是array，有时用map，看题解空间
+* 两个指针，一个指向窗口开头，一个指向窗口结尾。
+* 一些变量，跟踪当前的最好方案。
 
 #### 核心问题
-* 何时缩小窗口
-* 何时增大窗口
+* 何时缩小窗口, shrink
+* 何时增大窗口  expand
 
 ### 滑动窗口的类别
 * Fast/Slow 快慢指针
@@ -170,7 +167,13 @@ int findSubstring(String s){
             if(track[s[end]] ?){  /* modify counter here */ }
             track[s[end]]-- // track[s[end]]++
 
-            while(/* counter condition */){ // 找到一个符合条件的解
+
+            // 这个while条件非常的巧妙            
+            while(/* counter condition */){ // 找到一个符合条件的解 
+            // inValid if finding max: 
+                // if noValid, expand, then outside get the maximum valid
+            // valid if finding min
+                // if valid, expand, then inside get the min valid
                  
                  /* update d here if finding minimum*/
 
