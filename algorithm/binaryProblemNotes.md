@@ -335,3 +335,82 @@ class Solution {
 
 }
 ```    
+
+## 124.Binary Tree Maximum Path Sum
+
+```
+A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
+
+The path sum of a path is the sum of the node's values in the path.
+
+Given the root of a binary tree, return the maximum path sum of any path.
+
+ 
+
+Example 1:
+    1
+    /\
+    2 3
+
+Input: root = [1,2,3]
+Output: 6
+Explanation: The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.
+
+Example 2:
+
+            -10
+            / \
+            9   20
+                / \
+                15 7
+
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+``` 
+
+
+1. 卡壳思路
+    *  必须是dfs，bottom up，得出孩子节点的值，才能算出父节点的path value=`maxPathSum(node.left) + node.val + maxPathSum(node.right);`
+    * 但是这个值却不能传上去，因为已经`left+root+right`了，传上去以后，已经不再是一条valid路径。
+    * 所以对某个节点，无法找出一条valid的path的值
+
+这个卡壳卡的很正常，因为一般来说，都是node.val计算出的值，返回参与node的父节点，但是本题中我们不能返回 pathSum `left+root+right`。
+
+
+此处，针对本题我们引入一个概念，最大贡献值(其实就是左子树右子树累计带上去的值)
+
+* 如果节点是null，那么最大贡献值是0
+* 如果节点不是null，那么最大贡献值是节点值+max(子节点贡献值)
+
+```
+            -10(-10+max(35,9)=25)
+            / \
+        9(9)   20(20+max(15,7)=35)
+                / \
+            15(15) 7(7)
+```                
+
+那么最大路径值就等于所有节点中的最大贡献值的最大值。
+
+```java
+class Solution {
+    int maxSum = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        // 理解题意: 任意路径
+        // 对任意节点，最大值是max(left, 0)+root.val + max(right.0)
+        
+        pathGain(root);
+        return maxSum;
+    }
+    int pathGain(TreeNode root) {
+        if(root == null) return 0;
+        int left = Math.max(pathGain(root.left), 0);
+        int right = Math.max(pathGain(root.right), 0);
+        if(left + right + root.val > maxSum) {
+            maxSum = left + right + root.val;
+        }
+        return Math.max(left, right) + root.val;
+    }
+}
+```

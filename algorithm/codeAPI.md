@@ -41,3 +41,10 @@ long mul(long a, long k) {
 二分的思想是把[left, right)分为[left, mid), [mid+1, right)两部分
 
 所以`lower_bound`是`nums[mid]>=target`时，`right = mid`,`uppder_bound`是`nums[mid]<=target`时，`left=mid+1`
+
+
+## 快速排序
+
+
+## 归并排序 
+

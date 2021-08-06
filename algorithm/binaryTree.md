@@ -20,18 +20,17 @@ Binary Tree, Binary Search tree
 * `postTraveral(root).forEach(x-> visit(x))`
 * `levelTraveral(root).forEach(x-> visit(x))`
 
-## The most important thing for Binary three's problem
+## 父节点和子节点之间的关系
 Finding out the relationshipt between the parent node and children nodes
 
 找出父节点和子节点 之间的关系
 
 ![relationship analysis](./graphs/104.drawio.svg)
 
-If it's a top down recursive, the recursive itself can carry all information from parent to child.
-But if it's bottom up recurisve, sometimes we need a hashmap to store children's information for parent.
+* Top down的递归，父节点带信息到子节点的计算。
+* 如果是buttom up，我们需要从子节点带数据出去父节点，可以用返回值，hashmap来实现
 
 ## Binary Tree
-
 ### representation of a tree
 
 ![representation of a tree](./graphs/binaryTreeRepresent.drawio.svg)

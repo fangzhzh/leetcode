@@ -44,6 +44,7 @@
 ## 📚 栈，队列，Stack Queue Deque
 * [栈列表API](./stackQueueAPI.md)
 * [栈列表与经典题目的图解](./stackQueue.md)
+* [有限队列](./priorityQueueAPI.md)
 ### 单调栈
 * [单调栈API](./monotoneStackAPI.md)
 ## 📏Hash/double pointers/sliding windows
