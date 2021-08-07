@@ -8,17 +8,30 @@
     * 父依赖子 top down, DFS+memo / stack + memo / dynamic programming
     * 子依赖父 bottom up, BFS+memo / queue / dynamic programming
 
- tabulation or memoization
+tabulation or memoization
  
- ## top down
+## 遍历方式
+### DFS
+#### buttom up
+子依赖父
+#### top down
+父依赖子
 
-## buttom up
-## BFS
+### BSF LEVEL
 
-## DFS
-## LEVEL
+## 参数与返回值
+### 参数
+一般有能够递归需要的的变量，和当前的结果
 
+### 返回值
+* 可以是要求的值，比如最大。。。的个数，那么返回值是int
+* 可以是void，需要的值要更新参数列表的某个object，或者更新某个全局的变量，
+    * List<Integer> ans
+    * this.max = Math.max(this.max, curValue)
+* 在上一种情况下，返回值也可以用做计算全局变量
+    * this.max = Math.max(this.max, curValue+dfs(root.left) + dfs(root.right));
 
+## 例题
 ```java
 1143. 最长公共子序列
 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。

@@ -70,11 +70,11 @@ class Solution {
             graph.get(prerequisite[1]).add(prerequisite[0]);
         }
 
-        return canFinishDFS(numCourses, prerequisites, graph);
+        return canFinishDFS(numCourses,     graph);
     }
 
     // Time O(numCouse ^2 )
-    boolean canFinishDFS(int numCourses, int[][]prerequisites, List<List<Integer>>graph) {
+    boolean canFinishDFS(int numCourses, List<List<Integer>>graph) {
         // 有向无环图
         // dfs
         int[] visited = new int[numCourses];
@@ -112,6 +112,99 @@ class Solution {
 }
 ```
 
+### 例题:210.Course Schedule II
+
+210.Course Schedule II
+```java
+There are` a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+
+For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.
+
+ 
+
+Example 1:
+
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+Example 2:
+
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+Example 3:
+
+Input: numCourses = 1, prerequisites = []
+Output: [0]
+```
+
+解答
+
+```java
+class Solution {
+    boolean isValid = true;
+    // topologic DFS
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // 理解题意: topologic order, bfs的比较好想，就是按出度0入栈，不停出栈，修改其他节点的出度，见0进栈
+        // dfs有点麻烦，递归的dfs不好传递"环"(isValid==false)回顶层调用，我们用一个isValid来帮助
+
+        // graph，邻接表表示图，节省空间，代码好处理
+        List<Integer>[] map = new List[numCourses];
+        for(int i = 0; i < numCourses; i++) {
+            map[i] = new ArrayList<>();
+        }
+        buildGraph(numCourses, prerequisites, map);
+
+        List<Integer> ans = new ArrayList<>();
+        // visited 三种状态 
+            // 0(未处理), 等待处理 
+            // 1(处理中)，处理到一个1的节点，证明碰到环，那么是一个无效的
+            // 2(处理完)，已经被处理过，不需要再次处理
+        int[]visited = new int[numCourses];
+        for(int i = 0; i< numCourses; i++) {
+            if(visited[i] == 0) {
+                visited[i] = 1;
+                dfsFindOrder(map, i, ans, visited);
+                visited[i] = 2;
+                ans.add(i);
+            }
+ 
+        }
+        if(!isValid) return new int[0];
+
+        int[] ansa = new int[numCourses];
+        for(int i = 0; i < numCourses; i++) {
+            ansa[i] = ans.get(i);
+        }
+        return ansa;
+    }
+    void buildGraph(int numCourses, int[][] prerequisites, List<Integer>[]map) {
+        for(int i = 0; i < prerequisites.length; i++) {
+            int[] edge = prerequisites[i];
+            map[edge[0]].add(edge[1]);
+        }
+    }
+
+    void dfsFindOrder(List<Integer>[]map, int idx, List<Integer> ans, int[] visited) {
+        List<Integer> deps = map[idx];
+        for(int i =0; i<deps.size(); i++) {
+            int j = deps.get(i);
+            if(visited[j] == 1) {
+                isValid = false;
+                return;
+            }
+            if(visited[j] == 0) {
+                visited[j] = 1;
+                dfsFindOrder(map, j, ans, visited);
+                visited[j] = 2;
+                ans.add(j);
+            }
+        }
+    }
+}
+```
 ## 广度优先
 这个是经典解法，我们在构造DAG的同时，构造一个入度数组。
 

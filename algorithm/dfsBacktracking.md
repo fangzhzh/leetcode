@@ -18,7 +18,7 @@ Leetcode 200 Number of Islands
 
 深度优先一般配合回溯找所有解，但是dfs也可以没有回溯过程。
 
-## 解体模式
+## 解题模式
 1. 主函数
     主函数一般做两件事情 **第一，处理边界情况，例如图为空，初始节点满足条件的情况， 第二，遍历整个图。**
 
@@ -181,7 +181,7 @@ class Solution:
         if root.val == sum and not root.lefft and not root.right:
             return [[root.val]]
         # 因为初始节点可以访问所有可达节点，所以只需要遍历跟节点
-        return self.def(root, [], root.val, sum, [root.val])
+        return self.dfs(root, [], root.val, sum, [root.val])
 
     def dfs(self, node, res, current, target, path):
         # 1. 遍历每一个子节点
