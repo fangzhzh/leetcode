@@ -89,3 +89,89 @@ class UnionFind {
 } 
 
 ```
+
+## 例题
+
+### 323.无向图中连通分量的数目
+
+```
+给定编号从 0 到 n-1 的 n 个节点和一个无向边列表（每条边都是一对节点），请编写一个函数来计算无向图中连通分量的数目。
+
+示例 1:
+
+输入: n = 5 和 edges = [[0, 1], [1, 2], [3, 4]]
+
+     0          3
+     |          |
+     1 --- 2    4 
+
+输出: 2
+示例 2:
+
+输入: n = 5 和 edges = [[0, 1], [1, 2], [2, 3], [3, 4]]
+
+     0           4
+     |           |
+     1 --- 2 --- 3
+
+输出:  1
+
+```
+
+很明显的一个可以用并查集的问题，但是图中的问题，连通分量的数目，并查集本身并不能给出答案，这时往往我们需要另一个辅助的数据结构来保存结果
+
+```java
+class Solution {
+    // 323. 无向图中连通分量的数目
+    // Time O(n)
+    // Space O(n)
+    Map<Integer, Integer> uf = new HashMap<>(); // 储存连通分量
+    Set<Integer> set = new HashSet<>(); // 储存跟节点个数
+
+    void add(int x) {
+        if(!uf.containsKey(x)) {
+            uf.put(x, x);
+        }
+    }
+    void merge(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if(rootX != rootY) {
+            uf.put(rootY, rootX);
+        }
+    }
+    int find(int x) {
+        int root = x;
+        while(root != uf.get(root)) {
+            root = uf.get(root);
+        }
+        while(x != root) { // 压缩路径
+            int tmp = uf.get(x);
+            uf.put(tmp, root);
+            x = tmp;
+        }
+        return root;
+    }
+    public int countComponents(int n, int[][] edges) {
+        // 初始化并查集，每个节点都不需加入
+        for(int i = 0; i < n; i++) {
+            add(i);
+        }
+        for(int[] edge: edges) { // 构建并查集
+            merge(edge[0], edge[1]);
+        }
+        for(int i = 0; i < n; i++) { // 计算根节点个数，也就是连通分量的个数
+            set.add(find(i));
+        }
+        return set.size();
+    }
+}
+```
+
+
+## 并查集需要处理的情况
+由上题可以看出，并查集只能解决连通分量的问题，在问题里，还需要处理更多的问题
+* 有多少个连通分量
+* 连通分量的个数
+* 连通分量有没有环
+* 

@@ -1,7 +1,9 @@
 # monotone Stack
-## 单调栈用来解决一种问题, Next Greater Element
+## 单调栈用来解决一种问题, Next Greater/Smaller Element
 
-这种问题共享一个特征，在数组里，寻找某一个元素的下一个最大元素，从图的角度看，某一个元素的next greater element就是从该点出发的下一个山顶元素，如果从该点出发是下坡，那么该点没有next greater elements.
+这种问题共享一个特征，在数组里**寻找左边/右边的更大/更小的下一个元素**.
+
+以下一个更大元素为例，从图的角度看，某一个元素的next greater element就是从该点出发的下一个山顶元素，如果从该点出发是下坡，那么该点没有next greater elements.
 
 ```
                   │
@@ -32,6 +34,8 @@
 对图示[0,1,2,1,0,-1,-2,-2]对应的next greater element[1,2,n/a,n/a,n/a,n/a,n/a,n/a]
 
 用代码我们怎么来实现这个解法呢，此处 我们要介绍一种做法叫单调栈。
+
+```java
 int[] nextGreaterElement(int<Integer> nums) {
     int[]res = new int[nums.length];
     // 单调栈，从高到低依次入栈，nums[i]小于栈顶元素入栈。
@@ -48,7 +52,7 @@ int[] nextGreaterElement(int<Integer> nums) {
     }
     return res;
 }
-
+```
 
 
 ## 另一类问题，最长坡度

@@ -42,11 +42,11 @@
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
 ## 📚 栈，队列，Stack Queue Deque
-* [栈列表API](./stackQueueAPI.md)
+* [栈队列API](./stackQueueAPI.md)
 * [栈列表与经典题目的图解](./stackQueue.md)
-* [有限队列](./priorityQueueAPI.md)
+* [优先队列](./priorityQueueAPI.md)
 ### 单调栈
-* [单调栈API](./monotoneStackAPI.md)
+* [单调栈API](./monotoneStack.md)
 ## 📏Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
 
@@ -57,7 +57,7 @@
 * [字符串扫描并操作](./stringScanAndModify.md)
 
 ## 数组Array
-* [数组及其API][./arrayAPI.md]
+* [数组及其API](./arrayAPI.md)
 ## 🗺️ 图论
 * [图论基础](./graph.md)
 * [图论DFS错题本](./graphDFSProblemNotes.md)
@@ -80,6 +80,7 @@ dp+recursive，leetcode半壁江山
     * () parentheses
     * [] bracket
     * {} curly bracket/braces
+    * n! factorial
 
 * int加减乘除的题目处理溢出
 
@@ -92,9 +93,12 @@ dp+recursive，leetcode半壁江山
 * 721.账户合并
 
 ## 代表问题
-* [394. 字符串解码](./394.decode-string/394.md)
+* [394.字符串解码](./394.decode-string/394.md)
     * 递归，dfs
-
+* [279.279. 完全平方数](./279.perfect-squares/279.md)
+    * BFS
+    * 背包
+    * 递归
 ## 面经
 [FB面经](./FB面经.md)
 
