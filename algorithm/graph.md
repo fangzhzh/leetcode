@@ -17,7 +17,6 @@
 
 ![图的表示方式](./graphs/mapsDataStructure.drawio.svg)
 
-
 ### DFS 深度优先搜索
 深度优先搜索是一种在回退之前尽可能深入每个分支的遍历算法。深度优先+回溯
 * [DFS返回值](./dfsReturnValue.md)
@@ -31,6 +30,9 @@
 广度优先搜索是一种先访问所有同层结点，再继续深入下一层的遍历算法，用于得到无权图的最短路径。
 * [1087. Brace Expansion](./1087.brace-expansion)
 
+### DFS BFS做题时的取舍
+* 当你看到图的题目，要求最少，最短，最XX的一般用DFS
+* 如果题目要求个数，或者题目的解答必须要遍历所有几点一次，那么dfs
 ### Toplogic Sorting 拓扑排序
 只针对有向无环图 Directed Acyclic Graph
 [拓扑排序](./topoligicSorting.md)

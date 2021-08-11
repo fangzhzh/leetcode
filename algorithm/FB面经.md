@@ -7,6 +7,9 @@
 * [348. Design Tic-Tac-Toe](https://leetcode-cn.com/problems/design-tic-tac-toe)
 * [380. Insert Delete GetRandom O(1)](https://leetcode-cn.com/problems/insert-delete-getrandom-o1)
 * [953. Verifying an Alien Dictionary](https://leetcode-cn.com/problems/verifying-an-alien-dictionary/)
+* [680. Valid Palindrome II](https://leetcode-cn.com/problems/product-of-array-except-self/)
+* [560. Subarray Sum Equals K](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+* [621. Task Scheduler](https://leetcode-cn.com/problems/task-scheduler/)
 
 ### String
 * [157. Read N Characters Given Read4  简单](https://leetcode-cn.com/problems/read-n-characters-given-read4)
@@ -29,9 +32,10 @@
 
 ### HEAP
 #### PriorityQueue
-* [973. K Closest Points to Origin](https://leetcode-cn.com/problems/k-closest-points-to-origin)
+* [973.K Closest Points to Origin](https://leetcode-cn.com/problems/k-closest-points-to-origin)
 * [23. Merge k Sorted Lists  困难](https://leetcode-cn.com/problems/merge-k-sorted-lists)
-
+* [767. Reorganize String](https://leetcode-cn.com/problems/reorganize-string/)
+* [621. Task Scheduler](https://leetcode-cn.com/problems/task-scheduler/)
 
 ### Graph
 * [210. Course Schedule II](https://leetcode-cn.com/problems/course-schedule-ii)
@@ -116,6 +120,8 @@
 ### 一些特殊概念
 #### PrefixSum
 * [238. Product of Array Except Self  中等](https://leetcode-cn.com/problems/product-of-array-except-self)
+* [560. Subarray Sum Equals K](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+
 
 ## 所有题目
 
@@ -124,6 +130,8 @@
 * [29. Divide Two Integers](https://leetcode-cn.com/problems/divide-two-integers/)
 * [210. Course Schedule II](https://leetcode-cn.com/problems/course-schedule-ii)
 * [973. K Closest Points to Origin](https://leetcode-cn.com/problems/k-closest-points-to-origin)
+    * 优点队列 O(n log n) 最坏情况 O(n log n)
+    * 快速选择 O(k log n) 最坏情况 O(n log n)
 * [329. Longest Increasing Path in a Matrix](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix)
 * [124. Binary Tree Maximum Path Sum](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum)
 * [203. Remove Linked List Elements](https://leetcode-cn.com/problems/remove-linked-list-elements)
@@ -149,3 +157,8 @@
 * [158. Read N Characters Given Read4 II   困难](https://leetcode-cn.com/problems/read-n-characters-given-read4-ii-call-multiple-times)
 * [65. Valid Number](https://leetcode-cn.com/problems/valid-number)
 * [415. Add Strings](https://leetcode-cn.com/problems/add-strings)
+* [680. Valid Palindrome II](https://leetcode-cn.com/problems/product-of-array-except-self/)
+* [560. Subarray Sum Equals K](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+* [767. Reorganize String](https://leetcode-cn.com/problems/reorganize-string/)
+* [621. Task Scheduler](https://leetcode-cn.com/problems/task-scheduler/)
+* [253. Meeting Rooms II](https://leetcode-cn.com/problems/meeting-rooms-ii/)

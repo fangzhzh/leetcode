@@ -4,12 +4,77 @@
 ## Merge Sort
 
 ## Quick Sort
-Hoare partition scheme
+Hoare partition scheme O(n log n)
 
 关于Quick Sort背后的思想[双指针](./hashTwoPointers.md)
 
 *two pointers关键要清楚指针的定义，这个指针位置左边都是XX，包不包含当前坐标。*
 
+```java
+void quickSort(int[] array) {
+    quickSort(array, 0, array.length-1);
+}
+
+void quickSort(int[] array, int left, int right) {
+    int index = partition(array, left, right);
+    if (left < index - 1){ // Sort left half
+        quickSort(array, left, index - 1);
+    }
+    if (index < right) { // Sort right half
+        quickSort(array, index, right);
+    }
+}
+
+// 相向而行
+int partition(int[] array, int left, int right) {
+    int pivot = array[(left + right) / 2]; // Pick pivot point
+    while (left <= right) {
+        // Find element on left that should be on right
+        while (array[left] < pivot)
+            left++;
+        // Find element on right that should be on left
+        while (array[right] > pivot)
+            right--;
+
+        // Swap elements, and move left and right indices
+        if (left <= right) {
+            swap(array, left, right); // swaps elements
+            left++;
+            right--;
+        }
+    }
+    return left;
+}
+
+// 同向而行
+// [1,4,3,5,2,7]
+int partition(int[] array, int left, int right) {
+    int pivot = array[(left + right) / 2]; // Pick pivot point
+    int curR = left;
+    while(curR <= righg) {
+        if(array[curR] < pivot) {
+            swap(array, left, curR);
+            left++;
+        }
+        curR++;
+    }
+    return left;
+}
+
+void swap(int array[], int left, int right){
+    int temp = array[left];
+    array[left] = array[right];
+    array[right] = temp;
+}
+```
+
+快速排序的核心思想是“找到一个partition，那么这个partition 左边都小于目标值， 右边都不小于目标值。”
+
+每次partition把问题区间分为三部分
+
+* [0, left) partition前半部分，
+* [left, right) 为partition后半部分
+* [right, length) 待处理元素
 
 ## heap sort
 Heap sort is a comparison-based sorting technique based on Binary Heap data structure.

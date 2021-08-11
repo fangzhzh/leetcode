@@ -378,6 +378,7 @@ Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 
 这个卡壳卡的很正常，因为一般来说，都是node.val计算出的值，返回参与node的父节点，但是本题中我们不能返回 pathSum `left+root+right`。
 
 
+
 此处，针对本题我们引入一个概念，最大贡献值(其实就是左子树右子树累计带上去的值)
 
 * 如果节点是null，那么最大贡献值是0

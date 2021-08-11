@@ -5,13 +5,133 @@ Binary Tree, Binary Search tree
 
 
 ##  经典题目
-* [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
-* [104. 二叉树的最大深度](./104.maximum-depth-of-binary-tree/104.md/)
-* [101. 对称二叉树](./110.balanced-binary-tree/)
-* [617. 合并二叉树](./617.merge-two-binary-trees/)
-* 二叉树比较(相同，对称，镜像)
-    * [100. 相同的树](./100.same-tree)
-    * [101. 对称二叉树](./101.symmetric-tree)
+二叉树的题目有几类，
+* 求值
+    * [104. 二叉树的最大深度](./104.maximum-depth-of-binary-tree/104.md)
+
+* 操作，修改
+    * [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+    * [617. 合并二叉树](./617.merge-two-binary-trees/)
+    * [426. 将二叉搜索树转化为排序的双向链](https://leetcode-cn.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/)
+    * [430. 扁平化多级双向链表](https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/)
+* 特性
+    * 二叉树比较(相同，对称，镜像)
+        * [100. 相同的树](./100.same-tree)
+        * [101. 对称二叉树](./101.symmetric-tree)
+
+题目的解法根据后边的api入下边API所示
+
+```
+    // global variable
+    返回值 solution(root， 参数列表) {
+        // pre visit(x)
+        solution(root.left)
+        // mid visit(x)
+        solution(root.right)
+        // post visit(x)
+    }
+
+```
+
+### 需要注意的两点
+参数列表和返回值是非常需要注意的。
+
+#### 返回值
+参考参数列表里分析的430，巧妙设计的返回值帮助我们实现无错的递归算法。
+
+#### 参数列表
+一般来说，我们把所有需要的参数，全部放进参数列表，递归的过程中，更新参数列表
+
+比如100 相同的树，我们把左右节点带进去已经足够
+```java
+public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null) return true;
+        if(p == null || q == null) return false;
+        if(p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+```
+
+100可能太简单，我们看一个稍微复杂的例子。430, 扁平化链表。
+
+这个题目带一个root进去，也是不能解决问题的。但是我们观察到，对每一个note来说，只关心，prev和head和child last，然后涉及的函数代入了pre和head，返回值返回了child last。
+
+如果不能够正确的返回child last，我们也可以把child last变成一个类变量
+
+
+```java
+    public Node flatten(Node head) {
+        flattenInPlace(null, head);
+        return head;
+    }
+
+    // Time O(n)
+    // Space O(n)
+    // 递归返回当前链表的最后一个非null节点
+    Node flattenInPlace(Node prev, Node head) {
+        // 因为是prev和head，如果head空，那么返回前一个
+        if(head == null) return prev;
+        // prev不空，那么展开
+        if(prev != null) {
+            prev.next = head;
+            head.prev = prev;
+            prev.child = null;
+        }
+        // 先记录child,next
+        Node child = head.child;
+        Node next = head.next;
+        head.child = null;
+        // 展开child
+        Node childLast = flattenInPlace(head, child);
+        // 展开next
+        return flattenInPlace(childLast, next);
+    }
+```
+但是有的题目，很难把需要的参数全部放进参数列表里，这时我们需要定义类成员变量，然后在递归的过程中访问更新
+
+比如426 转换二叉树为双向链表
+
+```java
+class Solution {
+  // the smallest (first) and the largest (last) nodes
+  Node first = null;
+  Node last = null;
+
+  public void helper(Node node) {
+    if (node != null) {
+      // left
+      helper(node.left);
+      // node 
+      if (last != null) {
+        // link the previous node (last)
+        // with the current one (node)
+        last.right = node;
+        node.left = last;
+      }
+      else {
+        // keep the smallest node
+        // to close DLL later on
+        first = node;
+      }
+      last = node;
+      // right
+      helper(node.right);
+    }
+  }
+
+  public Node treeToDoublyList(Node root) {
+    if (root == null) return null;
+
+    helper(root);
+    // close DLL
+    last.right = first;
+    first.left = last;
+    return first;
+  }
+}
+
+
+```
 
 
 ## API
@@ -29,6 +149,9 @@ Finding out the relationshipt between the parent node and children nodes
 
 * Top down的递归，父节点带信息到子节点的计算。
 * 如果是buttom up，我们需要从子节点带数据出去父节点，可以用返回值，hashmap来实现
+
+
+
 
 ## Binary Tree
 ### representation of a tree

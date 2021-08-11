@@ -53,11 +53,14 @@
 ## 💹 动态规划
 * [动态规划基础](./dynamicProgramming.md)
 ## 🔡 字符串
-* [字符串](./string.md)
+* [字符串及API](./string.md)
 * [字符串扫描并操作](./stringScanAndModify.md)
 
 ## 数组Array
 * [数组及其API](./arrayAPI.md)
+
+## 前缀和 presum
+* [前缀和](./prefixSumAPI.md)
 ## 🗺️ 图论
 * [图论基础](./graph.md)
 * [图论DFS错题本](./graphDFSProblemNotes.md)
@@ -66,6 +69,9 @@
 
 ## 数学 Math
 * [数学题目基础及API](./mathAPI.md)
+
+## 贪心
+* [贪心题目证明](./greedyProof.md)
 ## Miscs
 
 * 递归和动态规划的一些共同点

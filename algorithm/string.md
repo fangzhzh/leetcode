@@ -34,3 +34,71 @@
     ```
 
 
+
+
+## String的一些特性问题
+
+### Palindromic 对称字符串
+0. 栈
+1. 通用做法需要双指针相向而行shrink，或者双指针背向而行expand
+2. 通用做法可以引申出如果是需要找出所有的Palindromic，就需要dfs的shrink或者expand
+
+#### Anagram
+1. 这个通用做法就是哈希表计算
+2. 如果要找出所有，也是方法1的沿伸。slicing window来keep一个哈希表，通过增减个数来确定遇到有效的Anagram
+
+### 括号
+有效括号是一类题目
+* [判断有效20. Valid Parentheses](https://leetcode-cn.com/problems/valid-parentheses)
+* [判断有效 32. Longest Valid Parentheses](https://leetcode-cn.com/problems/longest-valid-parentheses)
+* [移除使其有效 301. Remove Invalid Parentheses](https://leetcode-cn.com/problems/remove-invalid-parentheses)
+* [移除使其有效 1249. Minimum Remove to Make Valid Parentheses](https://leetcode-cn.com/problems/minimum-remove-to-make-valid-parentheses)
+
+怎么判断括号是有效，思路就是栈，类似消消乐。
+
+怎样移除使之有效，栈的方式就不好用了。这里有个模拟栈的思路，
+
+```java
+    int leftRemove = 0;
+    int  rigthRemove = 0;
+    int len = s.length();
+    for(int i  =  0; i < len; i++) {
+        char c = s.charAt(i);
+        if(c == '(') {
+            leftRemove++;
+        }  else if(c == ')'){
+            if(leftRemove != 0) {
+                leftRemove--;
+            } else {
+                rigthRemove++;
+            }
+        }
+    }
+```
+拿着计算出来的`leftRemove`和`rigthRemove`,dfs即可计算出所有valid string。这就是301题。
+
+但是如果我们需要找出一个，最小移除的呢。我们仍然需要按照刚才的思路，不同的是，我们不需要计算有几个需要移除，我们找出移除哪个。
+
+下边是一种贪心的算法，可以得出正确解。
+
+    使用 *栈*，每次遇到 "("，都将它的索引压入栈中。每次遇到 ")"，都从栈中移除一个索引，用该 ")" 与栈顶的 "(" 匹配。栈的深度等于余量。需要执行以下操作：
+
+    如果在栈为空时遇到 ")"，则删除该 ")"，防止余量为负。
+    如果扫描到字符串结尾有 "("，则删除它，防止余量不为 0。
+
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```java
+Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } if (s.charAt(i) == ')') {
+                if (stack.isEmpty()) {
+                    indexesToRemove.add(i);
+                } else {
+                    stack.pop();
+                }
+            }
+        }
+
+```
