@@ -20,7 +20,7 @@
     1. 题目总结和回顾
         * 每类题目要总结出API
     1. 思路覆盘
-        * 自己的思路卡在哪里    
+        * 自己的思路卡在哪里        
 ## 🔀 排序算法
 * [排序算法与其无处不在的应用](./sort.md)
 
@@ -34,7 +34,7 @@
 * [快慢指针](./LinkedListFastSlow.md)
 * [移动链表节点总结](./LinkedListMoving.md)
 ## ✌️ Binary Tree
-* [二叉树基础与API](./binaryTree.md)
+* [二叉树基础与API](./binar                  yTree.md)
 * [二叉树错题本](./binaryProblemNotes.md)
 ## 🔎 Binary Search 
 * [二分查找与API](./binarySearch.md)
@@ -45,8 +45,12 @@
 * [栈队列API](./stackQueueAPI.md)
 * [栈列表与经典题目的图解](./stackQueue.md)
 * [优先队列](./priorityQueueAPI.md)
+* [栈队列错题本](./stackQueueProblemNotes.md)
 ### 单调栈
 * [单调栈API](./monotoneStack.md)
+
+## 字典Ma
+* [字典API](./mapAPI.md)
 ## 📏Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
 
@@ -105,6 +109,9 @@ dp+recursive，leetcode半壁江山
     * BFS
     * 背包
     * 递归
+
+* [456.132 Pattern](./456.132-pattern/132-pattern.md)
+    * 如何在数组里寻找元素
 ## 面经
 [FB面经](./FB面经.md)
 

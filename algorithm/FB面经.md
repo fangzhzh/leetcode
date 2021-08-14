@@ -10,6 +10,7 @@
 * [133. Clone Graph](https://leetcode-cn.com/problems/clone-graph/)
 * [523. Continuous Subarray Sum](https://leetcode-cn.com/problems/continuous-subarray-sum/)
 * [146. LRU Cache](https://leetcode-cn.com/problems/lru-cache/)
+* [347. Top K Frequent Elements](https://leetcode-cn.com/problems/top-k-frequent-elements/)
 
 ### two pointers 双指针
 * [253. Meeting Rooms II](https://leetcode-cn.com/problems/meeting-rooms-ii/)
@@ -62,11 +63,14 @@
 * [91. Decode Ways](https://leetcode-cn.com/problems/decode-ways/)
 * [636. Exclusive Time of Functions](https://leetcode-cn.com/problems/exclusive-time-of-functions/)
 
+### Monotonic Stack 单调栈
+* [1762. Buildings With an Ocean View](https://leetcode-cn.com/problems/buildings-with-an-ocean-view/)
 ### HEAP 堆
 #### PriorityQueue 优先队列
 * [973. K Closest Points to Origin](https://leetcode-cn.com/problems/k-closest-points-to-origin)
 * [23. Merge k Sorted Lists  困难](https://leetcode-cn.com/problems/merge-k-sorted-lists)
 * [253. Meeting Rooms II](https://leetcode-cn.com/problems/meeting-rooms-ii/)
+* [347. Top K Frequent Elements](https://leetcode-cn.com/problems/top-k-frequent-elements/)
 
 ### Graph 图
 * [210. Course Schedule II](https://leetcode-cn.com/problems/course-schedule-ii)
@@ -185,6 +189,7 @@
 #### PrefixSum 前缀和
 * [238. Product of Array Except Self  中等](https://leetcode-cn.com/problems/product-of-array-except-self)
 * [523. Continuous Subarray Sum](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+* [304. Range Sum Query 2D - Immutable](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
 
 ## 所有题目
@@ -250,3 +255,7 @@
 * [636. Exclusive Time of Functions](https://leetcode-cn.com/problems/exclusive-time-of-functions/)
 * [34. Find First and Last Position of Element in Sorted Array](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 * [986. Interval List Intersections](https://leetcode-cn.com/problems/interval-list-intersections/)
+* [304. Range Sum Query 2D - Immutable](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
+* [227. Basic Calculator II](https://leetcode-cn.com/problems/basic-calculator-ii/)
+* [347. Top K Frequent Elements](https://leetcode-cn.com/problems/top-k-frequent-elements/)
+* [1762. Buildings With an Ocean View](https://leetcode-cn.com/problems/buildings-with-an-ocean-view/)

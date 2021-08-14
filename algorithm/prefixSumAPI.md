@@ -17,6 +17,10 @@ for (int i = 0; i < n; i++) {
 
 有时，这个前缀和也可以是乘积，比如例题[238. Product of Array Except Self]
 
+此处要注意，presum的长度是`n+1`,所以 presum[j]-presum[i] = nums[i]+ nums[i+1] + .... + nums[j]才会成立。
+
+如果presum是长度是n，那么presum[j]-presum[i]=nums[i+1]+nums[i+2] + ... + nums[j],这样前缀和用处就不大了。
+
 
 ## 例题
 

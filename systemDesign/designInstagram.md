@@ -33,9 +33,6 @@
 
 ### Storage
 
-### Memory
-？？？为什么feed类不考虑memory
-
 
 ## 系统设计
 

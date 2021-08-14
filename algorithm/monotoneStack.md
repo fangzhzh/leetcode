@@ -39,7 +39,7 @@
 int[] nextGreaterElement(int<Integer> nums) {
     int[]res = new int[nums.length];
     // 单调栈，从高到低依次入栈，nums[i]小于栈顶元素入栈。
-    // 如果nums[i]大于等于栈顶元素，则pop出所有这些元素，知道nums[i]小于栈顶元素，那么nums[i]入栈。
+    // 如果nums[i]大于等于栈顶元素，则pop出所有这些元素，直到nums[i]小于栈顶元素，那么nums[i]入栈。
     // 栈永远保持单调递增
     Stack<Integer> stack = new Stack<>();
     for(int i = nums.length-1; i>=0;i--) {

@@ -24,15 +24,28 @@
 
 # 双向列表
 ## Deque
-* HEAD VAlue(队列)
+* HEAD VAlue
     * offerFirst(e)
     * pollFirst
     * peekFirst()
-* Tail Value(栈)
+* Tail Value
     * OfferLst
     * pollLast
     * peekLast()
-##
+### Queue method
+* addLast(e) => add(e)
+* offerLast(e) => offer(e)
+* removeFirst() => remove()
+* pollFirst() => poll()
+* getFirst() => element()
+* peekFirst() => peek()
+
+### Stack method
+* addFirst(e)=> push()
+* removeFirst() => pop()
+* peekFirst() => peek()
+
 # 类关系与操作
 
 ![Deque继承关系](./graphs/dequeHiarchy.drawio.svg)
+
