@@ -88,7 +88,7 @@ public boolean find132pattern(int[] nums) {
         leftMin = Math.min(leftMin, nums[j]);
         // rightAll维护数组a中的右侧元素a[j+1...n-1]的所有值
         // 所以处理完j，我们需要把j+1去除，因为下一步，我们处理j+1，要保证rightAll的循环不变式成立
-        
+
         rightAll.put(nums[j+1], rigthAll.get(nums[j+1])-1);
         if(rightAll.get(nums[j+1]) == 0) { 
             rightAll.remove(nums[j+1]);
@@ -98,6 +98,73 @@ public boolean find132pattern(int[] nums) {
 }
 ```    
 
-## 枚举2
+### 复杂度分析
+
+时间复杂度：O(nlogn)。在初始化时，我们需要 O(nlogn) 的时间将数组元素 a[2..n-1]a[2..n−1] 加入有序集合中。在枚举 jj 时，维护左侧元素最小值的时间复杂度为 O(1)O(1)，将 a[j+1]a[j+1] 从有序集合中删除的时间复杂度为 O(logn)，总共需要枚举的次数为 O(n)，因此总时间复杂度为 O(nlogn)。
+
+空间复杂度：O(n)，即为有序集合存储右侧所有元素需要使用的空间。
 
 ## 枚举1
+
+我们来看如何枚举1.
+
+    如果我们从左到右的枚举1的下标i，那么j,k的下标范围在减少，这样不利于对他们的维护。因此，我们考虑从右到左的枚举i。
+
+    这个思考可以应用到所有搜索。
+
+如何维护j,k呢？我们知道1<3, 2 < 3,所以
+* 使用数据结构维护所有遍历过的元素，作为2的候选元素，假如数据解噢股
+* 在遍历新元素，考虑是否作为3。如果作为3，那么**数据结构中所有 严格小于他的元素都可以作为2**，我们将这些元素全部从纾解结构中移除，并使用一个变量维护**所有被移除的元素的最大值**。
+
+所以，这个"数据结构"是这样的：
+* 支持添加一个元素
+* 支持移除所有严格小于给定阈值的所有元素;（）
+* 两步操作依次进行，先用阈值移除元素，再将阈值加入数据结构。
+
+这就是“单调栈”。
+* 严格递减
+* 给定x，不断弹出栈顶元素，知道x严格小于栈顶元素，或者栈为空 。此时我们再入栈x
+* 维护栈的单调性
+
+涉及到本题，算法如下:
+* 单调栈维护2的候选元素。单调栈有唯一元素a[n-1]。还需要一个变量maxK记录所有可以作为2的元素的最大值
+* 随后我们从n-2开始从右往左枚举元素a[i]:
+    * 首选判断a[i]是否作为1， 如果a[i] < maxK，就可以作为1，找到一组132
+    * 随后判断a[i]是否可以作为3，找出哪些可以作为2.比较a[i]和stack.top()，如果a[i]大，那么stack.top()就是2，弹出并更新maxK
+    * 最后我们把a[i]作为2候选 元素放入单调栈
+* 枚举完，美国没找到132，那么说明不存在。
+
+```java
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int n = nums.length;
+        Deque<Integer> candidateK = new LinkedList<Integer>();
+        candidateK.push(nums[n - 1]);
+        int maxK = Integer.MIN_VALUE;
+
+        for (int i = n - 2; i >= 0; --i) {
+            if (nums[i] < maxK) {
+                return true;
+            }
+            while (!candidateK.isEmpty() && nums[i] > candidateK.peek()) {
+                maxK = candidateK.pop();
+            }
+            if (nums[i] > maxK) {
+                candidateK.push(nums[i]);
+            }
+        }
+
+        return false;
+    }
+}
+
+```
+
+
+## 枚举2
+
+这个方法不需要提前知道整个数组，所以适合流的题目。
+
+鉴于这个算法有点难理解，
+
+TODO
