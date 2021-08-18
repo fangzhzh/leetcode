@@ -95,7 +95,7 @@ A Binary Heap is a Complete Binary Tree where items are stored in a special orde
 * 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2] 
 
 
-### How to build the heap? 
+### 建堆 How to build the heap? 
 
 Heapify procedure can be applied to a node only if its children nodes are heapified. So the heapification must be performed in the bottom-up order.
 ```
@@ -165,7 +165,58 @@ public void sink (int[] nums, int index,int len) {
 
 [堆排序](./graphs/top_down_heap_sort.drawio.svg)
 
+
+```java
+public  void heapSort(int[] arr) {
+    // 构建初始大顶堆
+    buildMaxHeap(arr);
+    int len = arr.length-1;
+    for (int i = len; i > 0; i--) {
+        // 将最大值交换到数组最后
+        swap(arr, 0, i);
+        // 调整剩余数组，使其满足大顶堆
+        maxHeapify(arr, 0, i);
+    }
+}
+// 构建初始大顶堆
+private  void buildMaxHeap(int[] arr) {
+    // 从最后一个非叶子结点开始调整大顶堆，最后一个非叶子结点的下标就是 arr.length / 2-1
+    for (int i = arr.length / 2 - 1; i >= 0; i--) {
+        maxHeapify(arr, i, arr.length);
+    }
+}
+// 调整大顶堆，第三个参数表示剩余未排序的数字的数量，也就是剩余堆的大小
+private  void maxHeapify(int[] arr, int i, int heapSize) {
+    // 左子结点下标
+    int l = 2 * i + 1;
+    // 右子结点下标
+    int r = l + 1;
+    // 记录根结点、左子树结点、右子树结点三者中的最大值下标
+    int largest = i;
+    // 与左子树结点比较
+    if (l < heapSize && arr[l] > arr[largest]) {
+        largest = l;
+    }
+    // 与右子树结点比较
+    if (r < heapSize && arr[r] > arr[largest]) {
+        largest = r;
+    }
+    if (largest != i) {
+        // 将最大值交换为根结点
+        swap(arr, i, largest);
+        // 再次调整交换数字后的大顶堆
+        maxHeapify(arr, largest, heapSize);
+    }
+}
+private  void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
 ```
+
+```java
 class Solution {
     public int[] sortArray(int[] nums) {
         heapSort(nums);
@@ -176,13 +227,16 @@ class Solution {
         int len = nums.length - 1;
         // build 一个大顶堆
         buildMaxHeap(nums, len);
-        for (int i = len; i >= 1; --i) {
+        for (int i = len-1; i > 0; --i) {
            // 移除大顶，继续build大顶堆
             swap(nums, i, 0);
-            len -= 1;
-            maxHeapify(nums, 0, len);
+            maxHeapify(nums, 0, i);
         }
     }
+
+// [6,2,1,3,5,4,]
+//   6
+//   2 1
 
     public void buildMaxHeap(int[] nums, int len) {
        // 从第一个第一个非叶子节点，开始build heap
@@ -192,18 +246,18 @@ class Solution {
     }
 
    // 下沉
-    public void maxHeapify(int[] nums, int i, int len) {
-        for (; i*2 + 1 <= len;) {
+    public void maxHeapify(int[] nums, int i, int heapSize) {
+        for (; i*2 + 1 <= heapSize;) {
             int lson = i*2 + 1;
             int rson = i*2 + 2;
             int large;
             // 父左右孩子中最大的
-            if (lson <= len && nums[lson] > nums[i]) {
+            if (lson <= heapSize && nums[lson] > nums[i]) {
                 large = lson;
             } else {
                 large = i;
             }
-            if (rson <= len && nums[rson] > nums[large]) {
+            if (rson <= heapSize && nums[rson] > nums[large]) {
                 large = rson;
             }
             // 如果i不是最大，那么需要和较大那个孩子换一下，然后，继续从换后的位置重新继续下沉
@@ -224,8 +278,4 @@ class Solution {
     }
 }
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/sort-an-array/solution/pai-xu-shu-zu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```

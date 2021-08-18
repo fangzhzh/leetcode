@@ -12,6 +12,7 @@
 	+ 答案可以通过合并子问题答案求得
 - 子问题重叠
 	+ 子问题不重叠就可以用分治
+	+ overlapping sub
 
 ## Applying synamic programming
 * Characterize the structure of an optimal solution.
@@ -49,7 +50,8 @@ tabulation or memoization
 	- 初始化一个二维的动态规划时 就去初始化第0行和第0列。
 	- 如果不是跟坐标相关的动态规划 一般有N个数/字符,就开N+1个位置的数组 第0个位置单独留出来作初始化。
 - 答案 Answer
-	+ 最大的那个状态是什么,终点。
+	+ 最大的那个状态是什么
+	* 是终点，返回终点的，还是中间的某个值(这时就需要一个变量维护这个答案)
 
 ## 思考过程
 明确【状态】 -> 定义dp 数组/函数的定义 -> 明确【选择】 -> 明确 base case

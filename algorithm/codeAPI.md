@@ -86,10 +86,14 @@ public class Solution {
         return nums[k];
     }
 
+        // pivot = pickPivot()
+        // [0,left] <= pivot
+        // [left+1, hight) > pivot
     int partition(int[] nums, int low, int high) {
         int left = low;
+        int pivot = nums[high];
         for( int i = left; i < high; ++i) {
-            if( nums[i] <= nums[high]) {
+            if( nums[i] <= pivot) {
                 swap(nums, i , left);
                 left++;
             }

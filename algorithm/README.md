@@ -49,12 +49,12 @@
 ### 单调栈
 * [单调栈API](./monotoneStack.md)
 
-## 字典Ma
+## 字典 Map
 * [字典API](./mapAPI.md)
 ## 📏Hash/double pointers/sliding windows
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
 
-## 💹 动态规划
+## 💹 动态规划 DP 
 * [动态规划基础](./dynamicProgramming.md)
 ## 🔡 字符串
 * [字符串及API](./string.md)
