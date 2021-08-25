@@ -8,6 +8,8 @@
 * 详细设计
 * 瓶颈识别+解决
 
+## Mobile 系统设计
+[Mobile/Android/iOS 系统设计](./mobileSystemDesign.md)
 ## Design Facebook Live
 [设计facebook Live](./facebookLive.md)
 ## Design a URL Shortening service like TinyURL
