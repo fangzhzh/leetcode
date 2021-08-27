@@ -8,13 +8,29 @@
 * 详细设计
 * 瓶颈识别+解决
 
-
+* 时间分配
+* 5 minutes - acquaintance 寒暄
+* 5–10 minutes - defining the task 定义任务(问问题，理清需求)
+* 25–30 minutes - solution 
+    * API
+    * 定义Model(根据需求)
+    * 数据使用估计
+    * 高层实际
+    * 细节设计
+    * 瓶颈
+* 5 minutes - your questions to an interviewer.()
 ## 共通问题
 * 模块化
 * 离线
 * Scalability
 * Picture-in-Picture
-
+* Bandwidth Consumption/Data 流量
+* Battery Consumption 电池
+* Persistance 存储
+* Resilience
+* Device Support / Api
+* Memory Usage
+* Multiple language
 ## android 安卓相关
 * 架构相关: 
     * MVP, MVVM, MVC, MVI, VIPER, MV*, RIBS,MV-Flow
