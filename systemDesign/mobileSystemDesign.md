@@ -19,7 +19,17 @@
     * 细节设计
     * 瓶颈
 * 5 minutes - your questions to an interviewer.()
+
+
 ## 共通问题
+* reliable
+* scalable
+* maintainable
+* power efficiency
+* customizable
+* cost efficiency
+* secure
+
 * 模块化
 * 离线
 * Scalability
@@ -31,6 +41,7 @@
 * Device Support / Api
 * Memory Usage
 * Multiple language
+
 ## android 安卓相关
 * 架构相关: 
     * MVP, MVVM, MVC, MVI, VIPER, MV*, RIBS,MV-Flow
@@ -70,3 +81,7 @@
 
 * 获取数据，显示数据，from a simple fetch data and show lists of items on the device screen
 * 聊天/Messaging/数据备份 to build this IOT or real-time chat-app ( WRT - web realtime messaging ) kind of an application    
+
+
+## 面试的时间分配模板
+[面试模板](./SystemDesignInterviewTemplate.md)
