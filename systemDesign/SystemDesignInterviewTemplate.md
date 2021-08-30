@@ -1,115 +1,9 @@
-<style type="text/css">
-body {
-    zoom: 1.2;
-    line-height: 1.5;
-    padding: 2em 4em;
-    font-size: 12px;
-    line-height: 1.5;
-    max-width: 800px;
-    margin: 0 auto;
-    word-wrap: break-word;
-}
-
-</style>
-
 [timer](http://www.intervaltimer.com/timers/9835337-interview)
 
 # 系统设计最好的模板
 
-## Most important feature when designing a mobile app/feature
-* reliable
-* scalable
-* maintainable
-* power efficiency
-* customizable
-* cost efficiency
-* secure
 
-## Use case and technology alternative
-* Internet
-	* Message
-		* Json
-			* {type:1, timestamp:1993828239}
-		* Restful API
-			* HTTP HEADER from 200 bytes to over 2KB
-			* Content 60B
-		* Websocket
-			* 2B header, 4B timestamp, 1B event = 7B per event
-		* tradeoffs
-			* websocket is good saving data
-			* Json is good if cost is not a concern
-			* Http is good when not too much requests
-		* Data cost
-			* 2.5G/$16 = 120M/刀
-	* Media
-		* Upload
-			* Background upload, fire and forgot, 
-				* notification of finish/error retry
-			* Android Upload Service
-			* Http Upload
-		* Download
-			* Picaso
-			* Volley
-			* Image Cache
-* storage
-	* database
-		* sqlite
-		* room `part of Jackpack`
-	* sharedpreferences
-	* file
-* offline
-	* store 
-	* retry, exponential backoff && max retry
-	* discard
-* reminder
-	* notification
-* background/schedule tasking
-	* forever
-		* foreground service
-	* immediate
-		* Kotlin Coroutine
-		* Foreground Service
-		* WorkManager
-	* deferred
-		* DownloadManager
-	* exact	
-		* AlarmManager
-		* WorkManager
-* idle mode
-* dependency injecetion
-	* dagger
-	* hilt
-* location
-	* The fused location provider
-	* locationListener
-
-	```
-	var dir: Double,
-    var fix: Int, accuracy
-    var hdop: Double,
-    var lat: Double,
-    var lon: Double,
-    var pSpd: Double,
-    var rssi: Double?,
-    var sat: Int, number of satallat
-    var spd: Double, // kmph
-    var timestamp: Long, // system timestamp when data created
-    var gpsTime: Long // gps time of this data
-	```
-* end to end encryption
-
-	When you first register on Signal, a private `identity key` is generated on your phone, as well as a bunch of public `prekeys` that are uploaded to the server and sent to your contacts whenever they initiate a new conversation with you or you initiate a new conversation with them.
-
-	When you add a new instance of Signal Desktop to your account, the desktop client 
-	1. generates a keypair, 
-	2. encodes the public key as a QR code, 
-	3. you scan it with your phone
-	4. the phone encrypts your private 'identity key' to the desktop client’s public key and uploads the encrypted key to the Signal server, 
-	5. the desktop client then downloads and decrypts your 'identity key' and uses it to generate a new set of public 'prekeys' that are uploaded to the server.		
-
-	![Signal End to End encrytion](./graphs/end2EndEncryption.drawio.svg)
-## Android System Design Template 1
-![](./graphs/DesignValueTable.drawio.svg)
+![系统面试的步骤和考察点](./graphs/DesignValueTable.drawio.svg)
 
 ### Business idea 3–4 minutes
 
@@ -152,6 +46,12 @@ body {
 
 
 ### Mathematical model design (if needed)
+
+* Data useage
+* Storage usage
+* 以及这些数学在我们做决策的作用
+
+
 ### High level system design 3–5 minutes
 	Define how to split that state and functionality between the server and the client sides :
 
@@ -162,13 +62,22 @@ body {
 
 Always provide information about the alternatives and defend your choice
 
-![](https://miro.medium.com/max/1400/1*LpI0PQLJ-WabMA_YUAW6pw.png)
+![high level system design](./graphs/HighLevelSystemDesign.drawio.svg)
 ### API design  7–10 minutes
 ### High level client side design 10
 
 Always provide information about the alternatives and defend your choice
+在设计时，总是要列举各种选择并陈述其优缺点
+* Archtecture
 
-![](https://miro.medium.com/max/1400/1*RJddvC5szQ_mnxROUEupNA.png)
+我们这里使用MVI的模式，来实现react类似的mvvm，uni direction data flow， immutable statue，
+
+![high level client Archtecture template](./graphs/HighLevelClientDesignTemplate.drawio.svg)
+
+那么把这个模式，应用到我们的系统设计里
+
+![high level client Archtecture](./graphs/HighLevelClientDesign.drawio.svg)
+
 ### Detailed design of some modules 10
 
 ### One complex case and detailed discussion
