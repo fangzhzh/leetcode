@@ -20,6 +20,20 @@
     * 瓶颈
 * 5 minutes - your questions to an interviewer.()
 
+
+## Business Idea
+* Extended social interaction beyond physical 
+* 
+
+## Category
+* Direct Message
+* Social Network
+* Position sharing
+* Video Sharing
+* Live Video
+* Photo Sharing
+* Matching based on location
+
 ## Most important feature when designing a mobile app/feature
 * reliable
 * scalable
@@ -33,7 +47,7 @@
 * Availability 
 	* country
 		* Europe/ gdpr
-		* China, google play store
+		* China, google play service and google play store
 		* India, low internet speed and coverage
 	* OS/language
 		* Lollipop 21, permission
@@ -42,12 +56,6 @@
 		* especially Persian
 	* offline
 	* phone/tablet
-* Testability 
-	* CI automation test
-	* do we have QA already?
-	* do they have related experiences?
-	* do need training?
-
 * Scalability/Performance
 	*  scalability of our team
 		* how many team do we have involving this feature
@@ -58,6 +66,11 @@
 	* wss, https, tls
 	* gRPC
 	* sockets
+* Testability 
+	* CI automation test
+	* do we have QA already?
+	* do they have related experiences?
+	* do need training?
 
 ##  Android technology alternative
 * Internet
@@ -204,6 +217,13 @@
 * 获取数据，显示数据，from a simple fetch data and show lists of items on the device screen
 * 聊天/Messaging/数据备份 to build this IOT or real-time chat-app ( WRT - web realtime messaging ) kind of an application    
 
+* Direct Message
+* Social Network
+* Position sharing
+* Video Sharing
+* Live Video
+* Photo Sharing
+* Matching based on location
 
 
 ## Cloud 设计的一个模板
