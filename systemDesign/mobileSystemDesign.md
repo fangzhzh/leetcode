@@ -27,9 +27,39 @@
 * power efficiency
 * customizable
 * cost efficiency
-* secure
+* security
 
-## Use case and technology alternative
+## Use cases
+* Availability 
+	* country
+		* Europe/ gdpr
+		* China, google play store
+		* India, low internet speed and coverage
+	* OS/language
+		* Lollipop 21, permission
+		* google play store needs new app *API level 28* above
+	* Multiple Lauguage & cultures
+		* especially Persian
+	* offline
+	* phone/tablet
+* Testability 
+	* CI automation test
+	* do we have QA already?
+	* do they have related experiences?
+	* do need training?
+
+* Scalability/Performance
+	*  scalability of our team
+		* how many team do we have involving this feature
+		* how do we separate feature across teams
+		* how do we reuse our code
+* Security 
+	* how security requirement for our data
+	* wss, https, tls
+	* gRPC
+	* sockets
+
+##  Android technology alternative
 * Internet
 	* Message
 		* Json
@@ -175,8 +205,6 @@
 * 聊天/Messaging/数据备份 to build this IOT or real-time chat-app ( WRT - web realtime messaging ) kind of an application    
 
 
-## 面试的时间分配模板
-[面试模板](./SystemDesignInterviewTemplate.md)
 
 ## Cloud 设计的一个模板
 ## Cloud system design 

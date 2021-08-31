@@ -10,6 +10,9 @@
 
 ## Mobile 系统设计
 [Mobile/Android/iOS 系统设计](./mobileSystemDesign.md)
+## 面试的时间分配模板
+[面试模板](./SystemDesignInterviewTemplate.md)
+
 ## Design Facebook Live
 [设计facebook Live](./facebookLive.md)
 ## Design a URL Shortening service like TinyURL

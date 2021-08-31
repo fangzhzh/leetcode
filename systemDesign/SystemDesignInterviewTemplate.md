@@ -39,32 +39,8 @@ some notes:
 * Lollipop 21, permission
 * google play store needs new app *API level 28* above
  
-* Availability 
-	* country
-		* Europe/ gdpr
-		* China, google play store
-		* India, low internet speed and coverage
-	* OS/language
-		* Lollipop 21, permission
-		* google play store needs new app *API level 28* above
-	* Multiple Lauguage & cultures
-		* especially Persian
-	* offline
-	* phone/tablet
-* Testability 
-	* CI automation test
-	* do we have QA already?
-	* do they have related experiences?
-	* do need training?
 
-* Scalability/Performance
-	*  scalability of our team
-		* how many team do we have involving this feature
-		* how do we separate feature across teams
-		* how do we reuse our code
-* Security 
-	* how security requirement for our data
-	* wss, htps, tls
+*Check Use cases section in mobileSystemDesign*
 </details>
 
 
@@ -180,16 +156,23 @@ Always provide information about the alternatives and defend your choice
 1. Can you do a rough calculation to justify why you chose one architecture vs the other (e.g.: push vs pull)?
 
 # Example App to explore
+## Category
+* Direct Message
+* Social Network
+* Position sharing
+* Video Sharing
+* Live Video
+* Photo Sharing
+
+* Matching based on location
+
+## Exaiople App
 ## How would you design Instagram / Instagram Stories
 * Instagram/Instragram stories
 
 ## How would you design Facebook
 
 ## How would you design Facebook Messenger
-
-* peers online
-* message sent
-* message read
 
 ## How would you design Facebook's live update of comments on posts
 
@@ -201,6 +184,13 @@ Always provide information about the alternatives and defend your choice
 
 ## How would you design a distributed Botnet
 
-## How would you design a system that can handle millions of card transactions per hour
+## How would you design TikTok
 
-## How would you design security for Facebook's corporate network from scratch (Security team interview)
+## How would you design Zoom
+## How would you design Spotify
+## How would you design Google Maps
+## How would you design Google Photos
+## How would you design Uber
+## How would you design Dropbox
+## How would you design Photo Edit
+
