@@ -21,9 +21,6 @@
 * 5 minutes - your questions to an interviewer.()
 
 
-## Business Idea
-* Extended social interaction beyond physical 
-* 
 
 ## Category
 * Direct Message
@@ -33,6 +30,30 @@
 * Live Video
 * Photo Sharing
 * Matching based on location
+
+## Business Idea
+* Direct Message
+	* Connect people
+* Social Network
+	* Extended social 
+* Position sharing
+	* Better navigation
+* Video Sharing
+	* Better sharing
+* Live Video
+	* Better interaction
+* Photo Sharing
+	* Sharing better life
+* Matching based on location
+	* Better communicate
+* E-commercial	
+
+## Business Idea
+* Extended social interaction beyond physical 
+* Make search easy
+* Safe backup, extend of your phone
+* Shopping made easy, less hassle
+* 
 
 ## Most important feature when designing a mobile app/feature
 * reliable
