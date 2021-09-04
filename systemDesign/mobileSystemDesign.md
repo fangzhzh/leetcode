@@ -52,15 +52,6 @@
 * Safe backup, extend of your phone
 * Shopping made easy, less hassle
 
-## Most important feature when designing a mobile app/feature
-* reliable
-* scalable
-* maintainable
-* power efficiency
-* customizable
-* cost efficiency
-* security
-
 ## Use cases
 ### Question
 AS STAR

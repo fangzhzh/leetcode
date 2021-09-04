@@ -13,6 +13,8 @@
 ## 面试的时间分配模板
 [面试模板](./SystemDesignInterviewTemplate.md)
 
+## 逐字稿
+[逐字稿](./逐字稿.md)
 ## Design Facebook Live
 [设计facebook Live](./facebookLive.md)
 ## Design a URL Shortening service like TinyURL
