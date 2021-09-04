@@ -47,13 +47,10 @@
 * Matching based on location
 	* Better communicate
 * E-commercial	
-
-## Business Idea
 * Extended social interaction beyond physical 
 * Make search easy
 * Safe backup, extend of your phone
 * Shopping made easy, less hassle
-* 
 
 ## Most important feature when designing a mobile app/feature
 * reliable
@@ -65,6 +62,15 @@
 * security
 
 ## Use cases
+### Question
+AS STAR
+* A: Availability
+* S: Scalability/Performace
+
+* S: Security p2p/server
+* T: Testability CI/CD
+* A: Accessbility accessibility engineer
+* R: resource Battery/CPU/Storage
 * Availability 
 	* country
 		* Europe/ gdpr
@@ -82,21 +88,31 @@
 		* how many team do we have involving this feature
 		* how do we separate feature across teams
 		* how do we reuse our code
+* Accessibility
+	* accessiblity needs, legal risk 	
+	* Talk back, color contrast
+	* Make accessibility part of the planing/design process
+
 * Security 
 	* how security requirement for our data
-	* wss, https, tls
-	* gRPC
-	* sockets
+	* fundamental: 
+		* wss, https, tls
+		* gRPC
+		* sockets
+	* P2P
+		* Private key/public key in device
 * Testability 
 	* CI automation test
 	* do we have QA already?
 	* do they have related experiences?
 	* do need training?
-* app size
-	* 每增1M，减少约0.5%的install(decrease in install rate of 0.32% per MB)
-	* CPU architecture by supporting different ABI(ARM64, arm, x86, x64)
-	* Bundle
-* 资源使用的计算
+	* Separate of concern, massive unit test, little ui test, 
+		* TEST Pyrid
+	* A/B
+		* customization
+		* Tester plan
+		* Releease phrase
+* Resources 资源使用的计算
     * Image Cache
         * LRU, 
     * Database
@@ -113,6 +129,11 @@
         * WorkManager
             * 充电，wifi，晚上，没人用
         * SyncAdapter
+### Concerns
+* App size
+	* 每增1M，减少约0.5%的install(decrease in install rate of 0.32% per MB)
+	* CPU architecture by supporting different ABI(ARM64, arm, x86, x64)
+	* Bundle
 ##  Android technology alternative
 * Internet
 	* Message
