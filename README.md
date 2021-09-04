@@ -2,3 +2,4 @@ This is a repo for all my computer science knowledge, including algorithm, syste
 
 * [algorithm](./algorithm)
 * [system design](./systemDesign)
+* [meta](./metaInterview.md)

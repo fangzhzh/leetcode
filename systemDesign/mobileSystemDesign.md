@@ -92,7 +92,27 @@
 	* do we have QA already?
 	* do they have related experiences?
 	* do need training?
-
+* app size
+	* 每增1M，减少约0.5%的install(decrease in install rate of 0.32% per MB)
+	* CPU architecture by supporting different ABI(ARM64, arm, x86, x64)
+	* Bundle
+* 资源使用的计算
+    * Image Cache
+        * LRU, 
+    * Database
+        * Table records * number
+        * clean
+    * Data
+        * WIFI/Data selection
+        * 网络状况决定当前行为的必要性
+            * 视频有必要
+            * 其他的，如API，Image，Audio，没有太多的必要
+    * Battery   
+        * 不要用foreground service
+        * AlarmManager
+        * WorkManager
+            * 充电，wifi，晚上，没人用
+        * SyncAdapter
 ##  Android technology alternative
 * Internet
 	* Message

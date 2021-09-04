@@ -5,8 +5,9 @@
 
 ![系统面试的步骤和考察点](./graphs/DesignValueTable.drawio.svg)
 
-## Business idea 3–4 minutes
+## Business idea and requirement 
 
+### Business idea 3–4 minutes
 	Ability to think about the business part of the task. WHY
 
 <details><summary>Business idea 3–4 minutes WHO,WHY,WHEN,WHAT  </summary>
@@ -16,12 +17,27 @@
 * Understanding the main idea of the product or the feature (if you don't understand something, don't hesitate to ask all the needed questions. The more you know about the product the easier will be making decisions during the the rest of the process)
 </details>
 
-## Requirements clarification 5 minutes
+### Example
+* The list of services we sell to our users
+	* Safely storing and providing read/write access to your address book
+	* Provoding the ability to make/receive Audio and Video calls to contacts from your address book
+	* Providing the ability to send/receive text messages and images to contacts from your address book and safely store the history of all the chats
+* The data entities access we sell to our users
+	* Address book item:
+		* First name
+		* Family name
+		* Phone number
+	* Chat history message:
+		* User oppenent
+		* Inbound or outbound
+		* Date and time of the message
+		* Message text or image	
+### Requirements clarification 5 minutes
 	Ability to clarify requirement, boundary, priority
 
 	The requirements clarification process should be driven by definite and clear aims, questions shouldn't be random, but should rather follow some system.
 
-<details><summary> Requirements clarification 1–2 minutes (5 min) WHAT </summary>
+<details><summary> Requirements clarification 5 minutes (5 min) WHAT </summary>
 
 1. Use cases  
 2. Scenarios that will be/not be covered  
