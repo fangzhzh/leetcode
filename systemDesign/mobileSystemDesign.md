@@ -79,10 +79,6 @@ AS STAR
 		* how many team do we have involving this feature
 		* how do we separate feature across teams
 		* how do we reuse our code
-* Accessibility
-	* accessiblity needs, legal risk 	
-	* Talk back, color contrast
-	* Make accessibility part of the planing/design process
 
 * Security 
 	* how security requirement for our data
@@ -103,6 +99,11 @@ AS STAR
 		* customization
 		* Tester plan
 		* Releease phrase
+* Accessibility
+	* accessiblity needs, legal risk 	
+	* Talk back, color contrast
+	* Make accessibility part of the planing/design process
+
 * Resources 资源使用的计算
     * Image Cache
         * LRU, 

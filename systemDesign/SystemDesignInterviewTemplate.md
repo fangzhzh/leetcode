@@ -64,10 +64,12 @@ some notes:
 	User Experience
 
 <details><summary> Mathematical model design (if needed) 3–5 Math </summary>
+
 * Data useage
 * Storage usage
 * battery usage
 * 以及这些数学在我们做决策的作用
+
 </details>
 
 
