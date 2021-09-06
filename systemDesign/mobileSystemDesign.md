@@ -13,7 +13,7 @@
     * 瓶颈
 * 5 minutes - your questions to an interviewer.()
 
-### [详解时间分配模板](./SystemDesignInterviewTemplate.md)
+### [详解时间分配模板](./SystemDesignInterviewTimeTemplate.md)
 
 ## Category
 * Direct Message
@@ -245,6 +245,7 @@ AS STAR
         * repo/db/network/
             * retrofit
             * room-orm
+
 * unit-testing
     * mock components, mockk
     * mock ui-contract, mock data-contract
@@ -259,7 +260,11 @@ AS STAR
     * lifecycleScope or viewModelScope 
 
 
-
+* Unidirectional data flow
+	* 好处
+		* 更容易测试，state和UI decouple
+		* state独立，single source of truth，不容易出现inconsistent state
+		* UI consistence observable state holders: LiveData, StateFlow
 ## APP分类
 
 设计的APP一般可以分为两大类
@@ -276,130 +281,31 @@ AS STAR
 * Matching based on location
 
 
-## Cloud 设计的一个模板
-## Cloud system design 
+## Exaiople App
+## How would you design Instagram / Instagram Stories
+* Instagram/Instragram stories
 
-### FEATURE EXPECTATIONS (5 min)
-<details><summary>FEATURE EXPECTATIONS (5 min)  </summary>
+## How would you design Facebook
 
-1. Use cases  
-2. Scenarios that will be/not be covered  
-3. Who will use  
-4. How many will use  
-5. Usage patterns
+## How would you design Facebook Messenger
 
-* What are the basic requirements of the system? 
-* How will the app deliver updates to listening friends? 
-* What data, battery and privacy concerns will it face? 
-* Should it work constantly in the background, or only when active and in the foreground?​
+## How would you design Facebook's live update of comments on posts
 
-some notes:
-* Lollipop 21, permission
-* google play store needs new app *API level 28* above
- 
-</details>
+## How would you design an online collaborative editor (e.g. Google Docs)
 
-### ESTIMATIONS (5 min)
-<details><summary> ESTIMATIONS (5 min)  </summary>
+## How would you design a typehead feature (e.g. Google search autocomplete)
 
-1. Data usage
-2. Storage usage
-3. Baterry usage
-4. App
-</details>
+## How would you design Twitter's trending topics
 
-### DESIGN GOALS (5 min)
-<details><summary> DESIGN GOALS (5 min) </summary>
+## How would you design a distributed Botnet
 
-1. Latency and Throughput requirements  
+## How would you design TikTok
 
-2. Consistency vs Availability [Weak/strong/eventual => consistency | Failover/replication => availability]  
-</details>
+## How would you design Zoom
+## How would you design Spotify
+## How would you design Google Maps
+## How would you design Google Photos
+## How would you design Uber
+## How would you design Dropbox
+## How would you design Photo Edit
 
-### HIGH LEVEL DESIGN (5-10 min)
-<details><summary> HIGH LEVEL DESIGN (5 min)  </summary>
-
-1. APIs for Read/Write scenarios for crucial components  
-
-2. Database schema  
-
-3. Basic algorithm  
-
-4. High level design for Read/Write scenario  
-</details>
-
-### DEEP DIVE (15-20 min)
-<details><summary> 
-* Scaling the algorithm
-* Scaling individual components
-* Component
-
-</summary>
-
-1. Scaling the algorithm  
-
-2. Scaling individual components:  
-
-	* -> Availability, Consistency and Scale story for each component  
-
-	* -> Consistency and availability patterns  
-
-3. Think about the following components, how they would fit in and how it would help  
-
-	* a. DNS  
-
-	* b. CDN [Push vs Pull]  
-
-	* c) Load Balancers [Active-Passive, Active-Active, Layer 4, Layer 7]  
-
-	* d) Reverse Proxy  
-
-	* e) Application layer scaling [Microservices, Service Discovery]  
-
-	* f) DB [RDBMS, NoSQL]  
-
-		* > RDBMS  
-		* >> Master-slave, Master-master, Federation, Sharding, Denormalization, SQL Tuning  
-
-		* > NoSQL  
-		* >> Key-Value, Wide-Column, Graph, Document  
-		* Fast-lookups:  
-		* >>> RAM [Bounded size] => Redis, Memcached  
-		* >>> AP [Unbounded size] => Cassandra, RIAK, Voldemort  
-		* >>> CP [Unbounded size] => HBase, MongoDB, Couchbase, DynamoDB  
-
-	* g) Caches  
-
-		* > Client caching, CDN caching, Webserver caching, Database caching, Application caching, Cache @Query level, Cache @Object level  
-
-		* > Eviction policies:  
-		* >> Cache aside  
-		* >> Write through  
-		* >> Write behind  
-		* >> Refresh ahead  
-
-	* h) Asynchronism  
-		* > Message queues  
-		* > Task queues  
-		* > Back pressure  
-
-	* i) Communication  
-
-		* > TCP  
-
-		* > UDP  
-
-		* > REST  
-
-		* > RPC  
-</details>
-
-### JUSTIFY [5 min]  
-<details><summary> JUSTIFY [5 min]  </summary>
-
-	* (1) Throughput of each layer  
-
-	* (2) Latency caused between each layer  
-
-	* (3) Overall latency justification  
-</details>
