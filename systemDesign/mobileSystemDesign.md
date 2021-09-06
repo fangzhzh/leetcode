@@ -1,12 +1,5 @@
-# mobileSystemDesign 移动系统设计
-移动端的系统设计也许要follow这些步骤，虽然另有侧重
-* 厘清需求
-* 估算
-* 接口设计
-* 数据模型
-* high level的设计
-* 详细设计
-* 瓶颈识别+解决
+# mobileSystemDesign 移动系统设计知识点
+
 ## 系统设计时间模板
 * 时间分配
 * 5 minutes - acquaintance 寒暄
@@ -20,7 +13,7 @@
     * 瓶颈
 * 5 minutes - your questions to an interviewer.()
 
-
+### [详解时间分配模板](./SystemDesignInterviewTemplate.md)
 
 ## Category
 * Direct Message
@@ -181,8 +174,11 @@ AS STAR
 	* dagger
 	* hilt
 * location
-	* The fused location provider
-	* locationListener
+	* The fused location provider from google play service
+	* locationListener from location manager
+		* GPS_PROVIDER
+		* NETWORK_PROVIDER
+		* PASSIVE_PROVIDER
 
 	```
 	var dir: Double,
