@@ -11,13 +11,7 @@
 ## Mobile 系统设计
 [Mobile/Android/iOS 系统设计](./mobileSystemDesign.md)
 ## 面试的时间分配模板
-[面试模板](./SystemDesignInterviewTimeTemplate.md)
-
-## 如何清楚表达一个idea SEE-I
-**•	State it:** Clearly and succinctly state the concept or idea in a single sentence or two.  
-**•	Elaborate:** Explain it further in your own words.  
-**•	Exemplify:** Provide concrete examples and counter examples of the concept.  
-**•	Illustrate:** Provide a picture, diagram, metaphor or analogy of the concept.  
+[面试时间模板](./SystemDesignInterviewTimeTemplate.md)
 
 ## 逐字稿
 [逐字稿](./逐字稿.md)

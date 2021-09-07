@@ -10,7 +10,7 @@
 ### Business idea 3–4 minutes
 	Ability to think about the business part of the task. WHY
 
-<details><summary>Business idea 3–4 minutes WHO,WHY,WHEN,WHAT  </summary>
+<details><summary>Business idea 3–4 minutes WHO,WHY,WHEN,WHAT  **OUTPUT:VISION**</summary>
 
 * The list of services we sell to our users
 * The data entities access we sell to our users
@@ -37,7 +37,7 @@
 
 	The requirements clarification process should be driven by definite and clear aims, questions shouldn't be random, but should rather follow some system.
 
-<details><summary> Requirements clarification 5 minutes (5 min) WHAT </summary>
+<details><summary> Requirements clarification 5 minutes (5 min) WHAT **OUTPUT:PRD**</summary>
 
 1. Use cases  
 2. Scenarios that will be/not be covered  
@@ -73,7 +73,7 @@ some notes:
 </details>
 
 
-## High level system design 3–5 minutes
+## High level system design 10 minutes
 	Define how to split that state and functionality between the server and the client sides :
 
 <details><summary> High level system design 3–5 minutes HOW Overview </summary>
@@ -89,8 +89,9 @@ Always provide information about the alternatives and defend your choice
 
 </details>
 
-## API design  7–10 minutes
+## API design  5 minutes
 	The language the client are talking
+
 ## High level client side design 10 mins
 	Always provide information about the alternatives and defend your choice
 

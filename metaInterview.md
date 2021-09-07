@@ -4,8 +4,21 @@
 ## 抽象idea
 
 ## 提问
+* 如果是真的问题，那就是
+    * Do we consider xxx
+    * Is it a concern that 
+    * Do I handle the case
+* 如果需要确认，而不是真的问题
+    * Although I have confident on this feature, but I'd like to make sure that we're on the same page.
+
+## 如何清楚表达一个idea SEE-I
+**•	State it:** Clearly and succinctly state the concept or idea in a single sentence or two.  
+**•	Elaborate:** Explain it further in your own words.  
+**•	Exemplify:** Provide concrete examples and counter examples of the concept.  
+**•	Illustrate:** Provide a picture, diagram, metaphor or analogy of the concept.
 
 ## 表述方式
+
 ### 优点
 * Benifit
 * advantange
@@ -18,6 +31,7 @@
 ### 阐述idea
 * 不止这些
     * so on and so forth
+    * etc.  etˈsedərə
 
 ### User experiece
 * 资源使用
