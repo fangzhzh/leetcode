@@ -119,6 +119,19 @@ AS STAR
 	* 每增1M，减少约0.5%的install(decrease in install rate of 0.32% per MB)
 	* CPU architecture by supporting different ABI(ARM64, arm, x86, x64)
 	* Bundle
+
+## Server Concerns
+### Restful API
+* limit
+* paganation
+	* offset based
+	* curcor based
+* filter
+### Websocket
+### WebRTC
+### RTP/RTMP
+### Dash
+### gRPC
 ##  Android technology alternative
 * Internet
 	* Message
