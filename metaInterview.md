@@ -1,6 +1,7 @@
 # Meta Interview
 ## 重要的词汇
 * idempotent
+* Boilerplate code
 ## 抽象idea
 
 ## 提问

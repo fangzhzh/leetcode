@@ -164,6 +164,7 @@ AS STAR
 		* room `part of Jackpack`
 	* sharedpreferences
 	* file
+	* Firebase Firestore
 * offline
 	* store 
 	* retry, exponential backoff && max retry
@@ -266,7 +267,10 @@ AS STAR
 
 * UI相关
     * RecyclerView 
-        * recyclerview-adapter, view-holder
+        * recyclerview-adapter, view-holder pattern
+			* view holder pattern
+			* layout manager
+			* item animation
     * 图片缓存(how Glide/Picasso works basically  
     * Activity/Fragment/Navigation
 * Kotlin相关
