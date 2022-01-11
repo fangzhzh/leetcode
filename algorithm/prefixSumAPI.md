@@ -25,3 +25,7 @@ for (int i = 0; i < n; i++) {
 ## 例题
 
 * [238. Product of Array Except Self](https://leetcode-cn.com/problems/product-of-array-except-self/)
+
+## 例题 1588. 所有奇数长度子数组的和
+* [1588. 所有奇数长度子数组的和](https://leetcode-cn.com/problems/sum-of-all-odd-length-subarrays/)
+    * [查看本题的三中解法](./1588.sum-of-all-odd-length-subarrays/)
