@@ -26,6 +26,7 @@
 
 ## ☯️ 递归
 * [递归基础与API](./recursive.md)
+* [Recursion Trees and the Master Method][./recursiveMasterMethod.md]
 ## 分治
 
 ## 🌀 Linked List
@@ -34,7 +35,7 @@
 * [快慢指针](./LinkedListFastSlow.md)
 * [移动链表节点总结](./LinkedListMoving.md)
 ## ✌️ Binary Tree
-* [二叉树基础与API](./binar                  yTree.md)
+* [二叉树基础与API](./binaryTree.md)
 * [二叉树错题本](./binaryProblemNotes.md)
 ## 🔎 Binary Search 
 * [二分查找与API](./binarySearch.md)
