@@ -1,4 +1,11 @@
 # leetcode
+## [知识点](./catalogue.md)
+## 怎样解题
+
+## 怎样练习
+
+## [怎样面试](./codingInterview.md)
+* ACT
 ## 算法复盘
 1. 理解题目
     * 未知量
