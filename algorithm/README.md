@@ -4,8 +4,11 @@
 
 ## 怎样练习
 
-## [怎样面试](./codingInterview.md)
+## [怎样面试](./codingInterviewACT.md)
 * ACT
+
+## [特殊解法](./algor401.md)
+
 ## 算法复盘
 1. 理解题目
     * 未知量
