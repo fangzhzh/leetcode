@@ -1,7 +1,5 @@
 # leetcode
 ## [知识点](./catalogue.md)
-## 怎样解题
-
 ## 怎样练习
 
 ## [怎样面试](./codingInterviewACT.md)
@@ -127,4 +125,4 @@ dp+recursive，leetcode半壁江山
 [FB面经](./FB面经.md)
 
 ## 模板
-![模板API](./codeAPI.md)
+[模板API](./codeAPI.md)
