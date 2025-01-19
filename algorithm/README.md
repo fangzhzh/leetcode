@@ -1,9 +1,13 @@
 # leetcode
+![algor overview](./graphs/algorithn-mind-map.png)
+
 ## [知识点](./catalogue.md)
-## 怎样练习
 
 ## [怎样面试](./codingInterviewACT.md)
 * ACT
+    * Ask
+    * Confirm
+    * Test
 
 ## [特殊解法](./algor401.md)
 
@@ -34,7 +38,7 @@
 
 ## ☯️ 递归
 * [递归基础与API](./recursive.md)
-* [Recursion Trees and the Master Method][./recursiveMasterMethod.md]
+* [Recursion Trees and the Master Method](./recursiveMasterMethod.md)
 ## 分治
 
 ## 🌀 Linked List
@@ -42,9 +46,11 @@
 * [链表基础与API](./LinkedList.md)
 * [快慢指针](./LinkedListFastSlow.md)
 * [移动链表节点总结](./LinkedListMoving.md)
+
 ## ✌️ Binary Tree
 * [二叉树基础与API](./binaryTree.md)
 * [二叉树错题本](./binaryProblemNotes.md)
+
 ## 🔎 Binary Search 
 * [二分查找与API](./binarySearch.md)
 
