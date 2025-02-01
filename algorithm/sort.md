@@ -125,7 +125,10 @@ Applying heapify procedure to index 0:
 The heapify procedure calls itself recursively to build heap in top down manner.
 ```
 ![上浮建堆过程](./graphs/bottom_up_heapify.drawio.svg)
+
+
 ```
+// 上浮建堆
 public void swim (int index) {
     while (index > 1 && nums[index/2] > nums[index]) {
         swap(index/2,index);//交换
@@ -137,7 +140,7 @@ public void swim (int index) {
 ![下沉建堆过程](./graphs/top_down_heapify.drawio.svg)
 
 ```
-
+// 下沉建堆
 public void sink (int[] nums, int index,int len) {
         while (true) {
             //获取子节点
