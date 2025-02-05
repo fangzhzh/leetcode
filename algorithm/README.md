@@ -38,7 +38,7 @@
 
 ## ☯️ 递归
 * [递归基础与API](./recursive.md)
-* [Recursion Trees and the Master Method](./recursiveMasterMethod.md)
+
 ## 分治
 
 ## 🌀 Linked List
