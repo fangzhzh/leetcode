@@ -116,3 +116,18 @@ class Solution {
         nums[j] = tmp;
     }
 }
+
+/* priority queue */
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(k);
+        for(int num: nums) {
+            minHeap.offer(num);
+            if(minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        return minHeap.peek();
+    }
+}
