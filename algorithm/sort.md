@@ -49,9 +49,11 @@ int partition(int[] array, int left, int right) {
 // 同向而行
 // [1,4,3,5,2,7]
 int partition(int[] array, int left, int right) {
+    // find a index, so that array[0, index-1] < array[index] and array[index, right) >= array[index]
+
     int pivot = array[(left + right) / 2]; // Pick pivot point
     int curR = left;
-    while(curR <= righg) {
+    while(curR <= right) {
         if(array[curR] < pivot) {
             swap(array, left, curR);
             left++;
