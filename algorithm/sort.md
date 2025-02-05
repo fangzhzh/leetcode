@@ -86,7 +86,7 @@ Heap sort is a comparison-based sorting technique based on Binary Heap data stru
 
 二叉堆就是一种完全二叉树，其中父节点大于/小于其子节点。
 
-A Binary Heap is a Complete Binary Tree where items are stored in a special order such that the value in a parent node is greater(or smaller) than the values in its two children nodes. The former is called max heap and the latter is called min-heap. The heap can be represented by a binary tree or array.
+A Binary Heap is a Complete Binary Tree where items are stored in a special order such that the value in a parent node is greater(or smaller) than the values in its two children nodes. The former is called **max heap** and the latter is called **min-heap**. The heap can be represented by a binary tree or array.
 
 * 大顶堆：每个结点的值都大于或等于其左右孩子结点的值
 * 小顶堆：每个结点的值都小于或等于其左右孩子结点的值
@@ -96,10 +96,11 @@ A Binary Heap is a Complete Binary Tree where items are stored in a special orde
 * 大顶堆：arr[i] >= arr[2i+1] && arr[i] >= arr[2i+2] 
 * 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2] 
 
+也就是说，大顶堆(max-heap)，小顶堆(min-heap)的是根据根节点的特性来命名的。
 
 ### 建堆 How to build the heap? 
 
-Heapify procedure can be applied to a node only if its children nodes are heapified. So the heapification must be performed in the bottom-up order.
+> **Heapify procedure can be applied to a node only if its children nodes are heapified.** So the heapification must be performed in the bottom-up order.
 ```
 Input data: 4, 10, 3, 5, 1
          4(0)
@@ -163,12 +164,58 @@ public void sink (int[] nums, int index,int len) {
 ```
 
 
-建堆我们这里提出两种方法，利用上浮操作，也就是不断插入元素进行建堆，另一种是利用下沉操作，遍历父节点，不断将其下沉，进行建堆，我们一起来看吧。
+建堆有两种方法，1. 利用上浮操作，也就是不断插入元素进行建堆，2.利用下沉操作，遍历父节点，不断将其下沉，进行建堆。
 
-### 排序
-我们已经有了大顶堆，如何排序呢，思路就是把大顶移除，然后对剩下对元素再建堆，然后移除大顶，对剩下元素再建堆，知道完成index 0的元素。
+### 上浮建堆(插入建堆)
+* 思路，每插入一个元素，就执行*上浮操作*以保持堆的性质
+* TC *O(N log N)*
 
-[堆排序](./graphs/top_down_heap_sort.drawio.svg)
+```
+public void heapSort(int[] arr) {
+    int n = arr.length;
+    // 1. only swim build heap
+    for(int i = 0; i < n; i++) {
+        insert(heap, i, arr[i]);
+    }
+
+    // 2. sort: swap and sink
+    for(int i = n - 1; i > 0; i--) {
+        swap(heap, 0, i);
+        downHeap(heap, 0, i);
+    }
+}
+void insert(int[] heap, int index, int value) {
+    heap[index] = value;
+    while(index > 0) {
+        int parent = (index - 1) / 2;
+        if(heap[parent] >= heap[index]) break;
+        swap(heap, parent, index);
+        index = parent;
+    }
+}
+
+// 用于维护堆堆性质
+void downHeap(int[] heap, int index, int size) {
+    while(2*index+1 < size) {
+        int left = 2*index+1;
+        int right = left +1;
+        int largest = left;
+        if(right < size && hea[right] > heap[left[) {
+            largest = right;
+        }
+        if(heap[index] >= heap[largest]) break;
+        swap(heap, index, largest);
+        index = largest;
+    }
+}
+```
+### 下沉建堆(Heapify)
+我们已经有了大顶堆，如何排序呢，思路就是把大顶移除，然后对剩下对元素再建堆，然后移除大顶，对剩下元素再建堆，直到完成index 0的元素。
+
+从最后一个非叶子节点开始，依次执行下沉操作，构建对结构。
+
+TC *O(N)*, 
+![堆排序](./graphs/top_down_heap_sort.drawio.svg)
 
 
 ```java
@@ -216,66 +263,14 @@ private  void swap(int[] arr, int i, int j) {
 
 ```
 
-```java
-class Solution {
-    public int[] sortArray(int[] nums) {
-        heapSort(nums);
-        return nums;
-    }
+## Heap in Java
+Java's `PriorityQueue` by default is min-heap, but can be max-heap using a custom comparator
 
-    public void heapSort(int[] nums) {
-        int len = nums.length - 1;
-        // build 一个大顶堆
-        buildMaxHeap(nums, len);
-        for (int i = len-1; i > 0; --i) {
-           // 移除大顶，继续build大顶堆
-            swap(nums, i, 0);
-            maxHeapify(nums, 0, i);
-        }
-    }
+```
+import java.util.PriorityQueue;
+import java.util.Collections;
 
-// [6,2,1,3,5,4,]
-//   6
-//   2 1
-
-    public void buildMaxHeap(int[] nums, int len) {
-       // 从第一个第一个非叶子节点，开始build heap
-        for (int i = len / 2; i >= 0; --i) {
-            maxHeapify(nums, i, len);
-        }
-    }
-
-   // 下沉
-    public void maxHeapify(int[] nums, int i, int heapSize) {
-        for (; i*2 + 1 <= heapSize;) {
-            int lson = i*2 + 1;
-            int rson = i*2 + 2;
-            int large;
-            // 父左右孩子中最大的
-            if (lson <= heapSize && nums[lson] > nums[i]) {
-                large = lson;
-            } else {
-                large = i;
-            }
-            if (rson <= heapSize && nums[rson] > nums[large]) {
-                large = rson;
-            }
-            // 如果i不是最大，那么需要和较大那个孩子换一下，然后，继续从换后的位置重新继续下沉
-            if (large != i) {
-                swap(nums, i, large);
-                i = large;
-            } else {
-               // 此元素即为i，不需要换，本元素已经处理完
-                break;
-            }
-        }
-    }
-
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
-    }
-}
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
 
 ```
