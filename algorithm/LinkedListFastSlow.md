@@ -18,11 +18,20 @@ It's often used to navigate a linked list where you don’t know the size in adv
 
 ```java
 ListNode slow = head;
-ListNode fast = head.next;
-ListNode fast = head;
-while(fast != null && fast.next != null) {
+ListNode fast = head.next; // 0, 1
+ListNode fast = head; // 0, 0
+while(hasMore(fast)) {
     slow = slow.next;
     fast = fast.next.next;
+}
+
+// 乐观跳
+bool hasMore(fast) {
+   return fast != null && fast.next != null;
+}
+// 悲观跳
+bool hasMore(fast) {
+   fast.next != null && fast.next.next != null
 }
 ```
 
@@ -31,22 +40,34 @@ while(fast != null && fast.next != null) {
 
 ```java
 public ListNode middleNode(ListNode head) {
+         // 0, 0, 乐观跳
         ListNode slow = head;
-        ListNode fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        System.out.println("head, check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
-
-        slow = head;
-        fast = head;
+        ListNode fast = head;         
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
         System.out.println("head, check next, slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
 
+         // 0, 0 悲观跳
+        slow = head;
+        fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        System.out.println("head, check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
+
+         // 0, 1 乐观跳
+        slow = head;
+        fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        System.out.println("head.next check next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
+
+         // 0， 1 悲观跳
         slow = head;
         fast = head.next;
         while (fast.next != null && fast.next.next != null) {
@@ -55,13 +76,6 @@ public ListNode middleNode(ListNode head) {
         }
         System.out.println("head.next, check next.next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
 
-        slow = head;
-        fast = head.next;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        System.out.println("head.next check next slow:" + slow.val + " fast:" + (fast==null?-1:fast.val));
 
 
         return slow;
@@ -79,12 +93,12 @@ public ListNode middleNode(ListNode head) {
 * head check next, slow:4 fast:-1
 
 
-| num| fast | 跳法 |  slow | fast |
-|-----|------|-------| ------| -----|
-| even | head | head, head.next 乐观跳 | right | null |
-| odd | head | head, head.next 乐观跳| mid | last |
-| even | head | head.next, head.next.next 悲观跳| left | penultimate |
-| odd | head | head.next, head.next.next 悲观跳| mid | last |
+| num| fast | 跳法 |  slow at | fast | half half|
+|-----|------|-------| ------| -----| ----- |
+| even | head | head, head.next 乐观跳 | mid+slight right => index=len/2, start of second half | null | length(left) = length(right)|
+| odd | head | head, head.next 乐观跳| mid=>index=tail(len/2),  | last | length(left) = length(right)-1 |
+| even | head | head.next, head.next.next 悲观跳| left | penultimate (second last) | length(left) = length(right)|
+| odd | head | head.next, head.next.next 悲观跳| mid | last | length(left)+1 = length(right)-1 |
 
 
 
@@ -149,9 +163,10 @@ flowchart LR
 
 * k-th node from the end
 
-fast go to kth, then slow and fast go together until fast reaches to the end. Then the slow is the kth from the end.
+   fast go to kth, then slow and fast go together until fast reaches to the end. Then the slow is the kth from the end.
 
 * medium node
-slow go once, fast go twice, then slow is midium and fast the end.
+
+   slow go once, fast go twice, then slow is midium and fast the end.
 
 
