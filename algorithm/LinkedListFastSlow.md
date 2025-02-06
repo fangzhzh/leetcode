@@ -16,6 +16,12 @@ It's often used to navigate a linked list where you don’t know the size in adv
 
 ### 模板
 
+以下模版都基于假设
+* Slow step: 1
+* Fast step: 2
+
+> 但是实际应用中，两个步长可以根据需要调整。比如，倒数第k个，在算法的第二部分，slow, fast一起移动时，slow,fast，一起移动，步长可以均为1.
+
 ```java
 ListNode slow = head;
 ListNode fast = head.next; // 0, 1
