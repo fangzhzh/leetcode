@@ -12,10 +12,6 @@ tabulation or memoization
  
 ## 遍历方式
 ### DFS
-#### buttom up
-子依赖父
-#### top down
-父依赖子
 
 ### BSF LEVEL
 
