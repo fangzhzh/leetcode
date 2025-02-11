@@ -15,8 +15,8 @@ body {
 
 ## Collections
 
-|**interface**|**HashTable**|**Resizable Array** | ** Balanced Tree** | Linked List | Hash Table  Linked List |
-|----|----|----| 
+|**interface**|**HashTable**|**Resizable Array** | **Balanced Tree** | Linked List | Hash Table  Linked List |
+|----|----|----| ----| --- | --- | 
 | Set | HashSet | 				| TreeSet*	|				| LinkedHashSet|
 | List | 			| ArrayList |			| LinkedList	|	|
 | Queue |			| ArrayDeque |			| LinkedList 	| 	|
@@ -28,7 +28,7 @@ body {
 
 ## Time Complexity of Data structure
 | Data structure	| Access |	Search |	Insertion	|Deletion |
-|---|---|---|
+|---|---|---|---|---|
 | Array | 	O(1)	| O(N)	| O(N)	| O(N) | 
 | Stack	| O(N)| 	O(N)	| O(1)	| O(1) |
 | Queue	| O(N)| 	O(N)	| O(1)	| O(1) |
@@ -39,6 +39,21 @@ body {
 | AVL Tree	| O(log N)	| O(log N)	| O(log N)| 	O(log N) | 
 | B Tree	| O(log N)	| O(log N)	|  O(log N)	| O(log N) | 
 Red Black Tree| 	O(log N)	| O(log N)	| O(log N)	| O(log N)| 
+
+## initialise List<Integer>
+
+```
+List<Integer> list=new ArrayList<>();
+
+List<Integer> llist=new LinkedList<>();
+
+List<Integer> stack=new Stack<>();
+
+
+// size
+List<Integer> list=new ArrayList<>(10);
+```
+
 ## initialise List<List<Integer>>
 - initialise and add
 ```
