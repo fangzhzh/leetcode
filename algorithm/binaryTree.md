@@ -6,9 +6,8 @@ Binary Tree, Binary Search tree
 
 ##  经典题目
 二叉树的题目有几类，
-* 求值
+* 求值 
     * [104. 二叉树的最大深度](./104.maximum-depth-of-binary-tree/104.md)
-
 * 操作，修改
     * [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
     * [617. 合并二叉树](./617.merge-two-binary-trees/)
@@ -19,126 +18,28 @@ Binary Tree, Binary Search tree
         * [100. 相同的树](./100.same-tree)
         * [101. 对称二叉树](./101.symmetric-tree)
 
-题目的解法根据后边的api入下边API所示
+
+## API  
+* `preTraveral(root).forEach(x-> visit(x))`
+* `inTraveral(root).forEach(x-> visit(x))`
+* `postTraveral(root).forEach(x-> visit(x))`
+* `levelTraveral(root).forEach(x-> visit(x))`
+
+## 解法API模版·
 
 ```
     // global variable
-    返回值 solution(root， 参数列表) {
+    **返回值** solution(root， **参数列表**) {
         // pre visit(x)
         solution(root.left)
         // mid visit(x)
         solution(root.right)
         // post visit(x)
     }
-
-```
-
-### 需要注意的两点
-参数列表和返回值是非常需要注意的。
-
-#### 返回值
-参考参数列表里分析的430，巧妙设计的返回值帮助我们实现无错的递归算法。
-
-#### 参数列表
-一般来说，我们把所有需要的参数，全部放进参数列表，递归的过程中，更新参数列表
-
-比如100 相同的树，我们把左右节点带进去已经足够
-```java
-public boolean isSameTree(TreeNode p, TreeNode q) {
-        if(p == null && q == null) return true;
-        if(p == null || q == null) return false;
-        if(p.val != q.val) return false;
-        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-    }
-```
-
-100可能太简单，我们看一个稍微复杂的例子。430, 扁平化链表。
-
-这个题目带一个root进去，也是不能解决问题的。但是我们观察到，对每一个note来说，只关心，prev和head和child last，然后涉及的函数代入了pre和head，返回值返回了child last。
-
-如果不能够正确的返回child last，我们也可以把child last变成一个类变量
-
-
-```java
-    public Node flatten(Node head) {
-        flattenInPlace(null, head);
-        return head;
-    }
-
-    // Time O(n)
-    // Space O(n)
-    // 递归返回当前链表的最后一个非null节点
-    Node flattenInPlace(Node prev, Node head) {
-        // 因为是prev和head，如果head空，那么返回前一个
-        if(head == null) return prev;
-        // prev不空，那么展开
-        if(prev != null) {
-            prev.next = head;
-            head.prev = prev;
-            prev.child = null;
-        }
-        // 先记录child,next
-        Node child = head.child;
-        Node next = head.next;
-        head.child = null;
-        // 展开child
-        Node childLast = flattenInPlace(head, child);
-        // 展开next
-        return flattenInPlace(childLast, next);
-    }
-```
-但是有的题目，很难把需要的参数全部放进参数列表里，这时我们需要定义类成员变量，然后在递归的过程中访问更新
-
-比如426 转换二叉树为双向链表
-
-```java
-class Solution {
-  // the smallest (first) and the largest (last) nodes
-  Node first = null;
-  Node last = null;
-
-  public void helper(Node node) {
-    if (node != null) {
-      // left
-      helper(node.left);
-      // node 
-      if (last != null) {
-        // link the previous node (last)
-        // with the current one (node)
-        last.right = node;
-        node.left = last;
-      }
-      else {
-        // keep the smallest node
-        // to close DLL later on
-        first = node;
-      }
-      last = node;
-      // right
-      helper(node.right);
-    }
-  }
-
-  public Node treeToDoublyList(Node root) {
-    if (root == null) return null;
-
-    helper(root);
-    // close DLL
-    last.right = first;
-    first.left = last;
-    return first;
-  }
-}
-
-
 ```
 
 
-## API
-* `preTraveral(root).forEach(x-> visit(x))`
-* `inTraveral(root).forEach(x-> visit(x))`
-* `postTraveral(root).forEach(x-> visit(x))`
-* `levelTraveral(root).forEach(x-> visit(x))`
+
 
 ## 父节点和子节点之间的关系
 Finding out the relationshipt between the parent node and children nodes
@@ -177,8 +78,8 @@ void traverse(TreeNode root) {
 For the recursive solution, the main point is to find out what need to happen to one node.
 
 
-### Breadth First Search
-**level traversal**
+### Breadth First Search(**level traversal**)
+
 
 ```java
 void bfs(Node root) {
@@ -199,6 +100,61 @@ void bfs(Node root) {
 }
 
 ```
+In above tempalte, we don't really see the level info, let's create a new tempalte.
+
+
+```java
+
+// leveled
+void leveledBFS(Node root) {
+    Queue queue = new Queue();
+    queue.offer(root);
+    int level = 0;
+    while(!queue.isEmpty()){
+        for(int i = q.size(); i > 0; i--) {
+            Node node = (Node)queue.poll();
+
+            if(node.getLeft() != null){
+                queue.offer(node.getLeft());
+            }
+
+            if(node.getRight() != null){
+                queue.offer(node.getRight());
+            }
+        }
+        level++;
+    }
+}
+
+// item->level pair
+// obviously, this is more Cumbersome then the last one.
+void itemLeveledBFS(Node root) {
+    Queue queue = new Queue();
+    queue.offer(root);
+    int level = 1;
+    Map<TreeNode, Integer> map = new LinkedHashMap<>();
+    map.put(root, 1);
+    while(!queue.isEmpty()){
+        for(int i = q.size(); i > 0; i--) {
+            Node node = (Node)queue.poll();
+
+            if(node.getLeft() != null){
+                queue.offer(node.getLeft());
+                level = map.get(cur)+1;
+                map.put(cur.left, level);
+            }
+
+            if(node.getRight() != null){
+                queue.offer(node.getRight());
+                level = map.get(cur)+1;
+                map.put(cur.right, level);
+            }
+        }
+    }
+}
+
+```
+
 
 ### Depth First Search	
 
@@ -305,6 +261,111 @@ General signature of DFS solution
     }
 
 ```  
+
+### 返回值
+参考参数列表里分析的430，巧妙设计的返回值帮助我们实现无错的递归算法。
+
+### 参数列表
+一般来说，我们把所有需要的参数，全部放进参数列表，递归的过程中，更新参数列表
+#### 例题
+* 100. isSameTree
+    * public boolean isSameTree(TreeNode p, TreeNode q) {
+*  430.Flatten a Multilevel Doubly Linked List
+    * public Node flatten(Node head) 
+* 426. Tree to double list
+    *  public Node treeToDoublyList(Node root)
+
+#### 分析    
+比如100 相同的树，我们把左右节点带进去已经足够
+```java
+public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null) return true;
+        if(p == null || q == null) return false;
+        if(p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+```
+
+100可能太简单，我们看一个稍微复杂的例子。430, 扁平化链表。
+
+这个题目带一个root进去，也是不能解决问题的。但是我们观察到，对每一个note来说，只关心，prev和head和child last，然后涉及的函数代入了pre和head，返回值返回了child last。
+
+如果不能够正确的返回child last，我们也可以把child last变成一个类变量
+
+
+```java
+    public Node flatten(Node head) {
+        flattenInPlace(null, head);
+        return head;
+    }
+
+    // Time O(n)
+    // Space O(n)
+    // 递归返回当前链表的最后一个非null节点
+    Node flattenInPlace(Node prev, Node head) {
+        // 因为是prev和head，如果head空，那么返回前一个
+        if(head == null) return prev;
+        // prev不空，那么展开
+        if(prev != null) {
+            prev.next = head;
+            head.prev = prev;
+            prev.child = null;
+        }
+        // 先记录child,next
+        Node child = head.child;
+        Node next = head.next;
+        head.child = null;
+        // 展开child
+        Node childLast = flattenInPlace(head, child);
+        // 展开next
+        return flattenInPlace(childLast, next);
+    }
+```
+但是有的题目，很难把需要的参数全部放进参数列表里，这时我们需要定义类成员变量，然后在递归的过程中访问更新
+
+比如426 转换二叉树为双向链表
+
+```java
+class Solution {
+  // the smallest (first) and the largest (last) nodes
+  Node first = null;
+  Node last = null;
+
+  public void helper(Node node) {
+    if (node != null) {
+      // left
+      helper(node.left);
+      // node 
+      if (last != null) {
+        // link the previous node (last)
+        // with the current one (node)
+        last.right = node;
+        node.left = last;
+      }
+      else {
+        // keep the smallest node
+        // to close DLL later on
+        first = node;
+      }
+      last = node;
+      // right
+      helper(node.right);
+    }
+  }
+
+  public Node treeToDoublyList(Node root) {
+    if (root == null) return null;
+
+    helper(root);
+    // close DLL
+    last.right = first;
+    first.left = last;
+    return first;
+  }
+}
+
+
+```
 
 ## Specia Binary Tree
 

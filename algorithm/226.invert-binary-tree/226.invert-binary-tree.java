@@ -24,6 +24,33 @@ class Solution {
      public TreeNode invertTree(TreeNode root) {
         return invertTreeDFSPre(root);
     }
+    // recursive bottom up
+    // starts by resolving base cases and incrementally build towards the final solution.
+    private TreeNode invertTreeBU(TreeNode root) {
+        if(root == null) {
+            return null;
+        }
+        
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+    // recursive top down
+    // starts with original problem and recursively break into sub problems
+    private TreeNode invertTreeTD(TreeNode root) {
+        if(root == null) {
+            return null;
+        }
+        
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
+    }
     public TreeNode invertTreeRecursive(TreeNode root) {
         if(root == null) return null;
         TreeNode tmp = root.left;
