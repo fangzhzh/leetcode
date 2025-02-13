@@ -33,13 +33,15 @@
         * 每类题目要总结出API
     1. 思路覆盘
         * 自己的思路卡在哪里        
+
 ## 🔀 排序算法
 * [排序算法与其无处不在的应用](./sort.md)
 
 ## ☯️ 递归
 * [递归基础与API](./recursive.md)
 
-## 分治
+## 🔎 Binary Search 
+* [二分查找与API](./binarySearch.md)
 
 ## 🌀 Linked List
 链表可以先提出使用额外空间的暴力解，拿到基本分，再优化到常数空间的解
@@ -51,8 +53,6 @@
 * [二叉树基础与API](./binaryTree.md)
 * [二叉树错题本](./binaryProblemNotes.md)
 
-## 🔎 Binary Search 
-* [二分查找与API](./binarySearch.md)
 
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
