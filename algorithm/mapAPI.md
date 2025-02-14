@@ -1,36 +1,84 @@
-# mapAPI.md
+# Java Map类的结构与实现
 
-java里的字典map。HashMap也归类为hashtable，但是map下有其他的字典相关的数据结构也许要掌握。
+## 类层次结构
 
-比如key有序字典，链表字典
+```mermaid
+classDiagram
+    Map <|.. AbstractMap
+    AbstractMap <|-- HashMap
+    AbstractMap <|-- TreeMap
+    HashMap <|-- LinkedHashMap
+    Map <|.. NavigableMap
+    NavigableMap <|.. TreeMap
+    
+    class Map{
+        <<interface>>
+        +put(K, V)
+        +get(K)
+        +remove(K)
+        +containsKey(K)
+        +containsValue(V)
+        +size()
+        +isEmpty()
+    }
+    
+    class HashMap{
+        -Node[] table
+        +put(K, V)
+        +get(K)
+        +remove(K)
+        Time: O(1)
+    }
+    
+    class LinkedHashMap{
+        -Entry[] table
+        -Entry head
+        -Entry tail
+        +put(K, V)
+        +get(K)
+        +removeEldestEntry()
+        Time: O(1)
+    }
+    
+    class TreeMap{
+        -Entry root
+        +put(K, V)
+        +get(K)
+        +floorKey(K)
+        +ceilingKey(K)
+        Time: O(log n)
+    }
+```
 
+## Map接口主要方法
+- containsKey(K key): 检查是否包含指定的key
+- containsValue(V value): 检查是否包含指定的value
+- get(K key): 获取指定键的值
+- put(K key, V value): 放入键值对
 
-## Map
-- map.containsKey()
-* <Map.Entry<Character, Integer> 
-	* List<Map.Entry> cached
-	* Map.Entry<Character, Integer> entry = pq.poll();
-	* entry.getValue()
-	* entry.getKey()
-	* entry.setValue
+### Map.Entry接口
+* Map.Entry<K,V>: 表示一个键值对
+    * getValue(): 获取值
+    * getKey(): 获取键
+    * setValue(V value): 设置新值
+
 ### HashMap
-* implement Map interface
-* HashTable
-* Time O(1)
-### LinkedHashMap
-* implement Map interface
-* double-linked List
-* Time O(1)
+* 基于HashTable实现
+* 时间复杂度: O(1)
+* 不保证键值对的顺序
 
-LinkedHashMap is implemented as a doubly-linked list buckets in Java.
+### LinkedHashMap
+* 继承HashMap
+* 使用双向链表维护插入顺序
+* 时间复杂度: O(1)
+* 可用于LRU缓存实现
 
 ### TreeMap
-* TreeMap implements the Map, NavigableMap, and SortedMap interface.
-* Red-Black Tree
-* Time O(log(n)) 
-key sorted map
+* 基于红黑树实现,  implements the Map, NavigableMap, and SortedMap interface.
+* 时间复杂度: O(log n)
+* 键值对按键排序 - key sorted map
 
-### code
+## code
 
 
 ```java

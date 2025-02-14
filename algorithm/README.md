@@ -1,4 +1,4 @@
-# leetcode
+# Overview
 ![algor overview](./graphs/algorithn-mind-map.png)
 
 ## [知识点](./catalogue.md)
@@ -33,64 +33,95 @@
         * 每类题目要总结出API
     1. 思路覆盘
         * 自己的思路卡在哪里        
-
-## 🔀 排序算法
-* [排序算法与其无处不在的应用](./sort.md)
-
-## ☯️ 递归
-* [递归基础与API](./recursive.md)
-
-## 🔎 Binary Search 
-* [二分查找与API](./binarySearch.md)
-
+# 数据结构
 ## 🌀 Linked List
 链表可以先提出使用额外空间的暴力解，拿到基本分，再优化到常数空间的解
 * [链表基础与API](./LinkedList.md)
-* [快慢指针](./LinkedListFastSlow.md)
 * [移动链表节点总结](./LinkedListMoving.md)
 
 ## ✌️ Binary Tree
 * [二叉树基础与API](./binaryTree.md)
 * [二叉树错题本](./binaryProblemNotes.md)
-
-
-## 🔟󠀽󠀽⏭️2️⃣ 位运算
-* [位运算](./bits.md)
+## 二叉搜索树 🟡
+* [二叉搜索树](./binarySearchTree.md)
+## Trie(字典树/前缀树) 🟡
+* [Trie(字典树/前缀树)](./trie.md)
+## 线段树 🟡
+## 📏Hash/double pointers/sliding windows
+* [Map,HashMap及API](./mapAPI.md)
+* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
+## 并查集 🟡
 ## 📚 栈，队列，Stack Queue Deque
 * [栈队列API](./stackQueueAPI.md)
-* [栈列表与经典题目的图解](./stackQueue.md)
-* [优先队列](./priorityQueueAPI.md)
+* [栈队列经典题目的图解](./stackQueue.md)
 * [栈队列错题本](./stackQueueProblemNotes.md)
+### PriorityQueue
+* [优先队列](./priorityQueueAPI.md)
 ### 单调栈
 * [单调栈API](./monotoneStack.md)
 
-## 字典 Map
-* [字典API](./mapAPI.md)
-## 📏Hash/double pointers/sliding windows
-* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
-
-## 💹 动态规划 DP 
-* [动态规划基础](./dynamicProgramming.md)
-## 🔡 字符串
-* [字符串及API](./string.md)
-* [字符串扫描并操作](./stringScanAndModify.md)
-
-## 数组Array
-* [数组及其API](./arrayAPI.md)
-
-## 前缀和 presum
-* [前缀和](./prefixSumAPI.md)
 ## 🗺️ 图论
 * [图论基础](./graph.md)
 * [图论DFS错题本](./graphDFSProblemNotes.md)
 ## 📱 矩阵
 * [矩阵及API](./matrix.md)
-
-## 数学 Math
-* [数学题目基础及API](./mathAPI.md)
-
+## 🔡 字符串
+* [字符串及API](./string.md)
+* [字符串扫描并操作](./stringScanAndModify.md)
+## 数组Array
+* [数组及其API](./arrayAPI.md)
+# 一般算法
+## 🔎 Binary Search 
+* [二分查找与API](./binarySearch.md)
+## double pointers/滑动窗口
+* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
+## ☯️ 递归/回溯
+* [递归基础与API](./recursive.md)
+    * DFS, BFS
+## 拓扑排序 🟡
+## 🔟󠀽󠀽⏭️2️⃣ 位运算
+* [位运算](./bits.md)
 ## 贪心
 * [贪心题目证明](./greedyProof.md)
+## 💹 动态规划 DP 
+* [动态规划基础](./dynamicProgramming.md)
+## 数据流
+## 🔀 排序算法 
+* [排序算法与其无处不在的应用](./sort.md)
+## 数学 Math
+* [数学题目基础及API](./mathAPI.md)
+## 状态压缩 🟡
+# 特殊算法
+## Morris 遍历
+## [快慢指针](./LinkedListFastSlow.md)
+## Boyer-Moore投票 🟡
+## 轮转数组 🟡
+## [模板API](./codeAPI.md)
+* 快速幂法
+* 快速乘法
+* 快速排序
+* 快速选择
+## 最大公约数 🟡
+## 判断质数 🟡
+## 排列组合 🟡
+## Dijkstra 🟡
+## Bellman-Ford 🟡
+# 代码模版
+## ✌️ Binary Tree
+* [二叉树基础与API](./binaryTree.md)
+## 前缀和 presum
+* [前缀和](./prefixSumAPI.md)
+## Union Find 🟡
+## [链表(反转， merge)](./LinkedList.md)
+## 拓扑排序 🟡
+## 二叉树最近公共祖先 🟡
+* [二叉树错题本](./binaryProblemNotes.md)
+
+
+
+
+
+
 ## Miscs
 
 * 递归和动态规划的一些共同点
@@ -130,5 +161,3 @@ dp+recursive，leetcode半壁江山
 ## 面经
 [FB面经](./FB面经.md)
 
-## 模板
-[模板API](./codeAPI.md)
