@@ -46,7 +46,8 @@
 * [二叉搜索树](./binarySearchTree.md)
 ## Trie(字典树/前缀树) 🟡
 * [Trie(字典树/前缀树)](./trie.md)
-## 线段树 🟡
+## 线段树 🔴
+* [线段树Segment Tree](./segmentTree.md)
 ## 📏Hash/double pointers/sliding windows
 * [Map,HashMap及API](./mapAPI.md)
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
