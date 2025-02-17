@@ -103,3 +103,5 @@ classDiagram
 
 ![Deque继承关系](./graphs/dequeHiarchy.drawio.svg)
 
+# Basic question
+* [20. 有效的括号](./20.valid-parentheses/)
