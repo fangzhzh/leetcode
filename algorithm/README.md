@@ -51,7 +51,8 @@
 ## 📏Hash/double pointers/sliding windows
 * [Map,HashMap及API](./mapAPI.md)
 * [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
-## 并查集 🟡
+## Union find(并查集)
+* [union find](./unionFindSet.md)
 ## 📚 栈，队列，Stack Queue Deque
 * [栈队列API](./stackQueueAPI.md)
 * [栈队列经典题目的图解](./stackQueue.md)
@@ -112,7 +113,8 @@
 * [二叉树基础与API](./binaryTree.md)
 ## 前缀和 presum
 * [前缀和](./prefixSumAPI.md)
-## Union Find 🟡
+## Union find(并查集)
+* [union find](./unionFindSet.md)
 ## [链表(反转， merge)](./LinkedList.md)
 ## 拓扑排序 🟡
 ## 二叉树最近公共祖先 🟡
