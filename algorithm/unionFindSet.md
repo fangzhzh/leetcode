@@ -7,22 +7,70 @@
 
 并查集的典型应用是有关连通分量的问题
 
-并查集解决单个问题（添加，合并，查找）的时间复杂度都是O(1)O(1)
+并查集解决单个问题（添加，合并，查找）的时间复杂度都是O(1)
 
 因此，并查集可以应用到在线算法中
 
 Union Find = Disjoint Set
 
+## Core concepts
+* `find(x)`: Determine which set x belongs to.
+* `union(x, y)`: Merge two sets together
+
+## Common applications
+* Finding connected components in a graph
+* Detecting cycles in a graph
+* Network connectivity
+    * [[0, 1], [1, 2], [3, 4]]
+* Image processing (connected pixels)
+
+
 ## 实现
 
 并查集跟树很像，只不过，在并查集这个数据结构里，节点记录父节点，树记录子节点
 
-### 实现图解
-![并查集的实现图解](./graphs/unionFind.drawio.svg)
+> [[0, 1], [1, 2], [3, 4]]`
+### 实现
+```java
+class UnionFind {
+    private int[] parent;
+    
+    public UnionFind(int size) {
+        parent = new int[size];
+        
+        // Initially, each element is its own parent
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+        }
+    }
+    
+    // Find without path compression
+    public int find(int x) {
+        while (parent[x] != x) {
+            x = parent[x];
+        }
+        return x;
+    }
+    
+    // Union without rank
+    public void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY) {
+            parent[rootY] = rootX;  // Simply make rootX the parent of rootY
+        }
+    }
+    
+    // Check if two elements are in the same set
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+}
+```
 
-
-
-### 路径压缩
+## Optimizations
+### Optimization1: 路径压缩(path compressoin)
 图中的并查集可能会退化成长长列表，0->1->2->......->999->1000,这是时间复杂度退化为O(n)
 
 ```java
@@ -87,10 +135,213 @@ class UnionFind {
         return find(x) == find(y);
     }
 } 
+```
 
+### Optimization 2: Uinon by rank
+```java
+class UnionFind {
+    private int[] parent;
+    private int[] rank;  // Used for path compression
+    
+    public UnionFind(int size) {
+        parent = new int[size];
+        rank = new int[size];
+        
+        // Initially, each element is its own parent
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+    }
+    
+    // Find with path compression
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);  // Path compression
+        }
+        return parent[x];
+    }
+    
+    // Union by rank
+    public void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY) {
+            // Union by rank
+        if (rank[rootX] < rank[rootY]) {
+            parent[rootX] = rootY;  // Smaller tree (rootX) attaches to larger tree (rootY)
+        } else if (rank[rootX] > rank[rootY]) {
+            parent[rootY] = rootX;  // Smaller tree (rootY) attaches to larger tree (rootX)
+        } else {  // Same rank
+            parent[rootY] = rootX;  // Arbitrary choice
+            rank[rootX]++;  // Height increases by 1
+        }
+        }
+    }
+    
+    // Check if two elements are in the same set
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+}
+```
+
+#### How union by rank help optimize the algorithm
+```
+Initial state:     After union without rank:    After union with rank:
+1       4          1                           4
+|       |          |                          / \
+2       5          2                         1   5
+|                  |                         |
+3                  3                         2
+                   |                         |
+                   4                         3
+                   |
+                   5
+Height: 2,2        Height: 5                 Height: 3
+
+```
+## Union Find Algorithm Visualization
+### Initial State
+```
+Initially, each element is its own parent:
+
+Elements:   0   1   2   3   4   5
+Parents:    0   1   2   3   4   5
+Rank:       1   1   1   1   1   1
+
+Visualization:
+0    1    2    3    4    5
+⭕   ⭕   ⭕   ⭕   ⭕   ⭕
+(Each node is a separate tree)
+```
+
+### Step 1: Union(1, 2)
+```
+After union(1, 2):
+
+Elements:   0   1   2   3   4   5
+Parents:    0   1   1   3   4   5
+Rank:       1   2   1   1   1   1
+
+Visualization:
+0       1       3    4    5
+⭕      ⭕      ⭕   ⭕   ⭕
+       /
+      2
+```
+
+### Step 2: Union(3, 4)
+```
+After union(3, 4):
+
+Elements:   0   1   2   3   4   5
+Parents:    0   1   1   3   3   5
+Rank:       1   2   1   2   1   1
+
+Visualization:
+0       1       3        5
+⭕      ⭕      ⭕       ⭕
+       /      /
+      2      4
+```
+
+### Step 3: Union(1, 3)
+```
+After union(1, 3) (union by rank - 1 and 3 have same rank, arbitrarily choose 1 as root):
+
+Elements:   0   1   2   3   4   5
+Parents:    0   1   1   1   3   5
+Rank:       1   3   1   2   1   1
+
+Visualization:
+0       1           5
+⭕      ⭕          ⭕
+      /  \
+     2    3
+          |
+          4
+```
+
+### Path Compression Example
+```
+When we call find(4), before path compression:
+4 -> 3 -> 1
+
+After path compression:
+4 directly points to 1
+
+Elements:   0   1   2   3   4   5
+Parents:    0   1   1   1   1   5
+Rank:       1   3   1   2   1   1
+
+Visualization:
+0       1           5
+⭕      ⭕          ⭕
+     /  |  \
+    2   3   4
+```
+
+### Key Points
+
+1. **Path Compression**
+   - Makes the tree flat
+   - All nodes point directly to root
+   - Improves future operations
+
+2. **Union by Rank**
+   - Keeps trees balanced
+   - Attaches smaller tree to larger tree
+   - Prevents long chains
+
+3. **Time Complexity**
+   ```
+   Without optimizations:
+   - find():  O(N)
+   - union(): O(N)
+
+   With path compression and union by rank:
+   - find():  ~O(1)
+   - union(): ~O(1)
+   ```
+
+## Common Operations Visualization
+
+### find(x) Operation
+```
+1. Start at node x
+2. Follow parent pointers until reaching root
+3. (With path compression) Make all nodes point to root
+
+Before:    After path compression:
+  1           1
+ /           / \
+2           2   3
+ \
+  3
+```
+
+### union(x, y) Operation
+```
+1. Find roots of x and y
+2. Compare ranks
+3. Attach smaller rank tree to larger rank tree
+
+Before:     After union(1,4):
+1    4           1
+|    |          / \
+2    5         2   4
+                   |
+                   5
 ```
 
 ## 例题
+* Number of Connected Components in an Undirected Graph
+* Friend Circles / Number of Provinces
+* Redundant Connection
+* Accounts Merge
+* Number of Islands II
 
 ### 323.无向图中连通分量的数目
 
