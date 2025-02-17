@@ -44,7 +44,7 @@
 * [二叉树错题本](./binaryProblemNotes.md)
 ## 二叉搜索树 🟡
 * [二叉搜索树](./binarySearchTree.md)
-## Trie(字典树/前缀树) 🟡
+## Trie(字典树/前缀树)
 * [Trie(字典树/前缀树)](./trie.md)
 ## 线段树 🔴
 * [线段树Segment Tree](./segmentTree.md)
@@ -113,8 +113,7 @@
 * [二叉树基础与API](./binaryTree.md)
 ## 前缀和 presum
 * [前缀和](./prefixSumAPI.md)
-## Union find(并查集)
-* [union find](./unionFindSet.md)
+## Union Find 🟡
 ## [链表(反转， merge)](./LinkedList.md)
 ## 拓扑排序 🟡
 ## 二叉树最近公共祖先 🟡
