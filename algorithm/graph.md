@@ -19,10 +19,10 @@
 
 ### DFS 深度优先搜索
 深度优先搜索是一种在回退之前尽可能深入每个分支的遍历算法。深度优先+回溯
-* [DFS返回值](./dfsReturnValue.md)
-* [深度优先+回溯 DFS+backtracking](./dfsBacktracking.md)
-* [深度优先+记忆化 DFS+memo](./dfsMemo.md)
 * [DFS实现深入浅出](./dfsImpDiveIn.md)
+* [深度优先+回溯 DFS+backtracking](./dfsBacktracking.md)
+* [DFS返回值](./dfsReturnValue.md)
+* [深度优先+记忆化 DFS+memo](./dfsMemo.md)
 * [1087. Brace Expansion](./1087.brace-expansion)
 
 
@@ -35,10 +35,11 @@
 * 如果题目要求个数，或者题目的解答必须要遍历所有几点一次，那么dfs
 ### Toplogic Sorting 拓扑排序
 只针对有向无环图 Directed Acyclic Graph
-[拓扑排序](./topoligicSorting.md)
-
+* [拓扑排序](./topologicalSorting.md)
 
 ### 最短路径Dijstra
+* [Dijkstra](./dijkstra.md)
+
 ### 并查集
-[并查集](./unionFindSet.md)
+* [并查集](./unionFindSet.md)
 

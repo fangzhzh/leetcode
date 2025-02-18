@@ -46,7 +46,7 @@
 * [二叉搜索树](./binarySearchTree.md)
 ## Trie(字典树/前缀树)
 * [Trie(字典树/前缀树)](./trie.md)
-## 线段树 🔴
+## 线段树
 * [线段树Segment Tree](./segmentTree.md)
 ## 📏Hash/double pointers/sliding windows
 * [Map,HashMap及API](./mapAPI.md)
@@ -80,7 +80,9 @@
 ## ☯️ 递归/回溯
 * [递归基础与API](./recursive.md)
     * DFS, BFS
-## 拓扑排序 🟡
+## 拓扑排序
+* [拓扑排序](./topologicalSorting.md)
+
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
 ## 贪心
@@ -106,16 +108,19 @@
 ## 最大公约数 🟡
 ## 判断质数 🟡
 ## 排列组合 🟡
-## Dijkstra 🟡
+## Dijkstra
+* [Dijkstra](./dijkstra.md)
 ## Bellman-Ford 🟡
 # 代码模版
 ## ✌️ Binary Tree
 * [二叉树基础与API](./binaryTree.md)
 ## 前缀和 presum
 * [前缀和](./prefixSumAPI.md)
-## Union Find 🟡
+## Union find(并查集)
+* [union find](./unionFindSet.md)
 ## [链表(反转， merge)](./LinkedList.md)
-## 拓扑排序 🟡
+## 拓扑排序
+* [拓扑排序](./topologicalSorting.md)
 ## 二叉树最近公共祖先 🟡
 * [二叉树错题本](./binaryProblemNotes.md)
 
