@@ -1,10 +1,10 @@
-# hashmap and two pointers
+# hashmap and two pointers 和 滑动窗口
 ## HashMap
 O(1) find 所以HashMap会被用在很多需要查找的场景
 
 hashmap的使用通常是tow pass，第一遍build map,第二遍使用
 
-但是有时候one pass hash也很好，一边build一边使用，l可避免在处理某个元素的时候，从hashmap里取出自己
+但是有时候one pass hash也很好，一边build一边使用，可避免在处理某个元素的时候，从hashmap里取出自己
 
 HashMap可以存字符，也可以存字符位置，也可以存-1表示某种状态
 
@@ -79,23 +79,160 @@ void moveZeros(int[] nums) {
 
 ![moveZeros图解](./graphs/moveZeros.drawio.svg)
 
-## 滑动窗口
+## Sliding window(滑动窗口)
 双指针用法里有一种用法，很重要，很常用的，然后有了自己的名字。滑动窗口。
 
 * 一般滑动窗口用来把一个brutal force的O(n^2),o(n^3)的问题，简化为O(n),或者O(n^2)
 * 数组或者字符串的subrange，最长，最短，某个value，符合某个条件的
 
+### What is a Sliding Window?
+Think of it like a video camera that can zoom in and out:
+```
+String: "ADOBECODEBANC"
+        [A]              Initial window size 1
+        [ADO]            Expanded to size 3
+        [ADOB]           Expanded to size 4
+           [DOB]         Slid right
+           [DOBE]        Expanded
+              [BEC]      Slid right
+```
+
+
+## Three Types of Window Movement
+* EXPAND
+* CONTRACT
+* SLIDE
+### 1. EXPAND (Growing the Window)
+```
+"ADOBECODEBANC"
+[A] → [AD] → [ADO] → [ADOB]
+```
+When to use:
+- Need more characters
+- Current window doesn't satisfy condition
+- Looking for a larger pattern
+
+### 2. CONTRACT (Shrinking the Window)
+```
+"ADOBECODEBANC"
+[ADOB] → [DOB] → [OB]
+```
+When to use:
+- Window has extra characters
+- Looking for minimum size
+- Current window is too big
+
+### 3. SLIDE (Moving the Window)
+```
+"ADOBECODEBANC"
+[ADO] → [DOB] → [OBE]
+```
+When to use:
+- Fixed size window
+- Need to check all positions
+- Like finding anagrams
+
+## Template for Sliding Window
+
+### Basic Structure
+```java
+// Initialize window bounds
+int start = 0, end = 0;
+
+// Initialize window state
+Map<Character, Integer> window = new HashMap<>();
+
+// Process string
+while (end < s.length()) {
+    // 1. Expand: Add character at end
+    char c = s.charAt(end++);
+    window.put(c, window.getOrDefault(c, 0) + 1);
+    
+    // 2. Contract: Remove characters from start if needed
+    while (needToShrink()) {
+        char d = s.charAt(start++);
+        window.put(d, window.get(d) - 1);
+    }
+    
+    // 3. Update answer if needed
+    updateAnswer();
+}
+```
+
+## Real World Examples
+
+### 1. Minimum Window Substring (LC 76)
+Find smallest window containing all target characters
+
+```
+S: "ADOBECODEBANC"
+T: "ABC"
+
+Step-by-step visualization:
+1. [A]DOBECODEBANC     Found: A    Need: B,C
+2. [ADOB]ECODEBANC     Found: A,B  Need: C
+3. [ADOBEC]ODEBANC     Found all!  Shrink...
+4. DOBEC[BANC]         Better!     Answer="BANC"
+
+Key States:
+- Need to find: Map<Char, Count> of T
+- Current window: Map<Char, Count> of window
+- Valid when: All chars in T are found
+```
+
+### 2. Find All Anagrams (LC 438)
+Find all anagrams of pattern in string
+
+```
+S: "cbaebabacd"
+P: "abc"
+
+Fixed-size window (size = P.length()):
+[cba] → valid!      Add index 0
+b[bae] → not valid
+ba[aeb] → not valid
+bae[eba] → not valid
+baeb[bac] → valid!  Add index 5
+```
+
+## Common Patterns to Remember
+
+1. Growing Window (Minimum Window Substring)
+   - Expand until valid
+   - Contract to minimize
+   - Track minimum size
+
+2. Fixed Window (Find Anagrams)
+   - Window size = pattern size
+   - Slide one by one
+   - Compare window state
+
+3. Variable Window (Longest Substring)
+   - Expand while valid
+   - Contract when invalid
+   - Track maximum size
+
+## Tips for Solving Sliding Window Problems
+
+1. Ask yourself:
+   - What makes a window valid?
+   - When should I expand?
+   - When should I contract?
+
+2. Choose your window state:
+   - HashMap for character frequencies
+   - Counter for conditions
+   - Set for unique elements
+
+3. Optimize the solution:
+   - Use array instead of HashMap for small character sets
+   - Track validity with counter instead of checking map
+   - Update state incrementally instead of recalculating
+
+Remember: Sliding Window turns many O(n²) substring problems into O(n) solutions by avoiding repeated work!
+
+
 ![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
-
-
-### 滑动窗口API
-* Window: 窗口,一个数据结构表示的当前string/数组的已经考察过的一部分。有时是array，有时用map，看题解空间
-* 两个指针，一个指向窗口开头，一个指向窗口结尾。
-* 一些变量，跟踪当前的最好方案。
-
-#### 核心问题
-* 何时缩小窗口, shrink
-* 何时增大窗口  expand
 
 ### 滑动窗口的类别
 * Fast/Slow 快慢指针
@@ -149,48 +286,91 @@ void moveZeros(int[] nums) {
 
 
 #### 滑动窗口模板
-滑动窗口模板有两种，一种是flexible的窗口，一种是fix的窗口
 
 ```java
-// flexible的窗口
-// minimum/maxmum
-int findSubstring(String s){
-        int[] track = new int[256];// map
-        int counter; // check whether the substring is valid
-        int begin=0, end=0; //two pointers, one point to tail and one  head
-        int len; //the length of substring
-        int d; // 结果
-        for() { /* initialize the hash map(track) here */ }
+// Initialize window bounds
+int start = 0, end = 0;
 
-        while(end<s.length()()){
+// Initialize window state
+Map<Character, Integer> window = new HashMap<>();
 
-            if(track[s[end]] ?){  /* modify counter here */ }
-            track[s[end]]-- // track[s[end]]++
-
-
-            // 这个while条件非常的巧妙            
-            while(/* counter condition */){ // 找到一个符合条件的解 
-            // inValid if finding max: 
-                // if noValid, expand, then outside get the maximum valid
-            // valid if finding min
-                // if valid, expand, then inside get the min valid
-                 
-                 /* update d here if finding minimum*/
-
-                //increase begin to make it invalid/valid again
-                if(track[s[begin]] ?){ /*modify counter here*/ }
-                track[s[begin]]++ // track[s[begin]]--
-                begin++
-            }  
-
-            /* update d here if finding maximum*/
-            end++;
-        }
-        return d;
-  }
+// Process string
+while (end < s.length()) {
+    // 1. Expand: Add character at end
+    char c = s.charAt(end++);
+    window.put(c, window.getOrDefault(c, 0) + 1);
+    
+    // 2. Contract: Remove characters from start if needed
+    while (needToShrink()) {
+        char d = s.charAt(start++);
+        window.put(d, window.get(d) - 1);
+    }
+    
+    // 3. Update answer if needed
+    updateAnswer();
+}
 ```
-#### 例题题解
+#### 76 76. Minimum Window Substring76. 最小覆盖子串
+![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
 
+```java
+class Solution {
+    public String minWindow(String s, String t) {
+        // Initialize window state
+        Map<Character, Integer> need = new HashMap<>();  // characters we need
+        Map<Character, Integer> window = new HashMap<>(); // current window state
+        
+        // Count characters needed from t
+        for (char c : t.toCharArray()) {
+            need.put(c, need.getOrDefault(c, 0) + 1);
+        }
+        
+        // Initialize window bounds and answer tracking
+        int start = 0, end = 0;
+        int minStart = 0, minLen = Integer.MAX_VALUE;
+        int required = need.size();  // number of unique chars we need
+        int current = 0;   // number of chars we've found with correct count
+        
+        // Process string using sliding window
+        while (end < s.length()) {
+            // 1. Expand: Add character at end
+            char c = s.charAt(end++);
+            if (need.containsKey(c)) {
+                window.put(c, window.getOrDefault(c, 0) + 1);
+                // If we've found exactly what we need for this char
+                if (window.get(c).equals(need.get(c))) {
+                    current++;
+                }
+            }
+            
+            // 2. Contract: Remove characters from start if possible
+            while (current == required) {  // we have all chars we need
+                // Update answer if this window is smaller
+                if (end - start < minLen) {
+                    minStart = start;
+                    minLen = end - start;
+                }
+                
+                // Remove char at start
+                char d = s.charAt(start++);
+                if (need.containsKey(d)) {
+                    // If removing this char breaks our window validity
+                    if (window.get(d).equals(need.get(d))) {
+                        current--;
+                    }
+                    window.put(d, window.get(d) - 1);
+                }
+            }
+        }
+        
+        // Return answer
+        return minLen == Integer.MAX_VALUE ? 
+            "" : s.substring(minStart, minStart + minLen);
+    }
+}
+```
+
+#### 例题题解
 * 438.找到字符串中所有字母异位词
 
 
@@ -203,7 +383,7 @@ class Solution {
         // first thing, how to verify the anagram
         // data structure to store the windows info to verify anagram
         // p map: char->counter, 
-        // s map: char -> counter, maintaining a valid subset of anagram of p.
+        // s map: char->counter, maintaining a valid subset of anagram of p.
         // findAnagramsFlexiWindow(s, p)
         return findAnagramsFixedWindow(s, p);
     }

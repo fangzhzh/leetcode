@@ -10,7 +10,7 @@
  * ADOBECODEBANC, 
  * ABC
  * 
- end:0,A,count2,map:0,A
+   end:0,A,count2,map:0,A
 ' +
   'end:1,D,count2,map:-1,AD
 ' +

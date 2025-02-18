@@ -1,11 +1,66 @@
 # monotone Stack
+## Algorithm idea
+1. The stack maintains elements in decreasing order (that's why it's called monotone)
+2. When we find a greater element, we pop all smaller elements from stack
+3. For each popped element, the current element is its "next greater element"
+4. If an element never gets popped, it means no greater element exists after it (-1)
+
 ## 单调栈用来解决一种问题, Next Greater/Smaller Element
 
 这种问题共享一个特征，在数组里**寻找左边/右边的更大/更小的下一个元素**.
 
 以下一个更大元素为例，从图的角度看，某一个元素的next greater element就是从该点出发的下一个山顶元素，如果从该点出发是下坡，那么该点没有next greater elements.
-
+## APIS
+* 实现单调栈，实现四种不同的单调栈，分别找到每个元素左边/右边第一个比其大/小的元素
+```java
+int[] next_greater_element(int[] arr) {
+    //[4,5,2,10,8]
+    // res: [5, 10, 10, -1, 8]
+    Stack<Integer> stack = new Stack<>();
+    int[] result = new int[arr.length];
+    for(int i = 0; i < arr.length; i++>) { // reverse order to find previous greater/smaller element
+        // arr[stack.peek()] < arr[i]: next greater
+        // arr[stack.peek()] > arr[i]: next smaller
+        while(!stack.isEmpty() && arr[stack.peek()] < arr[i]) {
+            int idx = stack.pop();
+            result[idx] = arr[i];
+        }
+        stack.push(i);
+    }
+    return result;
+}
+/**
+------
+i = 0
+cur:4
+stack: [4]
+result: [-1, -1, -1, -1, -1]
+----
+i = 1
+cur: 5
+stack: [5]
+result: [5, -1, -1, -1, -1]
+------
+i = 2
+cur: 2
+stack: [5, 2]
+result: [5, -1, -1, -1, -1]
+-----
+i = 3
+cur: 10
+stack: [10]
+result: [5, 10, 10, -1, -1]
+-----
+i = 4
+cur:[10, 8]
+stack:
+result: [5, 10, 10, -1, -1]
+*/
 ```
+
+
+## Examples
+```java
                   │
                   │
                   │
