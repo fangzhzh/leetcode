@@ -1,8 +1,10 @@
-# Synchronized关键字底层实现
+# Synchronized关键字
 
-## 1. 内存可见性与有序性
-
+## 1. Synchronized特性: 内存可见性与有序性
+### 1.0 原子性
 ### 1.1 内存可见性
+同步块的操作保证内存可见性
+
 ```java
 public class SynchronizedVisibility {
     private int value = 0;
@@ -24,6 +26,8 @@ public class SynchronizedVisibility {
 
 ### 1.2 有序性保证
 * **happens-before关系**：同步块的所有操作与其他线程的同步块形成happens-before关系
+
+JMM可以通过happens-before关系向程序员提供跨线程的内存可见性保证（如果A线程的写操作a与B线程的读操作b之间存在happens-before关系，尽管a操作和b操作在不同的线程中执行，但JMM向程序员保证a操作将对b操作可见）。
 
 ```java
 public class SynchronizedOrdering {
@@ -47,109 +51,9 @@ public class SynchronizedOrdering {
     }
 }
 ```
+## 2. 底层实现原理
 
-## 2. 实现机制
-
-### 2.1 对象头中的Mark Word
-```
-|锁状态   | Mark Word内容                        | 说明                  |
-|---------|-----------------------------------|----------------------|
-|无锁     | 对象hashCode、分代年龄          | 正常对象              |
-|偏向锁   | 线程ID、epoch、分代年龄        | 单线程重复访问         |
-|轻量级锁 | 指向栈中锁记录的指针          | 多线程竞争轻度        |
-|重量级锁 | 指向ObjectMonitor的指针        | 多线程竞争激烈        |
-```
-
-### 2.2 锁升级过程
-1. **无锁 -> 偏向锁**
-   * 线程首次获取锁
-   * 记录线程ID
-
-2. **偏向锁 -> 轻量级锁**
-   * 其他线程尝试获取锁
-   * 在栈中创建Lock Record
-
-3. **轻量级锁 -> 重量级锁**
-   * 线程自旋一定次数后
-   * 创建ObjectMonitor对象
-
-## 3. 锁的优化
-
-### 3.1 锁消除
-```java
-public class LockElimination {
-    public String concatString(String s1, String s2) {
-        // JVM可以分析到这里的StringBuilder不会被其他线程访问
-        // 自动消除synchronized
-        return new StringBuilder().append(s1).append(s2).toString();
-    }
-}
-```
-
-### 3.2 锁粗化
-```java
-public class LockCoarsening {
-    public void method() {
-        // JVM会将这三个同步块合并
-        synchronized(this) {
-            // 操作1
-        }
-        synchronized(this) {
-            // 操作2
-        }
-        synchronized(this) {
-            // 操作3
-        }
-    }
-}
-```
-
-## 4. 使用场景
-
-### 4.1 复合操作原子性
-```java
-public class BankAccount {
-    private int balance;
-    
-    public synchronized void transfer(BankAccount to, int amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            to.balance += amount;
-        }
-    }
-}
-```
-
-### 4.2 对象状态一致性
-```java
-public class Counter {
-    private int count;
-    private int total;
-    
-    public synchronized void increment() {
-        count++;
-        total += count;
-    }
-}
-```
-
-### 4.3 类级别的线程安全
-```java
-public class Singleton {
-    private static Singleton instance;
-    
-    public static synchronized Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-```
-
-## 1. 底层实现原理
-
-### 1.1 对象头结构
+### 2.1 对象头结构
 ```
 |内容                    | 说明                          |
 |--------------------------|-------------------------------|
@@ -158,9 +62,9 @@ public class Singleton {
 |Array length(if array)    |数组的长度（如果是数组）     |
 ```
 
-### 1.2 Mark Word与ObjectMonitor的关系
+### 2.2 Mark Word与ObjectMonitor的关系
 
-#### 1.2.1 Mark Word结构
+#### 2.2.1 Mark Word结构
 ```
 |锁状态   | Mark Word内容                        | 说明                  |
 |---------|-----------------------------------|----------------------|
@@ -170,7 +74,7 @@ public class Singleton {
 |重量级锁 | 指向ObjectMonitor的指针        | 多线程竞争激烈        |
 ```
 
-#### 1.2.2 Mark Word与ObjectMonitor的关系
+#### 2.2.2 Mark Word与ObjectMonitor的关系
 * Mark Word是对象头中的一部分，存储在对象自身内存中
 * ObjectMonitor是一个独立的数据结构，在JVM中管理
 
@@ -185,14 +89,14 @@ public class Singleton {
 }
 ```
 
-### 1.3 锁升级过程
+### 2.3 锁升级过程
 
-#### 1.3.1 为什么需要锁升级？
+#### 2.3.1 为什么需要锁升级？
 * 线程竞争的概率是非常低的
 * 大部分情况下，锁总是由同一个线程获得
 * 通过锁升级的方式，减少了锁竞争带来的性能开销
 
-#### 1.3.2 锁的三种状态
+#### 2.3.2 锁的三种状态
 ```java
 public class LockExample {
     private static Object lock = new Object();
@@ -208,7 +112,7 @@ public class LockExample {
 }
 ```
 
-#### 1.3.3 各种锁的详细解析
+#### 2.3.3 各种锁的详细解析
 
 1. **偏向锁（Biased Locking）**
    * 什么是偏向锁？
@@ -320,7 +224,7 @@ public class LockExample {
         - 优点：不消耗CPU（相比自旋）
         - 缺点：线程需要操作系统从用户态切换到内核态
 
-#### 1.3.4 锁升级的具体过程
+#### 2.3.4 锁升级的具体过程
 
 1. **无锁 (Non-locked) → 偏向锁 (Biased Lock)**
    * 线程第一次访问同步块
@@ -339,8 +243,80 @@ public class LockExample {
    * JVM会将锁升级为重量级锁
    * 未获得锁的线程进入阻塞队列 (Monitor's EntryList)
    * 等待操作系统来调度
+## 3. 锁的优化
+### 3.1 锁消除
+```java
+public class LockElimination {
+    public String concatString(String s1, String s2) {
+        // JVM可以分析到这里的StringBuilder不会被其他线程访问
+        // 自动消除synchronized
+        return new StringBuilder().append(s1).append(s2).toString();
+    }
+}
+```
 
-## 2. Synchronized vs Lock
+### 3.2 锁粗化
+```java
+public class LockCoarsening {
+    public void method() {
+        // JVM会将这三个同步块合并
+        synchronized(this) {
+            // 操作1
+        }
+        synchronized(this) {
+            // 操作2
+        }
+        synchronized(this) {
+            // 操作3
+        }
+    }
+}
+```
+## 4. 使用场景
+
+### 4.1 复合操作原子性
+```java
+public class BankAccount {
+    private int balance;
+    
+    public synchronized void transfer(BankAccount to, int amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            to.balance += amount;
+        }
+    }
+}
+```
+
+### 4.2 对象状态一致性
+```java
+public class Counter {
+    private int count;
+    private int total;
+    
+    public synchronized void increment() {
+        count++;
+        total += count;
+    }
+}
+```
+
+### 4.3 类级别的线程安全
+```java
+public class Singleton {
+    private static Singleton instance;
+    
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+
+## 5. Synchronized vs Lock
 
 ### 2.1 使用方式
 ```java
