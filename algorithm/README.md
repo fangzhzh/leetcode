@@ -95,23 +95,23 @@
 * [排序算法与其无处不在的应用](./sort.md)
 ## 数学 Math
 * [数学题目基础及API](./mathAPI.md)
-## 状态压缩 🟡
+## 状态压缩
 # 特殊算法
-## Morris 遍历
+## [Morris 遍历](./miscellaneous.md)
 ## [快慢指针](./LinkedListFastSlow.md)
-## Boyer-Moore投票 🟡
-## 轮转数组 🟡
+## [Boyer-Moore投票](./miscellaneous.md)
+## [轮转数组](./miscellaneous.md)
 ## [模板API](./codeAPI.md)
 * 快速幂法
 * 快速乘法
 * 快速排序
 * 快速选择
-## 最大公约数 🟡
-## 判断质数 🟡
-## 排列组合 🟡
+## [最大公约数](./miscellaneous.md)
+## [判断质数](./miscellaneous.md)
+## [排列组合](./miscellaneous.md)
 ## Dijkstra
 * [Dijkstra](./dijkstra.md)
-## Bellman-Ford 🟡
+## [Bellman-Ford](./miscellaneous.md)
 # 代码模版
 ## ✌️ Binary Tree
 * [二叉树基础与API](./binaryTree.md)
@@ -122,7 +122,7 @@
 ## Union find(并查集)
 * [union find](./unionFindSet.md)
 ## [链表(反转， merge)](./LinkedList.md)
-## 二叉树最近公共祖先 🟡
+## 二叉树最近公共祖先
 * [二叉树错题本](./binaryProblemNotes.md)
 ## 拓扑排序
 * [拓扑排序](./topologicalSorting.md)
