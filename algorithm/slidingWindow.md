@@ -78,7 +78,15 @@ while (end < s.length()) {
     updateAnswer();
 }
 ```
-
+## 核心概念 定义窗口 Windows
+- HashMap for character frequencies
+   - let's define for intialization we mark c in target as `map[c]--`
+   - [0, ∞) mean nothing, these chars count are of no use
+   - (-∞, 0) means a target's char is founded
+      - when expanding, check `map[c] < 0` first
+      - when contract after update `map[c]--`, check `map[c] < 0` 
+- Counter for conditions, count == 0, mean all found
+- Set for unique elements if needed
 # Real World Examples
 
 ## 1. Minimum Window Substring (LC 76)
@@ -141,11 +149,13 @@ baeb[bac] → valid!  Add index 5
 
 2. Choose your window state:
    - HashMap for character frequencies
-      - (0, ∞) mean wanted, 
-      - 0 all found, 
-      - (-∞, 0) means found more than needed
+      - let's define for intialization we mark c in target as `map[c]--`
+      - [0, ∞) mean nothing, these chars count are of no use
+      - (-∞, 0) means a target's char is founded
+         - when expanding, check `map[c] < 0` first
+         - when contract after update `map[c]--`, check `map[c] < 0` 
    - Counter for conditions, count == 0, mean all found
-   - Set for unique elements
+   - Set for unique elements if needed
 
 3. Optimize the solution:
    - Use array instead of HashMap for small character sets ✅
@@ -212,6 +222,7 @@ Remember: Sliding Window turns many O(n²) substring problems into O(n) solution
 ![76 76. Minimum Window Substring76. 最小覆盖子串](./graphs/76.minimum-window-substring.drawio.svg)
 
 ```java
+// two map version, need.include(c) to check whether a target's char is found
 class Solution {
     public String minWindow(String s, String t) {
         // Initialize window state
@@ -271,6 +282,51 @@ class Solution {
     }
 }
 ```
+
+```java
+// one map version, `map[c]<0` means a target's char is found
+class Solution {
+    public String minWindow(String s, String t) {
+        Map<Character, Integer> map = new HashMap<>(26); // char frequencies
+        /** 
+            - [0, ∞) mean many things, these chars are of no use
+            - (-∞, 0) means NUM wantedfound more than needed
+         */
+        int count = 0; // condition, count more wanted
+        int current = 0;
+        int left = 0, right = 0;
+        int length = Integer.MAX_VALUE;
+        int minStart = 0;
+
+        for(char c : t.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) - 1);
+            count++;
+        }
+        while(right < s.length()) {
+            char c = s.charAt(right++);
+            if(map.getOrDefault(c, 0) < 0) {
+                count--;
+            }
+            map.put(c, map.getOrDefault(c, 0) + 1);
+            while(count == 0) {
+                if(length > right - left ) {
+                    length = right - left ;
+                    minStart = left;
+                }
+                char d = s.charAt(left++);
+                map.put(d, map.get(d)-1);
+                if(map.get(d) < 0) {
+                    count++;
+                }
+            }
+        }
+        if(length == Integer.MAX_VALUE) return "";
+        return s.substring(minStart, minStart+length);
+
+    }
+}
+```
+
 
 ### 例题题解
 * 438.找到字符串中所有字母异位词
