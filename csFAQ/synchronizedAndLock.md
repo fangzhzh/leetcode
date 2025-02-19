@@ -304,11 +304,15 @@ public class Counter {
 ### 4.3 类级别的线程安全
 ```java
 public class Singleton {
-    private static Singleton instance;
+    private static volatile Singleton instance;
     
-    public static synchronized Singleton getInstance() {
+    public static Singleton getInstance() {
         if (instance == null) {
-            instance = new Singleton();
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
         }
         return instance;
     }
