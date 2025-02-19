@@ -48,9 +48,9 @@
 * [Trie(字典树/前缀树)](./trie.md)
 ## 线段树
 * [线段树Segment Tree](./segmentTree.md)
-## 📏Hash/double pointers/sliding windows
+## 📏Hash 哈希表
 * [Map,HashMap及API](./mapAPI.md)
-* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
+* [哈希表](./hashTwoPointers.md)
 ## Union find(并查集)
 * [union find](./unionFindSet.md)
 ## 📚 栈，队列，Stack Queue Deque
@@ -75,14 +75,15 @@
 # 一般算法
 ## 🔎 Binary Search 
 * [二分查找与API](./binarySearch.md)
-## double pointers/滑动窗口
-* [哈希表和双指针与滑动窗口](./hashTwoPointers.md)
+## 双指针 two pointers
+* [哈希表和双指针](./hashTwoPointers.md)
+## 滑动窗口 sliding window
+* [滑动窗口sliding window](./slidingWindow.md)
 ## ☯️ 递归/回溯
 * [递归基础与API](./recursive.md)
     * DFS, BFS
 ## 拓扑排序
 * [拓扑排序](./topologicalSorting.md)
-
 ## 🔟󠀽󠀽⏭️2️⃣ 位运算
 * [位运算](./bits.md)
 ## 贪心
@@ -116,13 +117,15 @@
 * [二叉树基础与API](./binaryTree.md)
 ## 前缀和 presum
 * [前缀和](./prefixSumAPI.md)
+## 前缀树
+* [Trie(字典树/前缀树)](./trie.md)
 ## Union find(并查集)
 * [union find](./unionFindSet.md)
 ## [链表(反转， merge)](./LinkedList.md)
-## 拓扑排序
-* [拓扑排序](./topologicalSorting.md)
 ## 二叉树最近公共祖先 🟡
 * [二叉树错题本](./binaryProblemNotes.md)
+## 拓扑排序
+* [拓扑排序](./topologicalSorting.md)
 
 
 
