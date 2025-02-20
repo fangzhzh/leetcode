@@ -187,7 +187,19 @@ PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length,
 	* this will create a new array and initialise it with all 0
 * `int[] result = new int[]{1,2,3,4};`
 	* this will create a new array of length 4 and intialise with 1,2,3,4
-
+## copy an array
+* `System.arraycopy(Object source_arr, int sourcePos, Object dest_arr, int destPos, int len)`
+	* `System.arraycopy(nums, 0, original, 0, nums.length);`
+* `int[] Arrays.copyOf(T[], int)`
+	* `int[] copied = Arrays.copyOf(nums, nums.length);`
+* loop copy an array
+```java
+void copy(int[] source, int[] target) {
+    for (int i = 0; i < source.length; i++) {
+        target[i] = source[i];
+    }
+}
+```
 ## loop a array
 
 ### loop i
@@ -303,3 +315,10 @@ TreeSet<String> set = new TreeSet();
 set.add("treeset");
 List<String> list = new ArrayList(set);
 ```
+
+
+
+## Random
+- The general contract of `int nextInt(int n)` is that one int value in the specified range is pseudorandomly generated and returned.
+	* The method call returns the next integer number from the sequence
+- The `Math.random()` method returns a double value with a positive sign, greater than or equal to 0.0 and less than 1.0.
