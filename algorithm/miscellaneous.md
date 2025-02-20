@@ -1,8 +1,8 @@
 # 需要了解并实现的特殊解法：
 ## Morris 遍历
 * [Morris 遍历​](./morrisTraveral.md)
-* [94. 二叉树的中序遍历](https://leetcode.com/problems/binary-tree-inorder-traversal/)
-* [144. 二叉树的前序遍历](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+- [94. 二叉树的中序遍历](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+- [144. 二叉树的前序遍历](https://leetcode.com/problems/binary-tree-preorder-traversal/)
 ## Floyd's Cycle Detection Algorithm（快慢指针）
 * [141. 环形链表](https://leetcode.com/problems/linked-list-cycle/)
 * [287. 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)
