@@ -53,6 +53,65 @@ for i from n−1 downto 1 do
 * [215. 数组中的第K个最大元素](https://leetcode.com/problems/kth-largest-element-in-an-array/)
 ## 判断质数
 * [204. 计数质数](https://leetcode.com/problems/count-primes/)
+### 判断质数
+`boolean isPrime(n)`
+#### 1. naive
+for i from 2 to n, step 1 do
+    if n % i = 0 then return false;
+#### 2. prime-sieve
+for i from 2 to i*i<n>, step 1 do
+    if n % i = 0 then return false;
+### 找出所有质数
+`int primeCounter(n)`
+#### 1. naive
+for i from 0 to n, step 1 do
+    isPrime(i)
+
+#### 埃氏筛 Eratosthenes
+* 将其所有质数的倍数都标记为合数
+```java
+class Solution {
+    public int countPrimes(int n) {
+        int[] isPrime = new int[n];
+        Arrays.fill(isPrime, 1);
+        int ans = 0;
+        for (int i = 2; i < n; ++i) {
+            if (isPrime[i] == 1) {
+                ans += 1;
+                if ((long) i * i < n) {
+                    for (int j = i * i; j < n; j += i) {
+                        isPrime[j] = 0;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+```
+#### 欧式筛法 - 线性筛
+```java
+class Solution {
+    public int countPrimes(int n) {
+        List<Integer> primes = new ArrayList<Integer>();
+        int[] isPrime = new int[n];
+        Arrays.fill(isPrime, 1);
+        for (int i = 2; i < n; ++i) {
+            if (isPrime[i] == 1) {
+                primes.add(i);
+            }
+            for (int j = 0; j < primes.size() && i * primes.get(j) < n; ++j) {
+                isPrime[i * primes.get(j)] = 0;
+                if (i % primes.get(j) == 0) {
+                    break;
+                }
+            }
+        }
+        return primes.size();
+    }
+}
+```
 ## 最近公共祖先
 * [236. 二叉树的最近公共祖先](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 * [1676. 二叉树的最近公共祖先 IV](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iv/)
