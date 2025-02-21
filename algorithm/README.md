@@ -105,12 +105,15 @@
 * 快速幂法
 * 快速乘法
 * 快速排序
-* 快速选择
 ## [最大公约数](./miscellaneous.md)
 ## [判断质数](./miscellaneous.md)
 ## [排列组合](./miscellaneous.md)
 ## Dijkstra
 * [Dijkstra](./dijkstra.md)
+* [743. Network Delay Time](https://leetcode.com/problems/network-delay-time/)
+* [787. Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
+* [1514. Path with Maximum Probability](https://leetcode.com/problems/path-with-maximum-probability/)
+
 ## [Bellman-Ford](./miscellaneous.md)
 # 代码模版
 ## ✌️ Binary Tree
@@ -126,6 +129,7 @@
 * [二叉树错题本](./binaryProblemNotes.md)
 ## 拓扑排序
 * [拓扑排序](./topologicalSorting.md)
+* [210. 课程表 II](https://leetcode.com/problems/course-schedule-ii/)
 
 
 
