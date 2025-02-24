@@ -40,24 +40,3 @@ The TCP/IP model consists of five layers, each with its own specific functions:
 
 3. **What is the difference between TCP and UDP?**  
    TCP is connection-oriented and ensures reliable data transfer, while UDP is connectionless and does not guarantee delivery.
-
-4. **What is the function of the Internet layer?**  
-   The Internet layer is responsible for routing packets across networks and addressing them using IP addresses.
-
-5. **What protocols operate at the Application layer?**  
-   Protocols like HTTP, FTP, SMTP, and DNS operate at the Application layer.
-
-6. **What is a socket?**  
-   A socket is an endpoint for sending or receiving data across a computer network.
-
-7. **Explain the concept of port numbers.**  
-   Port numbers are used to identify specific processes or services on a device, allowing multiple applications to use the network simultaneously.
-
-8. **What is the purpose of the Network Interface layer?**  
-   The Network Interface layer is responsible for the physical transmission of data over the network and includes technologies like Ethernet.
-
-9. **How does TCP/IP handle packet loss?**  
-   TCP/IP uses a combination of error-checking and retransmission to handle packet loss. If a packet is lost, the sender will retransmit the packet until it is received correctly.
-
-10. **What is the difference between IPv4 and IPv6?**  
-    IPv4 uses 32-bit addresses, while IPv6 uses 128-bit addresses. IPv6 also includes additional features such as improved security and mobility support.
