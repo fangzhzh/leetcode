@@ -202,11 +202,23 @@ Java has four types of thread pools:
     ```
 
 ### 3. What is the principle behind thread pools?
-From a data structure perspective, thread pools mainly use blocking queues (BlockingQueue) and HashSet collections. The process of submitting tasks involves the following steps:
-1. If the number of running threads < coreSize, create a core thread to execute the task immediately.
+
+
+From a data structure perspective, thread pools mainly use blocking queues (BlockingQueue). Blocking queues are used to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
+1. If the number of running threads < coreSize, create a core thread to execute the task immediately.  
+   - A core thread is a thread that is always kept in the pool and reused to execute tasks.  
+   - Core threads are created when the pool is first created and are never terminated until the pool is shut down.
 2. If the number of running threads >= coreSize, place the task in a blocking queue.
-3. If the queue is full and the number of running threads < maximumPoolSize, create a new non-core thread to execute the task.
+3. If the queue is full and the number of running threads < maximumPoolSize, create a new non-core thread to execute the task.  
+   - A non-core thread is a thread that is created when the pool needs more threads to execute tasks.  
+   - Non-core threads are terminated when the pool reaches the idle timeout.
 4. If the queue is full and the number of running threads >= maximumPoolSize, the thread pool calls the handler's reject method to refuse the submission.
+For example, for a thread pool size of 10:
+- The core size is typically set to 5, so 5 core threads are always kept in the pool and reused to execute tasks.
+- The queue size is typically set to 10, so up to 10 tasks can be queued for execution.
+- The maximum pool size is typically set to 10, so the pool can grow up to 10 threads to execute tasks.
+5. What happens to the core threads after the thread pool is shut down?
+When a thread pool is shut down, the core threads are allowed to finish any tasks they are currently running. After all tasks are finished, the core threads are terminated and the pool is shut down gracefully.
 
 ### 4. What are the types of work queues in thread pools?
 1. **ArrayBlockingQueue**: A bounded blocking queue based on an array structure, ordered by FIFO (first in, first out).
