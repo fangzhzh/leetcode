@@ -1,5 +1,65 @@
 # Synchronized关键字
 
+## Synchronized Usage Scenarios
+
+### 1. Class Level Synchronization (Class.class)
+```java
+public class ClassLevelExample {
+    // Method level
+    public static synchronized void staticMethod() {
+        // Only one thread can execute this across all instances
+    }
+    
+    // Block level
+    public void someMethod() {
+        synchronized(ClassLevelExample.class) {
+            // Only one thread can execute this block across all instances
+        }
+    }
+}
+```
+🔑 **Key Point**: Locks the entire class. All static synchronized methods in the class share the same lock.
+
+### 2. Instance Level Synchronization (this)
+```java
+public class InstanceLevelExample {
+    // Method level
+    public synchronized void instanceMethod() {
+        // Only one thread per instance can execute this
+    }
+    
+    // Block level
+    public void someMethod() {
+        synchronized(this) {
+            // Only one thread per instance can execute this block
+        }
+    }
+}
+```
+🔑 **Key Point**: Locks the instance. Different instances can execute the same method simultaneously.
+
+### 3. Object Field Synchronization
+```java
+public class FieldLevelExample {
+    private final Object lock = new Object();
+    private int count = 0;
+    
+    public void increment() {
+        synchronized(lock) {
+            count++;
+        }
+    }
+}
+```
+🔑 **Key Point**: Provides more fine-grained control. Different locks can protect different parts of the object.
+
+### **Best Practices**:
+- Use the smallest possible scope for synchronization
+- Prefer synchronized blocks over methods
+- Be careful with nested synchronization (avoid deadlocks)
+- Consider using private final objects for locks
+
+
 ## 1. Synchronized特性: 内存可见性与有序性
 ### 1.0 原子性
 ### 1.1 内存可见性
@@ -373,25 +433,3 @@ if (lock.tryLock(5, TimeUnit.SECONDS)) {
 ```java
 ReentrantLock fairLock = new ReentrantLock(true);
 ```
-
-4. **多条件变量**
-```java
-ReentrantLock lock = new ReentrantLock();
-Condition condition1 = lock.newCondition();
-Condition condition2 = lock.newCondition();
-```
-
-## 3. 使用建议
-
-1. **简单同步场景**
-   * 使用synchronized
-   * 代码简洁，不容易出错
-
-2. **复杂同步场景**
-   * 使用Lock
-   * 需要公平性、可中断、超时等特性
-
-3. **注意事项**
-   * Lock必须在finally中释放
-   * 尽量缩小同步范围
-   * 避免死锁
