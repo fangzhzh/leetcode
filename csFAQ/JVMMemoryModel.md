@@ -3,6 +3,17 @@
 ## 1. JVM内存结构
 
 ### 1.1 整体架构
+- **Main Memory**: Shared memory visible to all threads
+- **Working Memory**: Each thread has its own working memory (cache)
+  - Threads operate on copies of variables from main memory
+  - Changes must be synchronized back to main memory
+
+缓存行状态：
+- Modified（修改）：该CPU已修改缓存行
+- Exclusive（独占）：缓存行只在该CPU中
+- Shared（共享）：缓存行可能在其他CPU中
+- Invalid（无效）：缓存行已失效
+
 ```
 +------------------+     +------------------+     +------------------+
 |     Thread 1     |     |     Thread 2     |     |     Thread N     |
@@ -12,6 +23,10 @@
 |  +------------+  |     |  +------------+  |     |  +------------+  |
 +--------↕--------+     +--------↕--------+     +--------↕--------+
          ↕                      ↕                       ↕
++-----------------------------------------------------------------+
+|           系统总线（Bus）                                         |
++-----------------------------------------------------------------+
+                                ↑
 +--------------------------------------------------+
 |                    主内存（堆内存）                  |
 |                    Main Memory                     |
@@ -42,6 +57,14 @@
    }
    ```
 
+### CPU Cache带来的问题
+This layered architecture leads to:
+
+* Cache Coherence Issues: Different CPU caches may have different values
+* Memory Ordering: CPU and compiler can reorder memory operations
+* Memory Visibility: Updates in one CPU's cache not immediately visible to others
+
+
 ## 2. 内存交互操作
 
 ### 2.1 八种原子操作
@@ -56,7 +79,7 @@
 8. write（写入）：作用于主内存，将store的值写入变量
 ```
 
-### 2.2 变量的操作过程
+### 2.2 变量的原子操作过程
 ```java
 public class MemoryOperationExample {
     private int value = 0;  // 主内存中的变量
@@ -80,7 +103,13 @@ public class MemoryOperationExample {
 ```
 
 ## 3. 内存可见性问题
-
+- Without proper synchronization, changes made by one thread may not be visible to other threads
+- Synchronization mechanisms:
+  - **synchronized** keyword
+  - **volatile** variables
+  - final fields without [reference escape] of `this`
+    - If the constructor initializes a final field, that value is guaranteed to be visible to any thread that accesses the object after the constructor has completed.
+  - concurrent collections
 ### 3.1 可见性问题的产生
 ```java
 public class VisibilityProblem {
@@ -100,6 +129,8 @@ public class VisibilityProblem {
 ```
 
 ### 3.2 缓存一致性协议（MESI）
+缓存一致性协议定义了以下四种缓存状态
+
 ```
 +-------+     +-------+     +-------+
 | CPU1  |     | CPU2  |     | CPU3  |
@@ -113,23 +144,119 @@ public class VisibilityProblem {
 +-------+
 | 主内存  |
 +-------+
+```
 
 缓存状态：
-- Modified（修改）：该CPU已修改缓存行
-- Exclusive（独占）：缓存行只在该CPU中
-- Shared（共享）：缓存行可能在其他CPU中
-- Invalid（无效）：缓存行已失效
+- **Modified（修改）**：缓存行已被当前CPU修改，且与主内存中的数据不一致。此时，其他CPU不能读取该缓存行的数据。
+- **Exclusive（独占）**：缓存行只存在于当前CPU中，且与主内存中的数据一致。此时，其他CPU可以读取该缓存行的数据，但不能修改。
+- **Shared（共享）**：缓存行可能存在于多个CPU中，且与主内存中的数据一致。此时，所有CPU都可以读取该缓存行的数据，但不能修改。
+- **Invalid（无效）**：缓存行已失效，不能被当前CPU使用。此时，CPU需要从主内存中重新读取数据。
+
+
+#### 示例代码
+
+以下是一个简单的Java示例，展示了如何使用`volatile`关键字来确保内存可见性，这与缓存一致性协议的作用类似：
+```java
+public class CacheInvalidationProcess {
+    private volatile int value;
+    
+    // CPU1上的线程
+    public void writeOnCPU1() {
+        value = 42;
+        // 1. CPU!写入前发出占用总线信号（Bus Lock）
+        // 2. CPU1将缓存行状态改为Modified
+        // 3. 通过总线发出广播信号
+        // 4. 其他CPU收到信号，将相应缓存行标记为Invalid
+        // 5. 写入前发出占用总线信号（Bus Lock）
+    }
+    
+    // CPU2上的线程
+    public void readOnCPU2() {
+        // 1. CPU2发现缓存行是Invalid
+        // 2. 从主内存重新读取数据
+        // 3. 将新数据加载到缓存，状态改为Shared
+        System.out.println(value);
+    }
+}
 ```
 
-## 4. JMM内存屏障
+
+### 4. 指令重排 (Instruction Reordering)
+指令重排是指编译器和处理器为了优化性能而对指令执行顺序进行调整的过程。虽然指令重排可以提高单线程性能，但在多线程环境下可能会导致内存可见性问题。
+
+Java里通过内存屏障保证有序性，详见下一部分Memory Barriers。
+
+#### 4.1 重排类型
+1）**编译器优化的重排序**: 编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。
+
+2）**指令级并行的重排序**: 现代处理器采用了指令级并行技术（Instruction-LevelParallelism，ILP）来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。
+
+3）**内存系统的重排序**: 由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。
+
+```mermaid
+graph LR
+    S[源代码] --> A[编译器优化重排]
+    A --> B[指令级并行重排]
+    B --> C[内存系统重排]
+    C --> 最终执行指令序列
+```
+
+#### 4.2 重排相关的语义
+1. **With-Thread As-If-Serial 语义**：不管怎么重排（编译器和处理器为了提高并行度而进行的重排），单线程程序的执行结果不能被改变。编译器、运行时和处理器都必须遵守 As-If-Serial 语义。
+2. **Happens-Before 关系**：JMM 定义了 happens-before 关系来确保内存可见性和有序性。如果一个操作 happens-before 另一个操作，那么第一个操作的结果对第二个操作是可见的，并且第一个操作的执行顺序在第二个操作之前。
+
+#### 4.3 Happens-Before 规则
+从JDK 5开始，Java使用新的JSR-133内存模型, JSR-133使用happens-before的概念来阐述操作之间的内存可见性。
+
+1. **程序次序规则(Program order rule)**：在一个线程内，按照代码顺序，前面的操作 happens-before 于后面的操作。
+2. **监视器锁规则(Monitor lock rule)**：对一个锁的解锁 happens-before 于随后对这个锁的加锁。
+3. **volatile 变量规则(Volatile variable rule)**：对一个 volatile 变量的写操作 happens-before 于后续对这个 volatile 变量的读操作。
+4. **线程启动规则**：Thread.start() 方法调用 happens-before 于启动线程中的每一个动作。
+5. **线程终止规则**：线程中的所有操作 happens-before 于其他线程检测到该线程已经终止。
+6. **线程中断规则(Thread termination rule)**：对线程的中断操作 happens-before 于被中断线程的代码检测到中断事件的发生。
+7. **对象终结规则**：一个对象的构造函数执行完毕 happens-before 于该对象的 finalize() 方法的开始。
+8. **传递性**：如果 A happens-before B，且 B happens-before C，那么 A happens-before C。
+
+通过理解和应用这些规则，开发者可以编写出线程安全的代码，避免由于指令重排导致的内存可见性问题。
+
+## 4. JMM Memory Barriers内存屏障
 
 ### 4.1 四种屏障类型
-```
-LoadLoad屏障：确保Load1数据的装载先于Load2及后续装载指令完成
-StoreStore屏障：确保Store1数据对其他处理器可见先于Store2及后续存储指令
-LoadStore屏障：确保Load1数据装载先于Store2及后续存储指令
-StoreLoad屏障：确保Store1数据对其他处理器变得可见先于Load2及后续装载指令
-```
+
+* LoadLoad屏障：确保Load1数据的装载先于Load2及后续装载指令完成
+    * inserted between tow load operations, after a volatile read
+    *   ```
+        int x = volatile_y; // Load1 (volatile read)
+        // LoadLoad barrier inserted here
+        int b = z;         // Load2 (normal read)
+        ```
+* StoreStore屏障：确保Store1数据对其他处理器可见先于Store2及后续存储指令
+    * inserted between two store operations, before a volative write
+    *   ```
+        a = 1;              // Store1
+        // StoreStore barrier inserted here
+        volatile_x = 2;     // store 2
+        ```
+* LoadStore屏障：确保Load1数据装载先于Store2及后续存储指令
+    * inserted between a load and a store, after a volatile read
+    *   ```
+        int x = volatile_y; // Load (volatile read)
+        // LoadStore barrier inserted here
+        z = 1;             // Store (normal write)
+        ```
+* StoreLoad屏障：确保Store1数据对其他处理器变得可见先于Load2及后续装载指令
+    * The stronger barrier
+    * inserted before volatile reads and after volatile write
+    *   ```
+        volatile_x = 1;    // Store
+        // StoreLoad barrier inserted 
+        // Any subsequent loads
+
+        // Any previous stores
+        // StoreLoad barrier inserted here
+        int y = volatile_x; // Load
+        ```
+
 
 ### 4.2 屏障的使用示例
 ```java
@@ -153,6 +280,39 @@ public class BarrierExample {
 }
 ```
 
+
+## Reference Escape
+Idea that if the reference to the object (this) is shared with other threads before the constructor finishes, those threads may see an incomplete state of the object.
+
+```java
+class DatabaseService {
+    private final String connectionString;
+    private Connection connection;
+
+    public DatabaseService(String connectionString) {
+        this.connectionString = connectionString;
+
+        // Start a monitoring thread (not ideal to do this in the constructor)
+        new Thread(() -> {
+            monitorConnection();
+        }).start();
+        
+        // Initialize the database connection
+        this.connection = DriverManager.getConnection(connectionString);
+    }
+
+    private void monitorConnection() {
+        // Simulate monitoring the connection
+        while (true) {
+            if (connection == null) {
+                System.out.println("Connection is not initialized yet!");
+                break; // Exit if connection is null
+            }
+            // Perform monitoring logic...
+        }
+    }
+}
+```
 ## 5. 实际应用
 
 ### 5.1 单例模式中的内存问题
@@ -199,3 +359,7 @@ public class ProducerConsumer {
     }
 }
 ```
+
+
+# Reference
+* [Java内存模型（JMM）总结](https://zhuanlan.zhihu.com/p/29881777)

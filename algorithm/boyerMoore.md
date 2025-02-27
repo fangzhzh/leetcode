@@ -63,3 +63,8 @@ public class BoyerMooreMajorityVote {
     }
 }
 ```
+
+## Proof
+Balancing count
+
+If there is a majority element (an element that appears more than n/2 times), it will survive the counting process. This is because, for every time it is counted, there will be at least one other element that can decrement the count. However, since it appears more than half the time, it will always have a net positive count by the end of the first pass.

@@ -4,7 +4,7 @@
 Volatile是Java提供的一种轻量级的同步机制。它保证了变量的"可见性"，但不保证"原子性"。
 
 ### 1.1 JVM内存模型
-
+[JVM Memory model](./JVMMemoryModel.md)
 ```
 +------------------+     +------------------+
 |     Thread 1     |     |     Thread 2     |
@@ -28,13 +28,6 @@ Volatile是Java提供的一种轻量级的同步机制。它保证了变量的"�
    - L2缓存: ~10个时钟周期
    - 主内存: ~100个时钟周期
    
-   b. 局部性原理：
-   - 时间局部性：最近使用的数据可能很快再次被使用
-   - 空间局部性：相邻近的数据可能一起被使用
-   
-   c. 系统架构：
-   - CPU和主内存之间的速度差距越来越大
-   - 多核CPU架构需要各自的缓存
    ```
 
 2. **可见性问题示例**
@@ -57,45 +50,7 @@ Volatile是Java提供的一种轻量级的同步机制。它保证了变量的"�
 
 ### 1.2 Volatile的工作原理
 
-#### 1.2.1 MESI缓存一致性协议
-```
-+-------+     +-------+     +-------+
-| CPU1  |     | CPU2  |     | CPU3  |
-| Cache |     | Cache |     | Cache |
-+-------+     +-------+     +-------+
-    ↓            ↓            ↓
-+-----------------------------------+
-|           系统总线（Bus）           |
-+-----------------------------------+
-    ↑
-+-------+
-| 主内存  |
-+-------+
-
-缓存行状态：
-- Modified（修改）：该CPU已修改缓存行
-- Exclusive（独占）：缓存行只在该CPU中
-- Shared（共享）：缓存行可能在其他CPU中
-- Invalid（无效）：缓存行已失效
-```
-
-#### 1.2.2 Volatile变量的写操作
-```java
-public class VolatileWriteProcess {
-    private volatile boolean flag = false;
-    
-    public void write() {
-        // 1. 写入前发出占用总线信号（Bus Lock）
-        // 2. 其他CPU监听到总线信号
-        // 3. 其他CPU将对应缓存行标记为Invalid
-        // 4. 当前CPU写入数据并刷新到主内存
-        // 5. 释放总线锁（Bus Unlock）
-        flag = true;
-    }
-}
-```
-
-#### 1.2.3 缓存失效的过程
+#### 1.2.1 缓存失效的过程
 ```java
 public class CacheInvalidationProcess {
     private volatile int value;
@@ -103,9 +58,11 @@ public class CacheInvalidationProcess {
     // CPU1上的线程
     public void writeOnCPU1() {
         value = 42;
-        // 1. CPU1将缓存行状态改为Modified
-        // 2. 通过总线发出广播信号
-        // 3. 其他CPU收到信号，将相应缓存行标记为Invalid
+        // 1. CPU!写入前发出占用总线信号（Bus Lock）
+        // 2. CPU1将缓存行状态改为Modified
+        // 3. 通过总线发出广播信号
+        // 4. 其他CPU收到信号，将相应缓存行标记为Invalid
+        // 5. 写入前发出占用总线信号（Bus Lock）
     }
     
     // CPU2上的线程
@@ -117,40 +74,6 @@ public class CacheInvalidationProcess {
     }
 }
 ```
-
-#### 1.2.4 完整的Volatile操作示例
-```java
-public class VolatilePrinciple {
-    private volatile boolean flag = false;
-    
-    public void write() {
-        // 1. 获取总线锁
-        // 2. 写入CPU缓存，状态变为Modified
-        // 3. 通过总线广播使其他CPU缓存失效
-        // 4. 刷新到主内存
-        // 5. 释放总线锁
-        flag = true;
-    }
-    
-    public void read() {
-        // 1. 检查本地缓存状态
-        // 2. 如果是Invalid，从主内存加载
-        // 3. 将缓存状态改为Shared
-        while (!flag) {
-            // 能够读取到其他线程对flag的修改
-        }
-    }
-}
-```
-
-### 1.2 内存语义
-1. **写内存语义**：
-   - 写操作会强制将修改刷新到主内存
-   - 写操作会导致其他CPU缓存失效
-
-2. **读内存语义**：
-   - 读操作会强制从主内存加载
-   - 保证读取到最新的值
 
 ## 2. Volatile的三大特性
 
@@ -170,23 +93,30 @@ public class VisibilityExample {
 ```
 
 ### 2.2 有序性（禁止重排序）
+通过内存屏障保证有序性
 ```java
 public class OrderingExample {
     private int a = 0;
     private volatile boolean flag = false;
     
     public void writer() {
-        a = 1;                // 1
-        flag = true;          // 2 volatile写，构成内存屏障
+        a = 1;                // Store1 (normal write)
+        // StoreStore barrier - ensures a=1 is visible before flag=true
+        flag = true;          // Store2 (volatile write)
+        // StoreLoad barrier - ensures all stores complete before any subsequent loads
     }
     
     public void reader() {
-        if (flag) {           // 3 volatile读，构成内存屏障
-            int i = a;        // 4 一定能读到1
+        if (flag) {           // Load1 (volatile read)
+            // LoadLoad barrier - ensures subsequent loads happen after flag read
+            // LoadStore barrier - ensures subsequent stores happen after flag read
+            int i = a;        // Load2 (normal read)
         }
     }
 }
 ```
+
+[详细内存屏障](./JVMMemoryModel.md)
 
 ### 2.3 单次读/写的原子性
 ```java
@@ -211,59 +141,17 @@ public class AtomicityExample {
 ```
 
 ## 3. Volatile的内存屏障
-```
-写操作：
-StoreStore屏障
-volatile写操作
-StoreLoad屏障
+[详细内存屏障](./JVMMemoryModel.md)
 
-读操作：
-LoadLoad屏障
-volatile读操作
-LoadStore屏障
-```
-
-### 3.1 四种屏障的作用
-1. **StoreStore屏障**：
-   - 确保volatile写之前的普通写操作先刷新到主内存
-
-2. **StoreLoad屏障**：
-   - 确保volatile写操作刷新到主内存
-   - 让其他处理器的缓存行失效
-
-3. **LoadLoad屏障**：
-   - 确保volatile读操作之前的读操作先执行
-
-4. **LoadStore屏障**：
-   - 确保volatile读操作之后的写操作不会重排序到读操作之前
-
-## 4. 适用场景
-
-### 4.1 状态标志
-```java
-public class FlagExample {
-    private volatile boolean flag = false;
-    
-    public void shutdown() {
-        flag = true;  // 状态变更，通知其他线程
-    }
-    
-    public void doWork() {
-        while (!flag) {
-            // 工作内容
-        }
-    }
-}
-```
-
-### 4.2 双重检查单例模式
+## 4 应用场景
+### 4.1 双重检查单例模式
 ```java
 public class Singleton {
     private static volatile Singleton instance;
     
     public static Singleton getInstance() {
         if (instance == null) {
-            synchronized (Singleton.class) {
+            synchronized (Singleton.class) { // synchronized 类/instance/object filed
                 if (instance == null) {
                     instance = new Singleton();
                 }
@@ -273,8 +161,10 @@ public class Singleton {
     }
 }
 ```
+注:
+[synchronized 类/instance/object filed](./synchronizedAndLock.md)
 
-### 4.3 独立观察（一写多读）
+### 4.2 独立观察（一写多读）
 ```java
 public class Configuration {
     private volatile String config;
