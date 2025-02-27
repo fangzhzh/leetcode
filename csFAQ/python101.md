@@ -7,6 +7,27 @@
 * Boolean type: bool
 * Binary types: bytes, bytearray, memoryview
 
+## string/list slicing notiation
+**Python slicing creates new list**
+
+* s[start:stop:step]  # Extracts elements from index `start` to `stop-1`
+* Negative indices count from the end (s[-1] is the last element).
+
+* s[-k:]
+    * start: end -k
+    * end: end
+    * result: Last k
+* s[:-k] 
+    * start: 0
+    * end: end -k
+    * result: all except last k
+* s[::-1]    
+    * start: 0
+    * end: end
+    * step: -1
+    * result: start becomes to end, and end became start, from end to start, reversed string "abc"[::-1] => "cba"
+
+
 ## Exmaple
 ### revert a string
 ```python
