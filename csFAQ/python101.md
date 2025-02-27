@@ -1,11 +1,14 @@
 # Python's data types?
-* Numeric types: int, float, complex
-* Sequence types: list, tuple, range
-* Text type: str
-* Set types: set, frozenset
-* Mapping type: dict
-* Boolean type: bool
-* Binary types: bytes, bytearray, memoryview
+## Numeric types: int, float, complex
+### Integer.MAX and Integer.min
+* Integer.MAX_VALUE: float('inf')
+* Integer.MIN_VALUE: float('-inf')
+### Sequence types: list, tuple, range
+### Text type: str
+### Set types: set, frozenset
+### Mapping type: dict
+### Boolean type: bool
+### Binary types: bytes, bytearray, memoryview
 
 ## string/list slicing notiation
 **Python slicing creates new list**

@@ -4,6 +4,7 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
+        k = k % len(nums)
         def reverse(nums: List[int], left: int, right: int) -> None:
             while left < right:
                 nums[left], nums[right] = nums[right], nums[left]

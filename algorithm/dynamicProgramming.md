@@ -14,18 +14,6 @@
 	+ 子问题不重叠就可以用分治
 	+ overlapping sub
 
-## Applying synamic programming
-* Characterize the structure of an optimal solution.
-* Recursively define the value of an optimal solution.
-* Compute the value of an optimal solution.
-* Construct an optimal solution from computed information.
-
-### Step 1 Characterize the structure of an optimal solution
-以matrix-chain multiplication problem为例
-Ai...Aj, 我们可以把他们从k分为两段[Ai,Ai+1...Ak]和[Ak, Ak+1, ..., Aj]，这种情况是最优解。
-那么[Ai,Ai+1...Ak]和[Ak, Ak+1, ..., Aj]必须也是最优解
-
-### Step 2: A recursive solution
 ## 什么情况考虑动态规划
 - 求最大值最小值
 - 判断是否可行
@@ -112,3 +100,31 @@ We consider the vertices of the subproblem graph in an order that is a "reverse 
 
 Typically, the time to compute the solution to a subproblem is proportional to the degree(number of outgoing edges) of the corresponding vertex in the subproblem graph, and the number of the subproblems is equal to the number of vertices in the subproblem graph. Subproblem gragh G = (V, E). The running time of dynamic programming is linear in the number of vertices and edges. 
 
+## How to define a state
+State是当前状况的一个snapshot
+* ✅ Good states: holding/not holding stock, amount of money we have, position in array
+* ❌ Bad states: actions like buy/sell (these are transitions)
+
+State 应该是完备的，最小。
+
+### Best Candidates for States:
+#### Position-based:
+* Index in array/string
+* Current position in grid
+* Current day
+#### Resource-based:
+* Amount of money/items
+* Remaining capacity
+* Number of transactions left
+#### Status-based:
+* Whether holding something
+* Whether used something
+* Current state of system
+#### Combination of above:
+## Checklist for Good State Definition:
+* Can make next decision using only current state?
+* Captures all necessary information?
+* No redundant information?
+* Can clearly define transitions between states?
+
+Remember: States describe "where we are", transitions describe "how we move". This separation is key to clean DP solutions.
