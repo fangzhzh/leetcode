@@ -31,7 +31,8 @@ It doesn't matter what values are set beyond the returned length.
  * - find the first unmatch, move following
  * - if cur equal to previous, move following
  * 
- * ## a big problem is too many unnecessary move
+ * - a big problem is too many unnecessary move
+ * - not to mention the confusing while(left < len) swap(left, right)
  * - need to maintain counter, idx which are error-prone
  */
 class Solution {
