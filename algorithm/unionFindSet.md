@@ -3,7 +3,8 @@
 * 并查集这三个字，一个字代表一个意思。
 * 并（Union），代表合并
 * 查（Find），代表查找
-* 集（Set），代表这是一个以字典为基础的数据结构，它的基本功能是合并集合中的元素，查找集合中的元素
+* 集（Set），代表这是一个管理不相交集合的数据结构，它的基本功能是合并集合中的元素，查找元素所属的集合
+    * 在并查集的概念中，"集"指的是它管理的是不相交集合(Disjoint Sets)，而不是指它内部使用了Set数据结构。实际上，并查集通常使用数组或哈希表来实现
 
 并查集的典型应用是有关连通分量的问题
 
@@ -24,8 +25,73 @@ Union Find = Disjoint Set
     * [[0, 1], [1, 2], [3, 4]]
 * Image processing (connected pixels)
 
+## 实现Python
+```python
+class UnionFind:
+    def __init__(self, size):
+        self.parent = list(range(size))
+        self.rank = [1] * size
+    
+    def find(self, x):
+        # Path compression: make every node point directly to root
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        
+        if root_x != root_y:
+            # Union by rank
+            if self.rank[root_x] < self.rank[root_y]:
+                self.parent[root_x] = root_y
+            elif self.rank[root_x] > self.rank[root_y]:
+                self.parent[root_y] = root_x
+            else:
+                self.parent[root_y] = root_x
+                self.rank[root_x] += 1
+    
+    def connected(self, x, y):
+        return self.find(x) == self.find(y)
 
-## 实现
+# Alternative implementation using dictionary for non-consecutive elements
+class UnionFindDict:
+    def __init__(self):
+        self.parent = {}
+        
+    def add(self, x):
+        if x not in self.parent:
+            self.parent[x] = x
+            
+    def find(self, x):
+        root = x
+        # Find the root
+        while self.parent[root] != root:
+            root = self.parent[root]
+            
+        # Path compression
+        while x != root:
+            old_parent = self.parent[x]
+            self.parent[x] = root
+            x = old_parent
+            
+        return root
+    
+    def union(self, x, y):
+        self.add(x)
+        self.add(y)
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x != root_y:
+            self.parent[root_y] = root_x
+            
+    def connected(self, x, y):
+        if x not in self.parent or y not in self.parent:
+            return False
+        return self.find(x) == self.find(y)
+```        
+## 实现Java
 
 并查集跟树很像，只不过，在并查集这个数据结构里，节点记录父节点，树记录子节点
 
@@ -34,6 +100,8 @@ Union Find = Disjoint Set
 ```java
 class UnionFind {
     private int[] parent;
+    // or use map
+    private Map<Integer, Integer> parent;
     
     public UnionFind(int size) {
         parent = new int[size];
@@ -77,15 +145,15 @@ class UnionFind {
 int find(x) {
     int root = x;
     while[fa[root] != root] {
-        r = fa[root];
+        root = fa[root];
     }
 
-    while(fa[x] != x) {
+    while(x != root) {
         int parent = fa[x];
         fa[x] = root;
         x = parent;
     }
-    return x;
+    return root;
 }
 ```
 ![路径压缩版本的find](./graphs/unionFindSetCompression.drawio.svg)
@@ -169,14 +237,14 @@ class UnionFind {
         
         if (rootX != rootY) {
             // Union by rank
-        if (rank[rootX] < rank[rootY]) {
-            parent[rootX] = rootY;  // Smaller tree (rootX) attaches to larger tree (rootY)
-        } else if (rank[rootX] > rank[rootY]) {
-            parent[rootY] = rootX;  // Smaller tree (rootY) attaches to larger tree (rootX)
-        } else {  // Same rank
-            parent[rootY] = rootX;  // Arbitrary choice
-            rank[rootX]++;  // Height increases by 1
-        }
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;  // Smaller tree (rootX) attaches to larger tree (rootY)
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;  // Smaller tree (rootY) attaches to larger tree (rootX)
+            } else {  // Same rank
+                parent[rootY] = rootX;  // Arbitrary choice
+                rank[rootX]++;  // Height increases by 1
+            }
         }
     }
     
@@ -335,6 +403,14 @@ Before:     After union(1,4):
                    |
                    5
 ```
+
+## Common applications
+* Finding connected components in a graph
+* Detecting cycles in a graph
+* Network connectivity
+    * [[0, 1], [1, 2], [3, 4]]
+* Image processing (connected pixels)
+
 
 ## 例题
 * Number of Connected Components in an Undirected Graph
