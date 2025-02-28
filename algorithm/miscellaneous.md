@@ -221,13 +221,13 @@ public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode 
 - 牛顿迭代法，KMP 算法，Prim 算法，Floyd-Warshall 算法
 
 # 需要记下来的代码模版
-* [二分查找 lower_bound, upper_bound](./binarySearch.md)
-* [前缀树，前缀和](./trie.md)
-* [滑动窗口（找最长以及最短）](./slidingWindow.md)
-* [单调栈](./monotoneStack.md)
-* [拓扑排序](./topologicalSorting.md)
-* [Union Find](./unionFindSet.md)
-* 滚动哈希 Rolling hash
+## [二分查找 lower_bound, upper_bound](./binarySearch.md)
+## [前缀树，前缀和](./trie.md)
+## [滑动窗口（找最长以及最短）](./slidingWindow.md)
+## [单调栈](./monotoneStack.md)
+## [拓扑排序](./topologicalSorting.md)
+## [Union Find](./unionFindSet.md)
+## 滚动哈希 Rolling hash
 ```java
     private static final int P = 31; // 选择一个质数
     private static final int MOD = 1_000_000_007; // 大素数
@@ -245,7 +245,7 @@ public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode 
     }
 ```
 
-#### 应用
+### 应用
 Robin-karp
 ```java
 public class RabinKarp {
@@ -303,4 +303,5 @@ public class RabinKarp {
     }
 }
 ```
-* [快速选择算法](./codeAPI.md)
+## [快速选择算法](./codeAPI.md)
+

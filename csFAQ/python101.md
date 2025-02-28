@@ -33,6 +33,7 @@ my_list = [x*2 for x in range(3)]  # Creates [0, 2, 4]
 4. Multiplication for repeated elements:
 ```python
 my_list = [0] * 5  # Creates [0, 0, 0, 0, 0]
+my_list = [0] * n  # Creates n repeat of [0, 0, 0, 0, 0, ...]
 my_list = [1, 2] * 3  # Creates [1, 2, 1, 2, 1, 2]
 ```
 
