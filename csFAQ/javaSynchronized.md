@@ -122,19 +122,18 @@ public class SynchronizedOrdering {
 |Array length(if array)    |数组的长度（如果是数组）     |
 ```
 
-### 2.2 Mark Word与ObjectMonitor的关系
-
-#### 2.2.1 Mark Word结构
+#### Mark Word结构
 ```
 |锁状态   | Mark Word内容                        | 说明                  |
 |---------|-----------------------------------|----------------------|
 |无锁     | 对象hashCode、分代年龄          | 正常对象              |
-|偏向锁   | 线程ID、epoch、分代年龄        | 单线程重复访问         |
-|轻量级锁 | 指向栈中锁记录的指针          | 多线程竞争轻度        |
-|重量级锁 | 指向ObjectMonitor的指针        | 多线程竞争激烈        |
+|偏向锁(Biased Lock)   | 线程ID、epoch、分代年龄        | 单线程重复访问         |
+|轻量级锁(Lightweight Lock) | 指向栈中锁记录的指针          | 多线程竞争轻度        |
+|重量级锁(Heavyweight Lock) | 指向ObjectMonitor的指针        | 多线程竞争激烈        |
 ```
+### 2.2 Mark Word与ObjectMonitor的关系
 
-#### 2.2.2 Mark Word与ObjectMonitor的关系
+#### 2.2.1 Mark Word与ObjectMonitor的关系
 * Mark Word是对象头中的一部分，存储在对象自身内存中
 * ObjectMonitor是一个独立的数据结构，在JVM中管理
 
@@ -150,12 +149,6 @@ public class SynchronizedOrdering {
 ```
 
 ### 2.3 锁升级过程
-
-#### 2.3.1 为什么需要锁升级？
-* 线程竞争的概率是非常低的
-* 大部分情况下，锁总是由同一个线程获得
-* 通过锁升级的方式，减少了锁竞争带来的性能开销
-
 #### 2.3.2 锁的三种状态
 ```java
 public class LockExample {
@@ -163,7 +156,7 @@ public class LockExample {
     
     public void method() {
         synchronized(lock) {
-            // 锁会经历以下状态：
+            // 锁会升级，并经历以下状态：
             // 1. 偏向锁 (Biased Lock)：单线程重复访问
             // 2. 轻量级锁 (Lightweight Lock)：多线程竞争，自旋 (Spinning) 等待
             // 3. 重量级锁 (Heavyweight Lock)：竞争激烈，阻塞 (Blocking) 等待
@@ -171,9 +164,33 @@ public class LockExample {
     }
 }
 ```
+#### 2.3.4 锁升级的具体过程
+
+1. **无锁 (Non-locked) → 偏向锁 (Biased Lock)**
+   * 线程第一次访问同步块
+   * 在对象头Mark Word中记录线程ID
+   * 下次相同线程加锁时，只需比对线程ID
+   * 如果ID一致，说明是同一个线程，直接获得锁
+
+2. **偏向锁 (Biased Lock) → 轻量级锁 (Lightweight Lock)**
+   * 当有其他线程竞争锁时
+   * 首先撤销偏向锁，标记为无锁状态
+   * 线程在自己的栈帧 (Stack Frame) 中创建锁记录 (Lock Record)
+   * 通过CAS (Compare-And-Swap) 操作尝试在对象头中设置指向锁记录的指针
+
+3. **轻量级锁 (Lightweight Lock) → 重量级锁 (Heavyweight Lock)**
+   * 当线程自旋一定次数（默认10次）仍未获得锁
+   * JVM会将锁升级为重量级锁
+   * 未获得锁的线程进入阻塞队列 (Monitor's EntryList)
+   * 等待操作系统来调度
+   
+#### 2.3.1 为什么需要锁升级？
+* 线程竞争的概率是非常低的
+* 大部分情况下，锁总是由同一个线程获得
+* 通过锁升级的方式，减少了锁竞争带来的性能开销
+
 
 #### 2.3.3 各种锁的详细解析
-
 1. **偏向锁（Biased Locking）**
    * 什么是偏向锁？
      ```java
@@ -284,25 +301,7 @@ public class LockExample {
         - 优点：不消耗CPU（相比自旋）
         - 缺点：线程需要操作系统从用户态切换到内核态
 
-#### 2.3.4 锁升级的具体过程
 
-1. **无锁 (Non-locked) → 偏向锁 (Biased Lock)**
-   * 线程第一次访问同步块
-   * 在对象头Mark Word中记录线程ID
-   * 下次相同线程加锁时，只需比对线程ID
-   * 如果ID一致，说明是同一个线程，直接获得锁
-
-2. **偏向锁 (Biased Lock) → 轻量级锁 (Lightweight Lock)**
-   * 当有其他线程竞争锁时
-   * 首先撤销偏向锁，标记为无锁状态
-   * 线程在自己的栈帧 (Stack Frame) 中创建锁记录 (Lock Record)
-   * 通过CAS (Compare-And-Swap) 操作尝试在对象头中设置指向锁记录的指针
-
-3. **轻量级锁 (Lightweight Lock) → 重量级锁 (Heavyweight Lock)**
-   * 当线程自旋一定次数（默认10次）仍未获得锁
-   * JVM会将锁升级为重量级锁
-   * 未获得锁的线程进入阻塞队列 (Monitor's EntryList)
-   * 等待操作系统来调度
 ## 3. 锁的优化
 ### 3.1 锁消除
 ```java
