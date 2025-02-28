@@ -1,11 +1,28 @@
-# monotone Stack
-## Algorithm idea
-1. The stack maintains elements in decreasing order (that's why it's called monotone)
-2. When we find a greater element, we pop all smaller elements from stack
-3. For each popped element, the current element is its "next greater element"
-4. If an element never gets popped, it means no greater element exists after it (-1)
+# Monotonic Stack
+## Algorithm Idea
+1. A monotonic stack is a stack that maintains elements in either strictly increasing or strictly decreasing order
+   - For next greater element: maintain decreasing order (pop when current > stack top)
+   - For next smaller element: maintain increasing order (pop when current < stack top)
 
-## 单调栈用来解决一种问题, Next Greater/Smaller Element
+2. Key Operations:
+   - When pushing a new element:
+     * Compare with stack top
+     * Pop elements that violate the order
+     * Push new element
+   
+3. Common Patterns:
+   ```python
+   # Next Greater Element pattern
+   stack = []  # stores indices
+   for i in range(len(arr)):
+       # Keep popping while current element is greater than stack top
+       while stack and arr[i] > arr[stack[-1]]:
+           idx = stack.pop()
+           result[idx] = arr[i]  # arr[i] is the next greater element
+       stack.append(i)
+```
+```
+## 单调栈用来解决一种问题, Next Greater/Smaller Element, previous greater/smaller element
 
 这种问题共享一个特征，在数组里**寻找左边/右边的更大/更小的下一个元素**.
 
