@@ -1,84 +1,4 @@
-# Sort
-
-排序用来优化运行时间，当一个题目提到能不能O(logN)，那么肯定就是要排序来减少O(n)
-## Merge Sort
-
-## Quick Sort
-Hoare partition scheme O(n log n)
-
-关于Quick Sort背后的思想[双指针](./hashTwoPointers.md)
-
-*two pointers关键要清楚指针的定义，这个指针位置左边都是XX，包不包含当前坐标。*
-
-```java
-void quickSort(int[] array) {
-    quickSort(array, 0, array.length-1);
-}
-
-void quickSort(int[] array, int left, int right) {
-    int index = partition(array, left, right);
-    if (left < index - 1){ // Sort left half
-        quickSort(array, left, index - 1);
-    }
-    if (index < right) { // Sort right half
-        quickSort(array, index, right);
-    }
-}
-
-// 相向而行
-int partition(int[] array, int left, int right) {
-    int pivot = array[(left + right) / 2]; // Pick pivot point
-    while (left <= right) {
-        // Find element on left that should be on right
-        while (array[left] < pivot)
-            left++;
-        // Find element on right that should be on left
-        while (array[right] > pivot)
-            right--;
-
-        // Swap elements, and move left and right indices
-        if (left <= right) {
-            swap(array, left, right); // swaps elements
-            left++;
-            right--;
-        }
-    }
-    return left;
-}
-
-// 同向而行
-// [1,4,3,5,2,7]
-int partition(int[] array, int left, int right) {
-    // find a index, so that array[0, index-1] < array[index] and array[index, right) >= array[index]
-
-    int pivot = array[(left + right) / 2]; // Pick pivot point
-    int curR = left;
-    while(curR <= right) {
-        if(array[curR] < pivot) {
-            swap(array, left, curR);
-            left++;
-        }
-        curR++;
-    }
-    return left;
-}
-
-void swap(int array[], int left, int right){
-    int temp = array[left];
-    array[left] = array[right];
-    array[right] = temp;
-}
-```
-
-快速排序的核心思想是“找到一个partition，那么这个partition 左边都小于目标值， 右边都不小于目标值。”
-
-每次partition把问题区间分为三部分
-
-* [0, left) partition前半部分，
-* [left, right) 为partition后半部分
-* [right, length) 待处理元素
-
-## heap sort 堆排序
+# heap sort 堆排序
 Heap sort is a comparison-based sorting technique based on Binary Heap data structure.
 * 二叉堆
 
@@ -97,7 +17,7 @@ A Binary Heap is a Complete Binary Tree where items are stored in a special orde
 * 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2]
 
 也就是说，大顶堆(max-heap)，小顶堆(min-heap)的是根据根节点的特性来命名的。
-### 堆排序  Heapsort API
+## 堆排序  Heapsort API
 
 ```java
 void heapSort() {
@@ -110,7 +30,7 @@ void heapSort() {
 }
 ```
 
-### 上浮建堆(swimUp)
+## 上浮建堆(swimUp)
 ![上浮建堆过程](./graphs/bottom_up_heapify.drawio.svg)
 
 ```java
@@ -143,7 +63,7 @@ void sinkDown(int[] heap, int index, int size) {
 }
 ```
 
-### 堆排序（使用Top-down建堆）
+## 堆排序（使用Top-down建堆）
 * 思路：
     1. 建堆阶段：使用swimUp（Top-down方式）建立初始大顶堆
     2. 排序阶段：重复执行"交换堆顶和末尾元素，并对新堆顶执行sinkDown"
@@ -191,7 +111,7 @@ void sinkDown(int[] arr, int index, int size) {
     }
 }
 ```
-### 堆排序（使用sinkDown建堆）
+## 堆排序（使用sinkDown建堆）
 * 思路：
     1. 建堆阶段：使用sinkDown（Bottom-up方式）建立初始大顶堆
     2. 排序阶段：重复执行"交换堆顶和末尾元素，并对新堆顶执行sinkDown"
@@ -236,7 +156,7 @@ void sinkDown(int[] heap, int index, int size) {
 }
 ```
 
-## Heap in Java
+# Heap in Java
 Java's `PriorityQueue` by default is min-heap, but can be max-heap using a custom comparator
 
 ```
@@ -248,7 +168,7 @@ import java.util.Collections;
 
 ```
 
-## 应用
+# 应用
 Here are the common applications of min heap and max heap besides sorting:
 
 1. Priority Queue Implementation
@@ -278,11 +198,11 @@ Here are the common applications of min heap and max heap besides sorting:
     * 23. 合并 K 个升序链表
 
 The key advantage of heaps in these applications is their O(log n) time complexity for insertions and deletions while maintaining a sorted order of elements.
-## 题目
+# 题目
 * 215. 数组中的第K个最大元素
 * 23. 合并 K 个升序链表
 
-### PriorityQueue
+## PriorityQueue
 ```java
 public class FixedIntPriorityQueue {
     private final int[] heap;

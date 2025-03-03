@@ -222,7 +222,7 @@ public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode 
 
 # 需要记下来的代码模版
 ## [二分查找 lower_bound, upper_bound](./binarySearch.md)
-## [前缀树，前缀和](./trie.md)
+## [前缀树](./trie.md)
 ## [滑动窗口（找最长以及最短）](./slidingWindow.md)
 ## [单调栈](./monotoneStack.md)
 ## [拓扑排序](./topologicalSorting.md)
