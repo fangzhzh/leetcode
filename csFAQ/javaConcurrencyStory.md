@@ -1,0 +1,21 @@
+# Story
+[Google note book Java Thread Pools and Concurrency Guide](https://notebooklm.google.com/notebook/448c2ea8-ad9d-4c2a-a9d0-2aa5b12ec5bf?_gl=1*7g0aos*_ga*MTM4MjA2OTQ3Ny4xNzQwMDI4NTQx*_ga_W0LDH41ZCB*MTc0MDk5MzczNi40LjEuMTc0MDk5Mzc0MC41Ni4wLjA.)
+## Covered Conecpts:
+JMM |  Thread | memory visibliity | volatile | synchronized | Lock | thread pool | blocking queue | executor framework | lock coarsening | lock elimination | memory barriers | happens-before | CAS | AtomicStampedReference
+## Story
+Imagine a bustling coffee shop where multiple baristas (threads) are preparing orders (tasks).
+
+*   Initially, the shop relied on a single chalkboard (main memory) to track orders. Each barista would write down, read, and update the order status on this board. However, with increasing orders, baristas started using their own notepads (working memory/CPU caches) to improve speed. This introduced a problem: **memory visibility**. A barista might update an order's status on their notepad, but other baristas wouldn't see the change immediately, leading to confusion and errors.
+
+To solve this, the shop introduced a "**volatile**" system. Now, when an order status was marked "volatile," baristas were required to immediately update the main chalkboard after making changes on their notepads, ensuring that everyone saw the most current status. While this improved visibility, another problem arose: **instruction reordering**. Baristas, in their effort to optimize their work, might reorder steps in preparing an order, which sometimes led to incorrect drinks.
+
+To address instruction reordering, the shop implemented **memory barriers**. These barriers were like special instructions that prevented baristas from reordering certain steps. For example, a "StoreLoad" barrier ensured that the act of marking an order as complete was always visible to others before they started working on the next step. The Java Memory Model (JMM) uses **happens-before relationships** to ensure memory visibility and prevent reordering.
+
+However, as the shop grew even busier, contention increased. Baristas were constantly waiting to access the chalkboard, leading to delays. To manage this, the shop introduced a "**synchronized**" system. Now, only one barista could access the chalkboard (**synchronized block**) at a time. This ensured atomicity and consistency but created a new bottleneck. The synchronized block provides memory visibility and ensures that operations within the block are atomic. Java accomplishes this with **mutex locks**.
+
+To improve concurrency, the shop decided to use a more sophisticated approach by using **Locks**, where different types of locks were used to optimize certain processes. For example, they introduced **read-write locks** where multiple baristas could read the order list (shared access), but only one could modify it (exclusive access). This improved efficiency but required careful management to avoid deadlocks. The shop also used **optimistic locks** with **CAS (Compare And Swap)** operations. Baristas could optimistically prepare parts of the order, but they had to check the chalkboard to see if another barista had already modified the order. If so, they had to redo their work. However, this led to the **ABA problem**, where a value might change and revert to its original state without the barista noticing. To solve this, they used **AtomicStampedReference** to track versions.
+
+To further streamline operations, the shop implemented a **thread pool**. Instead of creating new baristas (threads) for each order, they maintained a pool of available baristas ready to take on tasks. This reduced the overhead of barista creation and improved overall efficiency. Orders were placed in a **thread-safe queue**. The baristas then picked up orders from the queue and processed them. The thread pool uses a **blocking queue** to manage the tasks. Different types of queues were used, such as **ArrayBlockingQueue** and **LinkedBlockingQueue**. The **Executor framework** was used to manage the thread pool.
+
+To handle peak hours, the coffee shop also utilized the concept of **lock coarsening**, grouping multiple lock acquisitions into a single lock to reduce overhead. Furthermore, they identified situations where locks were unnecessary and applied **lock elimination**.
+
