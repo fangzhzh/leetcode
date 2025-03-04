@@ -204,7 +204,7 @@ Java has four types of thread pools:
 ### 3. What is the principle behind thread pools?
 
 
-From a data structure perspective, thread pools mainly use blocking queues (BlockingQueue). Blocking queues are used to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
+From a data structure perspective, thread pools mainly use blocking queues (BlockingQueue) to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
 1. If the number of running threads < coreSize, create a core thread to execute the task immediately.  
    - A core thread is a thread that is always kept in the pool and reused to execute tasks.  
    - Core threads are created when the pool is first created and are never terminated until the pool is shut down.

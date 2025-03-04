@@ -237,6 +237,11 @@ ReentrantLock的核心实现原理:
 4. **公平性实现**
    - 公平锁：线程获取锁前检查CLH队列
    - 非公平锁：线程先尝试CAS获取锁，失败才检查队列
+### CLH
+Key aspects of the CLH queue:
+* Structure: The CLH queue is a FIFO queue implemented as a doubly-linked list of nodes. Each node in the queue represents a thread waiting to acquire the lock.
+* Node-Based: Each thread waiting for the lock is encapsulated in a Node object that contains the thread's information and its waiting status.
+* Waiting Mechanism: Threads in the CLH queue wait (spin or block) for their predecessor to release the lock. When a thread releases the lock, it wakes up its successor in the queue.
 
 ## 4 分布式锁
 1. **实现方式**
