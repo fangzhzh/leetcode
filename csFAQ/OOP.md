@@ -715,3 +715,13 @@ csv_processor.process()
 
 json_processor = JSONDataProcessor()  
 json_processor.process()  
+```
+
+## A little story
+One day, the kingdom faced a crisis, and King Abstraction called upon his advisors, the SOLID Council , to help:
+
+1. Sir Single Responsibility insisted that each class should focus on one task. For example, the Blacksmith class only forged weapons, while the Tailor class only sewed clothes. This ensured efficiency and clarity.
+2. Lady Open/Closed suggested that the kingdom's systems should be open for extension but closed for modification. For instance, they added a new Banker class to handle finances without changing the existing Merchant class.
+3. Lord Liskov Substitution ensured that any subclass could replace its parent class without breaking the system. For example, a Knight could always replace a Soldier in battle without causing chaos.
+4. Dame Interface Segregation advised against forcing classes to depend on interfaces they didn’t need. She split the Worker interface into FarmerInterface , MerchantInterface , and SoldierInterface , so each class only implemented what it required.
+5. Duke Dependency Inversion emphasized that high-level modules (like the KingdomManager ) should not depend on low-level modules (like Farmers or Merchants ). Instead, both should depend on abstractions, like the FoodSupplier interface.

@@ -177,6 +177,7 @@ public class LockExample {
    * 首先撤销偏向锁，标记为无锁状态
    * 线程在自己的栈帧 (Stack Frame) 中创建锁记录 (Lock Record)
    * 通过CAS (Compare-And-Swap) 操作尝试在对象头中设置指向锁记录的指针
+   * 获取失败，通过自旋 (Spinning) 等待
 
 3. **轻量级锁 (Lightweight Lock) → 重量级锁 (Heavyweight Lock)**
    * 当线程自旋一定次数（默认10次）仍未获得锁
