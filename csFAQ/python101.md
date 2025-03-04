@@ -75,6 +75,9 @@ my_set.clear()  # Removes all elements
 # count
 count = len(my_set)  # Returns 3
 
+# enumerate a set
+
+point_to_idx = {x: i for i, x in enumerate my_set}
 ```
 ## Mapping type: dict
 ```python
