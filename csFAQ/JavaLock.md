@@ -191,43 +191,37 @@ ReentrantLock的核心实现原理:
 
 
 1. **核心组件**
-   ```java
-   public class ReentrantLock implements Lock {
-       private final Sync sync;
-       
-       abstract static class Sync extends AbstractQueuedSynchronizer {
-           // 实现了锁的核心逻辑
-       }
-       
-       static final class NonfairSync extends Sync {
-           // 非公平锁实现
-       }
-       
-       static final class FairSync extends Sync {
-           // 公平锁实现
-       }
-   }
-   ```
+```java
+public class ReentrantLock implements Lock {
+    private final Sync sync;
+    
+    abstract static class Sync extends AbstractQueuedSynchronizer {
+        // 实现了锁的核心逻辑
+    }
+    
+    static final class NonfairSync extends Sync {
+        // 非公平锁实现
+    }
+    
+    static final class FairSync extends Sync {
+        // 公平锁实现
+    }
+}
+```
 
 2. **锁获取过程**
-   - CAS (Compare And Swap)是一种原子操作:
-     - 比较当前值和预期值是否相等
-     - 如果相等，则将其更新为新值
-     - 如果不相等，则更新失败
-   - 获取锁时首先通过CAS将state从0改为1:
-     - state=0表示锁空闲
-     - state>0表示锁被占用，值表示重入次数
-   - 如果CAS失败，检查当前持有锁的线程是否为自己:
-     - 如果是自己持有，state加1（可重入）
-     - 如果不是自己持有，进入CLH等待队列
-   - CLH队列(Craig, Landin, and Hagersten queue)是一个FIFO队列:
-     - 由Node节点组成的双向链表
-     - 每个Node包含线程信息和等待状态
-     - 新来的线程被包装成Node加入队尾
-   - 在CLH队列中等待:
-     - 通过自旋或阻塞等待前驱节点释放锁
-     - 前驱节点释放锁后会唤醒后继节点
-     - 被唤醒后重新尝试获取锁
+  - CAS操作检查
+    - state=0表示锁空闲
+    - state>0表示锁被占用，值表示重入次数
+    - 当前线程尝试获取锁，成功state从0改为1
+  - 如果CAS失败，检查当前持有锁的线程是否为自己:
+    - 如果是自己持有，state加1（可重入）
+    - 如果不是自己持有，进入CLH等待队列
+  - 在CLH队列中等待:
+    - 通过自旋或阻塞等待前驱节点释放锁
+    - 前驱节点释放锁后会唤醒后继节点
+    - 被唤醒后重新尝试获取锁
+  - 被唤醒，重新尝试获取锁
 
 3. **锁释放过程**
    - 将state值减1
@@ -243,6 +237,13 @@ Key aspects of the CLH queue:
 * Node-Based: Each thread waiting for the lock is encapsulated in a Node object that contains the thread's information and its waiting status.
 * Waiting Mechanism: Threads in the CLH queue wait (spin or block) for their predecessor to release the lock. When a thread releases the lock, it wakes up its successor in the queue.
 
+
+- CLH队列(Craig, Landin, and Hagersten queue)是一个FIFO队列:
+  - 由Node节点组成的双向链表
+  - 每个Node包含线程信息和等待状态
+  - 新来的线程被包装成Node加入队尾
+  - 前驱节点释放锁后会唤醒后继节点
+
 ## 4 分布式锁
 1. **实现方式**
    - 基于数据库
@@ -257,6 +258,29 @@ Key aspects of the CLH queue:
    - 性能影响
 
 ## FAQ
+### CAS 原理
+1. **CAS操作的基本原理**
+   - CAS操作是一种原子操作，由硬件提供支持
+   - CAS操作包含三个参数 CAS(memory_location, expected_value, new_value):
+     - 内存位置(V)
+     - 预期原值(A)
+     - 新值(B)
+   - 操作过程:
+     - 首先读取内存位置的值，与预期原值进行比较
+     - 如果相等，则将内存位置的值更新为新值
+     - 如果不相等，则不更新，返回当前值
+   - 操作是原子的，不会被其他线程中断
+
+2. **CAS操作的实现**
+   - CAS操作是通过硬件指令实现的，如x86架构下的cmpxchg指令
+   - 不同架构可能有不同的实现方式
+   - CAS操作通常是原子的，不会被其他线程中断
+   - In Java, CAS is implemented through classes like AtomicInteger , AtomicReference , etc.
+3. **CAS操作的应用**
+   - CAS操作广泛应用于多线程并发编程中
+   - 用于实现无锁数据结构，如ConcurrentHashMap
+   - 用于实现无锁算法，如无锁队列、无锁栈等
+   - 用于实现乐观锁，如乐观并发控制(OCC)
 ### CAS and ABA
 1. **什么是ABA问题?**
    - CAS操作检查值是否发生变化时，可能出现以下情况:
