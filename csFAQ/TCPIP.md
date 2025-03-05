@@ -28,9 +28,10 @@ The TCP/IP model consists of five layers, each with its own specific functions:
 * Open a webpage(application layer)
 * TCP connect from client to server: (transport layer)
     * 3-way handshake (SYN → SYN-ACK → ACK)
-* data is broken down into IP packets(including **IP addressing**) and **routing**, then sent over the network(internet layer)
-* data transmitted over a physical network medium, wifi, ethernet (network interface layer)
-* network card bit transmission (physical layer)
+* The HTTP request is broken into IP packets(including **IP addressing**) and **routing**, then sent over the network(Internet layer)
+* packets transmitted over a physical network medium, wifi, ethernet (Network Interface layer)
+* network card bit transmission (Physical layer)
+
 ## Common Interview Questions
 1. **What is TCP/IP?**  
    TCP/IP is a suite of communication protocols used to interconnect network devices on the Internet.

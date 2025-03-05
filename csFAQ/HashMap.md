@@ -48,31 +48,24 @@ Key characteristics:
 
 ## HashMap实现原理
 ### 存储结构
-* 链表 + 红黑树， 
+* Array + (链表 or 红黑树)
+```
+Array of buckets
+[0] -> null
+[1] -> LinkedList or Red-Black Tree
+[2] -> null
+...
+[n] -> LinkedList or Red-Black Tree
+```
+
+### Array 初始容量
+* 默认大小16
+* 负载因子0.75
+### Array 扩容 resizing O(n)
+size > capacity * load factor => New capacity = old capacity * 2 (max capacity 2^30)
+
+
 ![图示](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/15/170ddda186409662~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp#?w=1372&h=500&s=91501&e=png&b=fdfdfd)
-#### 为什么链表+红黑树，而不是？
-    
-**为什么不能只要链表**
-查询效率差
-
-为什么不是只要**红黑树？**？
-    
-红黑树需要更多存储空间，并且要进行左旋，右旋，变色保持平衡；单链表不需要。
-* 元素数小于8，单链表满足性能。O(n)
-* 大于8，红黑树O(lngn)
-
-只用**二叉查找树?**
-可以，但是特殊情况下，会变成一条线形链表，深遍历。
-
-### **链表转红黑树的长度互转阈值 8？**
-| **链表转红黑树阈值 8？** | 红黑树转链表 | 
-| ---- | ----- | 
-| 8 | 6 | 
-
-链表转红黑树的阈值8的原因
-
-1. 泊松分布，8以上的概率很小。
-2. 元素较少时，链表有更高的效率。
 
 ### 初始容量
 * 默认大小16
@@ -104,7 +97,7 @@ static final int tableSizeFor(int cap) {
 ![图示](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/15/170ddda189ee807a~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp#?w=586&h=336&s=17244&e=jpg)
 拿key到hashcode（32位int值），高16位和低16位进行抑或运算
 
-```
+```java
 // jdk1.8
 static final int hash(Object key) {   
      int h;
@@ -144,6 +137,32 @@ static int indexFor(int h, int length) {
     * 16 - 1=15 => 0000 1111
     * h & (length-1) 就是数组中有效下标
 
+### bucket元素
+Bucket 元素是链表 or 红黑树
+
+#### 为什么链表+红黑树，而不是？
+    
+**为什么不能只要链表**
+查询效率差
+
+为什么不是只要**红黑树？**？
+    
+红黑树需要更多存储空间，并且要进行左旋，右旋，变色保持平衡；单链表不需要。
+* 元素数小于8，单链表满足性能。O(n)
+* 大于8，红黑树O(lngn)
+
+只用**二叉查找树?**
+可以，但是特殊情况下，会变成一条线形链表，深遍历。
+
+### **链表转红黑树的长度互转阈值 8？**
+| **链表转红黑树阈值 8？** | 红黑树转链表 | 
+| ---- | ----- | 
+| 8 | 6 | 
+
+链表转红黑树的阈值8的原因
+
+1. 泊松分布，8以上的概率很小。
+2. 元素较少时，链表有更高的效率。
 
 ## HashMap 基本操作
 ### put方法/插入数据(你知道HashMap的数据插入原理吗?)
@@ -217,7 +236,7 @@ void transfer(Entry[] newTable) {
 ### JDK 1.8
 ![不需重新计算hash，保持原索引，或者原索引+oldcap](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2016/3cc9813a.png)
 
-## hashmpa线程安全
+## HashMap线程安全?NO
 * 多线程下扩容会死循环
 * 多线程下 put 会导致元素丢失
 * put 和 get 并发时会导致 get 到 null
@@ -227,129 +246,128 @@ JDK7, 头部插入
 ### 多线程下 put 会导致元素丢失
 ### put 和 get 并发时会导致 get 到 null
 ## 如何线程安全
-前两种使用全局锁，性能上有较大的影响。
-### Collections.SynchronizedMap()
 
-```java
-Map<String, Integer> testMap = new HashMap<>();
-///...
-Map<String, Integer> map = Collections.synchronizedMap(testMap);
-内部实现等同于HashTable
-
-```
-### HashTable
-### ConcurrentHashMap的实现
-#### JDK 1.7: 分段锁（Segment）
+*  Collections.SynchronizedMap()
+    *
+    ```java
+    Map<String, Integer> testMap = new HashMap<>();
+    ///...
+    Map<String, Integer> map = Collections.synchronizedMap(testMap);
+    内部实现等同于HashTable
+    ```
+* HashTable
+* ConcurrentHashMap
+## ConcurrentHashMap的实现
+### JDK 1.7: 分段锁（Segment）
 * 将数据分成多个段（Segment），每个段一个锁
 * 每个Segment继承自ReentrantLock
 * 默认16个段，最多支持16个线程并发写
 * 优点：分段降低锁竞争
 
-#### JDK 1.8: CAS + synchronized
+### JDK 1.8: CAS + synchronized
 * 摒弃Segment，采用Node数组+链表+红黑树
-* 同步机制：
-  1. **CAS（Compare And Swap）**：
-    * 无锁算法，CPU原子指令
-     * 原理：比较内存值V和预期值E，相同则更新为新值N
-     * 使用场景：初始化table、更新Node等
-     * 优点：无阻塞，性能好
-     * 缺点：自旋消耗CPU，ABA问题
-    * 原理详解：
-       ```java
-       // CAS的伪代码实现
-       public boolean compareAndSwap(int expectedValue, int newValue) {
-           // 原子操作，不会被中断
-           if (value == expectedValue) {
-               value = newValue;
-               return true;
-           }
-           return false;
-       }
-       ```
-     * 具体执行过程：
-       1. 读取当前值到CPU缓存
-       2. 比较CPU缓存中的值与预期值
-       3. 如果相等，则更新为新值
-       4. 如果不等，说明其他线程修改过，返回false
+#### 同步机制：
+1. **CAS（Compare And Swap）**：
+* 无锁算法，CPU原子指令
+    * 原理：比较内存值V和预期值E，相同则更新为新值N
+    * 使用场景：初始化table、更新Node等
+    * 优点：无阻塞，性能好
+    * 缺点：自旋消耗CPU，ABA问题
+* 原理详解：
+    ```java
+    // CAS的伪代码实现
+    public boolean compareAndSwap(int expectedValue, int newValue) {
+        // 原子操作，不会被中断
+        if (value == expectedValue) {
+            value = newValue;
+            return true;
+        }
+        return false;
+    }
+    ```
+    * 具体执行过程：
+    1. 读取当前值到CPU缓存
+    2. 比较CPU缓存中的值与预期值
+    3. 如果相等，则更新为新值
+    4. 如果不等，说明其他线程修改过，返回false
 
-     * ABA问题详解：
-       ```java
-       // 初始值 A
-       // 线程1准备把 A 改成 B
-       // 线程2把 A 改成 B，再改回 A
-       // 线程1 CAS检查发现还是 A，成功改成 B
-       // 问题：值虽然还是 A，但是已经发生过改变
-       
-       // 解决方案：使用版本号
-       class AtomicStampedReference<V> {
-           private V value;
-           private int stamp; // 版本号
-       }
-       ```
+    * ABA问题详解：
+    ```java
+    // 初始值 A
+    // 线程1准备把 A 改成 B
+    // 线程2把 A 改成 B，再改回 A
+    // 线程1 CAS检查发现还是 A，成功改成 B
+    // 问题：值虽然还是 A，但是已经发生过改变
+    
+    // 解决方案：使用版本号
+    class AtomicStampedReference<V> {
+        private V value;
+        private int stamp; // 版本号
+    }
+    ```
 
-     * 在ConcurrentHashMap中的应用：
-       ```java
-       // 初始化table数组
-       private final Node<K,V>[] initTable() {
-           Node<K,V>[] tab; int sc;
-           while ((tab = table) == null || tab.length == 0) {
-               if ((sc = sizeCtl) < 0) // 其他线程在初始化
-                   Thread.yield(); 
-               // CAS设置sizeCtl为-1，标记正在初始化
-               else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
-                   try {
-                       // 初始化逻辑
-                   } finally {
-                       sizeCtl = sc;
-                   }
-                   break;
-               }
-           }
-           return tab;
-       }
-       ```
+    * 在ConcurrentHashMap中的应用：
+    ```java
+    // 初始化table数组
+    private final Node<K,V>[] initTable() {
+        Node<K,V>[] tab; int sc;
+        while ((tab = table) == null || tab.length == 0) {
+            if ((sc = sizeCtl) < 0) // 其他线程在初始化
+                Thread.yield(); 
+            // CAS设置sizeCtl为-1，标记正在初始化
+            else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
+                try {
+                    // 初始化逻辑
+                } finally {
+                    sizeCtl = sc;
+                }
+                break;
+            }
+        }
+        return tab;
+    }
+    ```
 
-  2. **synchronized**：
-     * 使用场景：put操作时，锁定链表或红黑树的首节点
-     * JDK 1.6后性能优化：
-       - 偏向锁：无竞争时，标记线程ID
-       - 轻量级锁：自旋等待
-       - 重量级锁：线程阻塞
-     * 实现原理：
-       - 在对象头中存储锁信息（Mark Word）
-       - 包含：锁状态、线程ID、锁记录、哈希码等
+2. **synchronized**：
+    * 使用场景：put操作时，锁定链表或红黑树的首节点
+    * JDK 1.6后性能优化：
+        - 偏向锁：无竞争时，标记线程ID
+        - 轻量级锁：自旋等待
+        - 重量级锁：线程阻塞
+    * 实现原理：
+        - 在对象头中存储锁信息（Mark Word）
+        - 包含：锁状态、线程ID、锁记录、哈希码等
 
-     * 锁升级过程：
-       ```java
-       // 无锁 -> 偏向锁 -> 轻量级锁 -> 重量级锁
-       public class SynchronizedExample {
-           public synchronized void method() {
-               // 锁升级过程示例
-               // 1. 第一次进入：偏向锁（记录线程ID）
-               // 2. 其他线程竞争：升级为轻量级锁（自旋）
-               // 3. 自旋超时：升级为重量级锁（阻塞）
-           }
-       }
-       ```
+    * 锁升级过程：
+    ```java
+    // 无锁 -> 偏向锁 -> 轻量级锁 -> 重量级锁
+    public class SynchronizedExample {
+        public synchronized void method() {
+            // 锁升级过程示例
+            // 1. 第一次进入：偏向锁（记录线程ID）
+            // 2. 其他线程竞争：升级为轻量级锁（自旋）
+            // 3. 自旋超时：升级为重量级锁（阻塞）
+        }
+    }
+    ```
 
-     * 在ConcurrentHashMap中的应用：
-       ```java
-       final V putVal(K key, V value, boolean onlyIfAbsent) {
-           // ...
-           synchronized (f) { // f是链表的首节点
-               if (tabAt(tab, i) == f) {
-                   if (fh >= 0) { // 链表
-                       // 链表插入逻辑
-                   }
-                   else if (f instanceof TreeBin) { // 红黑树
-                       // 红黑树插入逻辑
-                   }
-               }
-           }
-           // ...
-       }
-       ```
-
+    * 在ConcurrentHashMap中的应用：
+    ```java
+    final V putVal(K key, V value, boolean onlyIfAbsent) {
+        // ...
+        synchronized (f) { // f是链表的首节点
+            if (tabAt(tab, i) == f) {
+                if (fh >= 0) { // 链表
+                    // 链表插入逻辑
+                }
+                else if (f instanceof TreeBin) { // 红黑树
+                    // 红黑树插入逻辑
+                }
+            }
+        }
+        // ...
+    }
+    ```
 #### 对比
 | 机制 | 优点 | 缺点 |
 |------|------|------|
@@ -357,6 +375,30 @@ Map<String, Integer> map = Collections.synchronizedMap(testMap);
 | synchronized | 实现简单，保证可见性 | 阻塞，性能相对较低 |
 | 分段锁 | 并发度高，锁竞争少 | 实现复杂，内存占用大 |
 
+## HashMap vs ConcurrentHashMap 数据结构对比
+
+| 版本 | HashMap 数据结构 | ConcurrentHashMap 数据结构 |
+|------|------------------|----------------------------|
+| JDK 1.7 | 数组 + 链表 | 分段锁 + 数组 + 链表 |
+| JDK 1.8 | 数组 + (链表 or 红黑树) | 数组 + (链表 or 红黑树) |
+
+## 详细对比
+
+| 特性 | HashMap | ConcurrentHashMap |
+|------|---------|-------------------|
+| **JDK 1.7** | | |
+| 数据结构 | 数组 + 链表 | 分段锁 + 数组 + 链表 |
+| 线程安全 | 非线程安全 | 线程安全 |
+| 锁机制 | 无锁 | 分段锁（Segment） |
+| 并发度 | 单线程 | 默认16个段，支持16线程并发 |
+| **JDK 1.8** | | |
+| 数据结构 | 数组 + (链表 or 红黑树) | 数组 + (链表 or 红黑树) |
+| 线程安全 | 非线程安全 | 线程安全 |
+| 锁机制 | 无锁 | CAS + synchronized |
+| 并发度 | 单线程 | 更高并发度 |
+| 树化阈值 | 链表长度 >= 8 | 链表长度 >= 8 |
+| 反树化阈值 | 链表长度 <= 6 | 链表长度 <= 6 |
+| 扩容机制 | 重新计算hash | 利用高位bit判断 |
 ## 有序HashMap
 TreeMap和LinkedHashMap
 ### LinedHashMap

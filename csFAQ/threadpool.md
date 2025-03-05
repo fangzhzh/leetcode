@@ -203,8 +203,21 @@ Java has four types of thread pools:
 
 ### 3. What is the principle behind thread pools?
 
+From a data structure perspective, thread pools mainly use **blocking queues (BlockingQueue)** to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
+```mermaid
+flowchart TD
+    A[Submit Task] --> B{Threads < coreSize?}
+    B -- Yes --> C[Create Core Thread]
+    B -- No --> D{Queue Full?}
+    D -- No --> E[Add Task to Queue]
+    D -- Yes --> F{Threads < maxSize?}
+    F -- Yes --> G[Create Non-Core Thread]
+    F -- No --> H[Reject Task]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style H fill:#f00,stroke:#333,stroke-width:4px
+```
 
-From a data structure perspective, thread pools mainly use blocking queues (BlockingQueue) to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
 1. If the number of running threads < coreSize, create a core thread to execute the task immediately.  
    - A core thread is a thread that is always kept in the pool and reused to execute tasks.  
    - Core threads are created when the pool is first created and are never terminated until the pool is shut down.
@@ -220,15 +233,46 @@ For example, for a thread pool size of 10:
 5. What happens to the core threads after the thread pool is shut down?
 When a thread pool is shut down, the core threads are allowed to finish any tasks they are currently running. After all tasks are finished, the core threads are terminated and the pool is shut down gracefully.
 
-### 4. What are the types of work queues in thread pools?
-1. **ArrayBlockingQueue**: A bounded blocking queue based on an array structure, ordered by FIFO (first in, first out).
-2. **LinkedBlockingQueue**: A blocking queue based on a linked list structure, also ordered by FIFO, typically with higher throughput than ArrayBlockingQueue.
-3. **SynchronousQueue**: A blocking queue that does not store elements. Each insert operation must wait for a corresponding remove operation.
-4. **PriorityBlockingQueue**: An unbounded blocking queue that supports priority ordering.
-
-### 5. How to understand bounded and unbounded queues?
+### 4. How to understand bounded and unbounded queues?
 - **Bounded Queue**: Limits the number of tasks that can be queued. If the queue is full, tasks may be rejected or may block until space becomes available.
 - **Unbounded Queue**: Does not limit the number of tasks that can be queued, but may lead to resource exhaustion if too many tasks are submitted.
+
+### 5. What are the types of work queues in thread pools(任务策略)?
+#### Blocking queue
+* **ArrayBlockingQueue**: A bounded blocking queue based on an array structure, ordered by FIFO (first in, first out).
+* **LinkedBlockingQueue**: A blocking queue based on a linked list structure, also ordered by FIFO, typically with higher throughput than ArrayBlockingQueue.
+* **SynchronousQueue**: A blocking queue that does not store elements. Each insert operation must wait for a corresponding remove operation.
+* **PriorityBlockingQueue**: An unbounded blocking queue that supports priority ordering.
+#### Non blocking queue
+* `ConcurrentLinkedQueue`: An unbounded, thread-safe, non-blocking queue based on linked nodes
+* `ConcurrentLinkedDeque`: A thread-safe, non-blocking deque (double-ended queue)
+* `LinkedTransferQueue`: A unbounded queue that supports both blocking and non-blocking operations
+
+**Characteristics of Non-Blocking Queues**:
+- Use CAS (Compare-And-Swap) operations instead of locks
+- Generally provide better performance under high contention
+- Don't block threads when the queue is empty or full
+- May require more complex task handling logic in thread pools
+
+
+**Example of Using Non-Blocking Queue**:
+```java
+ExecutorService executor = new ThreadPoolExecutor(
+    corePoolSize,
+    maxPoolSize,
+    keepAliveTime,
+    TimeUnit.MILLISECONDS,
+    new ConcurrentLinkedQueue<>()  // Using non-blocking queue
+);
+```
+
+However, in most standard thread pool implementations, blocking queues are preferred because they:
+- Provide better control over resource usage
+- Support bounded capacity(imp in non-blocking queue is more complex)
+- Integrate better with thread pool's task handling logic
+- Prevent busy-waiting when the queue is empty
+
+The standard thread pools (`newFixedThreadPool`, `newCachedThreadPool`, etc.) typically use blocking queues by default.
 
 ### 6. How are thread-safe queues typically implemented in multithreading?
 Java provides thread-safe queues, which can be categorized into blocking and non-blocking queues. A typical example of a blocking queue is `BlockingQueue`, while a non-blocking queue example is `ConcurrentLinkedQueue`. Blocking queues implement blocking functionality through methods like `put(e)` and `take()`, while `ConcurrentLinkedQueue` is based on linked nodes and is an unbounded, thread-safe non-blocking queue.
@@ -271,3 +315,33 @@ public class ExecutorExample {
 
 ### 8. What is the relationship between thread-safe queues and the Executor framework?
 Thread-safe queues are a fundamental component of the Executor framework, as they are used to manage the tasks that are submitted to the executor for execution. The Executor framework provides a higher-level abstraction for managing threads and executing tasks, and it relies on thread-safe queues to handle the underlying task management.
+
+
+## ThreadLocal
+
+ThreadLocal is a Java class that provides thread-local variables. These variables differ from their normal counterparts in that each thread that accesses one (via its get or set method) has its own, independently initialized copy of the variable. ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g., a user ID or transaction ID).
+
+```java
+public class ThreadLocalExample {
+    // Create a ThreadLocal variable
+    private static final ThreadLocal<Integer> threadLocalValue = ThreadLocal.withInitial(() -> 0);
+
+    public static void main(String[] args) {
+        // Create and start multiple threads
+        for (int i = 0; i < 3; i++) {
+            new Thread(() -> {
+                // Set thread-specific value
+                threadLocalValue.set((int) (Math.random() * 100));
+                // Get thread-specific value
+                System.out.println("Thread " + Thread.currentThread().getId() + 
+                                 " value: " + threadLocalValue.get());
+                // Clear the thread-local variable to avoid memory leaks
+                threadLocalValue.remove();
+            }).start();
+        }
+    }
+}
+```
+
+
+ThreadLocal works by maintaining a map (actually a ThreadLocalMap ) inside each thread. When you call get() or set() , it looks up or stores the value in the current thread's map. This is why each thread has its own independent copy of the variable.
