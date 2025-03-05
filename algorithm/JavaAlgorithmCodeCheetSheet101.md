@@ -29,7 +29,7 @@ body {
 ## Time Complexity of Data structure
 | Data structure	| Access |	Search |	Insertion	|Deletion |
 |---|---|---|---|---|
-| Array | 	O(1)	| O(N)	| O(N)	| O(N) | 
+| Array(ArrayList) | 	O(1)	| O(N)	| O(N)	| O(N) | 
 | Stack	| O(N)| 	O(N)	| O(1)	| O(1) |
 | Queue	| O(N)| 	O(N)	| O(1)	| O(1) |
 | Singly Linked list	| O(N)| 	O(N)	| O(1) |	O(1) |
