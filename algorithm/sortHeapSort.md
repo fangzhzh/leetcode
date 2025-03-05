@@ -28,6 +28,35 @@ void heapSort() {
         sinkDown(heap, 0, i); // 新root需要下沉
     }
 }
+
+void heapifySwimUp() {
+    for(int i = 0; i < n; i++) {
+        // element is inserted last and swim up
+        swimUp(arr, i, arr[i]);
+    }
+}
+void heapifySinkDown() {
+    // 从最后一个非叶子结点开始调整大顶堆，最后一个非叶子结点的下标就是 arr.length / 2-1
+    for (int i = arr.length / 2 - 1; i >= 0; i--) {
+        sinkDown(arr, i, arr.length);
+    }
+}
+/**
+ * nums: the nums
+ * index: insert the value into the index and just **heapify**
+ * /
+void swimUp(int[] nums, int index, int value)
+
+/**
+ * nums: the nums
+ * index: the element at the index to sinkDown
+ * size: the remainling element needed to handle
+ * 
+ * 假设[index+1, size)中间已经有序，
+ * 那么Sinkdown(index), 可以排序[index, size)
+ * /
+void sinkDown(int[] heap, int index, int size) 
+
 ```
 
 ## 上浮建堆(swimUp)
@@ -96,7 +125,7 @@ void swimUp(int[] arr, int index, int value) {
     }
 }
 
-// 用于维护堆堆性质
+
 void sinkDown(int[] arr, int index, int size) {
     while(2*index+1 < size) {
         int left = 2*index+1;
