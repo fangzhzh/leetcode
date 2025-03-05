@@ -1,6 +1,5 @@
 # priorityQueue API
 
-
 `Priority Queue is ordered as per their natural ordering or based on a custom Comparator supplied at the time of creation.`
 
 **有限队列是一个小顶堆**
@@ -40,4 +39,8 @@ PriorityQueue<String> queue  = new PriorityQueue<>(length);
 PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length, 
         ( a,  b) -> a.val - b.val);
 ```
+
+
+## [Priority 实现](./sortHeapSort.md)
+
 
