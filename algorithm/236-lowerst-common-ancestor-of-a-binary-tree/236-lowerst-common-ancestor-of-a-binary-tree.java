@@ -53,10 +53,14 @@ class Solution {
 /**
  * 
  * ## Analysis:
- * - find one/two/null from left, another/tow/null from right
+ * - find one/two/null from left, another/two/null from right
  * - if left != null, right != null, the root is the lca
  * - if left == null, right is the lca
  * - if right == null, left is the lca
+ * ## why?
+ * 1. p and q will exist
+ * 2. all node.val are unique & p != q
+ * ==> for root, find p frist in left, q is not in right, and q is exist, then q must be descendant of p
  */
 
  /**

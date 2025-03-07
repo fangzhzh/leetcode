@@ -53,6 +53,16 @@ array_2d = [[0 for _ in range(cols)] for _ in range(rows)]
 
 ```
 These methods can be used based on your specific needs, such as creating empty lists, lists with initial values, or lists with computed values.
+
+### add, remove
+```python
+# add
+my_list.append(4)  # Adds 4 to the end
+my_list.insert(1, 5)  # Inserts 5 at index 1
+# remove
+my_list.remove(3)  # Removes the first occurrence of 3
+my_list.pop(2)  # Removes and returns the element at index 2
+```
 ## Text type: str
 ## Set types: set, frozenset
 ```python
@@ -155,3 +165,15 @@ for i in range(4):
         # do something
 
 ```
+## Stack, queue
+
+| Data Structure | Java | Python | C++ |
+|---------------|------|--------|-----|
+| **Stack** | Stack | Stack: stack = [3, 4, 5] | stack |
+| Push | `st.push(val)` | `st.append(val)` | `st.push_back()` |
+| Pop | `st.pop()` | `st.pop()` | `st.pop_back()` |
+| Peek | `st.peek()` | `st[-1]` | `st.top()` |
+| **Queue** | Queue | deque: queue = deque() | queue |
+| Add | `q.add(val)` | `q.append(val)` | `q.push(val)` |
+| Remove | `q.poll()` | `q.popleft()` | `q.pop()` |
+| Peek | `q.peek()` | `q[0]` | `q.front()` |
