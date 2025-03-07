@@ -170,7 +170,7 @@ General signature of DFS solution
 
 
 ```java
-    // preOrder is 
+    // preOrder is Root -> Left -> Right, so push root immediately at 179
     void preOrderDFS(Node root) {
         if(root == null)
             return;
@@ -196,6 +196,7 @@ General signature of DFS solution
     }
 
 // usually we denote BST using inOrder traversal
+    // inOrder is  Left -> Root -> Right, so need to process left sub tree first, so keep going left before process any node
     void inOrderDFS(Node root) {
         if(root == null)
             return;
