@@ -725,3 +725,5 @@ One day, the kingdom faced a crisis, and King Abstraction called upon his adviso
 3. Lord Liskov Substitution ensured that any subclass could replace its parent class without breaking the system. For example, a Knight could always replace a Soldier in battle without causing chaos.
 4. Dame Interface Segregation advised against forcing classes to depend on interfaces they didn’t need. She split the Worker interface into FarmerInterface , MerchantInterface , and SoldierInterface , so each class only implemented what it required.
 5. Duke Dependency Inversion emphasized that high-level modules (like the KingdomManager ) should not depend on low-level modules (like Farmers or Merchants ). Instead, both should depend on abstractions, like the FoodSupplier interface.
+
+小李拍电影，找了不同的人，每个人不一样的任务，因为**single responsiblity**。其中动画设计公司提出他们自己根据需求做设计，会做得更好，open to extension, close to modification. open-closed原则，负责灯光的小灯生病了，另一个灯光替代他，因为liskov 替代原则，小李认为自己（导演）的功能是：招人/拍戏/发行，最后想到自己应该是导演+招聘+发行方，于是分开，哪一块自己做不了了，可以找相应功能的部门支持，比如可以找专门星探公司找演员，这是interface segragation。小李把排序过程抽象成 cut/action，这样，所有的演员，相关人员，只要实现了这两个接口，理解这个概念，就能配合演戏。而不需要单独对所有的相关人员说停。即使是10年老演员，新演员，只要实现了这两个接口，就可以合作。
