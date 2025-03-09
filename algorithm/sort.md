@@ -25,6 +25,33 @@ void quickSort(int[] array, int left, int right) {
     }
 }
 
+// Iterative implementation of quicksort
+void quickSortIter(int[] array, int left, int right) {
+    Stack<Integer> stack = new Stack<>();
+    
+    // Push initial values
+    stack.push(left);
+    stack.push(right);
+    
+    while (!stack.isEmpty()) {
+        right = stack.pop();
+        left = stack.pop();
+        
+        int index = partition(array, left, right);
+        
+        if (left < index - 1) {
+            stack.push(left);
+            stack.push(index - 1);
+        }
+        
+        if (index < right) {
+            stack.push(index);
+            stack.push(right);
+        }
+    }
+}
+
+
 // 相向而行
 int partition(int[] array, int left, int right) {
     int pivot = array[(left + right) / 2]; // Pick pivot point

@@ -21,7 +21,7 @@
 
 ##  二分查找的模版
 
-```
+```java
 int binarySearch(int[] nums, int target) {
     int left = 0, right = ...; // 定义搜索区间  right = nums.length / nums.length - 1
 

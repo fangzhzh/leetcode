@@ -19,8 +19,6 @@
 
 ## Others
 - [[Custom widget in Android]](TOO DETIALS, P2)
-	- Android ListView
-	- List View VS. Recycler View
 	+ SpannableString
 	+ CardView
 	+ Tabbar & viewPager
@@ -38,7 +36,6 @@
 		- [B:Google Play Style Tabs using TabLayout](http://guides.codepath.com/android/Google-Play-Style-Tabs-using-TabLayout)
 	+ [B:Android Sliding Sidebar (Hamburger) Menu with Navigation Drawer Icon](http://codetheory.in/android-navigation-drawer/)
 
-- [[Choosing the Right Background Scheduler in Android]]
 - [Deeplink](https://github.com/airbnb/DeepLinkDispatch)
 - [Webview]
 	+ [How to load external webpage inside WebView](https://stackoverflow.com/questions/7305089/how-to-load-external-webpage-inside-webview)
