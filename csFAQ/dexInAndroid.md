@@ -117,7 +117,51 @@ In the context of computer science, the term Kilo, K, denotes 1024 (or 2^10). Be
       }
     }
 ```
+## Dalvik, ART, JIT, and AOT in Android
 
+These terms represent key components of Android's runtime environment evolution:
+
+## Dalvik
+
+Dalvik is the original virtual machine (VM) used by Android until version 4.4 (KitKat). Key characteristics:
+- Register-based VM (unlike JVM which is stack-based)
+- Executes Dalvik bytecode (.dex files)
+- Uses Just-In-Time (JIT) compilation starting from Android 2.2
+- Optimized for mobile devices with limited memory and CPU power
+- Each app runs in its own VM instance, providing isolation
+
+## ART (Android Runtime)
+
+ART replaced Dalvik as Android's runtime starting with Android 5.0 (Lollipop). Key improvements:
+- Better performance and memory efficiency
+- Native support for multi-dex applications
+- Improved garbage collection algorithms
+- Better debugging and profiling support
+- Uses Ahead-Of-Time (AOT) compilation as its primary approach
+- Still maintains compatibility with Dalvik bytecode (.dex files)
+
+## JIT (Just-In-Time) Compilation
+
+JIT is a compilation technique used by both Dalvik and ART:
+- Compiles bytecode to native machine code during app execution
+- Only compiles code paths that are frequently executed
+- Reduces startup time but may cause performance hiccups
+- Uses more memory during runtime
+- Dalvik used JIT as its primary approach
+- ART uses JIT in hybrid mode starting from Android 7.0 (Nougat)
+
+## AOT (Ahead-Of-Time) Compilation
+
+AOT is a compilation technique primarily used by ART:
+- Compiles all bytecode to native machine code during app installation
+- Results in faster execution at runtime
+- Increases app installation time
+- Consumes more storage space
+- Reduces battery usage during app execution
+- Primary approach in ART from Android 5.0-6.0
+- Used in hybrid mode with JIT since Android 7.0
+
+In Android 7.0 and later, ART uses a hybrid approach combining both JIT and AOT compilation to balance installation time, storage space, and runtime performance.
 # Proguard
 
 [Proguard Manu][https://stuff.mit.edu/afs/sipb/project/android/sdk/android-sdk-linux/tools/proguard/docs/index.html#manual/introduction.html]
@@ -125,7 +169,7 @@ ProGuard is a Java class file shrinker, optimizer, obfuscator, and preverifier:
 
 ## Main Functions
 
-* [[Android 混淆那些事儿]]
+* Android 混淆那些事儿
 	* 压缩(Shrink): 侦测并移除代码中⽆无⽤用的类、字段、⽅方法、和特性(Attribute)。
 	* 优化(Optimize): 分析和优化字节码。
 	* 混淆(Obfuscate): 使⽤用a、b、c、d这样简短⽽而⽆无意义的名称，对类、字段和⽅方 法进⾏行行重命名。
