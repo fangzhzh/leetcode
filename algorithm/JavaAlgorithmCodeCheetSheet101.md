@@ -73,13 +73,39 @@ List<Integer> list=new ArrayList<>(10);
 
 
 ## Map
-- map.containsKey()
-- <Map.Entry<Character, Integer> 
+* map.containsKey()
+* iterate element:
+	* <Map.Entry<Character, Integer> 
 	+ List<Map.Entry> cached
 	+ Map.Entry<Character, Integer> entry = pq.poll();
 	+ entry.getValue()
 	+ entry.getKey()
 	+ entry.setValue
+* iterate keys:
+```java
+// Using keySet()
+Map<String, Integer> map = new HashMap<>();
+for (String key : map.keySet()) {
+    System.out.println(key + ": " + map.get(key));
+}
+```
+* iterate values:
+```java
+// Using values()
+Map<String, Integer> map = new HashMap<>();
+for (Integer value : map.values()) {
+    System.out.println(value);
+}
+```
+* iterate entries:
+```java
+// Using entrySet()
+Map<String, Integer> map = new HashMap<>();
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+```
+	
 ### HashMap
 * implement Map interface
 * HashTable
@@ -180,6 +206,57 @@ To get a guaranteed O(n log n) time for adding n elements you may state the size
 PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length, 
         ( a,  b) -> a.val - b.val);
 
+#### PriorityQueue 比较器的简单理解方法
+
+1. **小顶堆**（最小元素优先出队）：
+   ```java
+   // 按照自然顺序排列（小的在前）
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> a - b);
+   // 或者更简单地使用默认构造
+   PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+   ```
+
+2. **大顶堆**（最大元素优先出队）：
+   ```java
+   // 按照逆序排列（大的在前）
+   PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+   ```
+
+#### 直观理解方法
+
+想象你在**排队**，比较器决定谁站在前面：
+
+- 如果你想让**小的数**排在前面（小顶堆）：`(a, b) -> a - b`
+  - 当 a < b 时，返回负数，a 排在 b 前面
+  - 当 a > b 时，返回正数，b 排在 a 前面
+
+- 如果你想让**大的数**排在前面（大顶堆）：`(a, b) -> b - a`
+  - 当 a < b 时，返回正数，b 排在 a 前面
+  - 当 a > b 时，返回负数，a 排在 b 前面
+
+#### 使用 Comparator 方法
+
+如果觉得减法不够直观，可以使用 Comparator 的方法：
+
+```java
+// 小顶堆
+PriorityQueue<Integer> minHeap = new PriorityQueue<>(Comparator.naturalOrder());
+
+// 大顶堆
+PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
+```
+
+对于自定义对象，可以这样写：
+
+```java
+// 小顶堆 - 按频率升序
+PriorityQueue<Node> minHeap = new PriorityQueue<>(Comparator.comparing(node -> node.freq));
+
+// 大顶堆 - 按频率降序
+PriorityQueue<Node> maxHeap = new PriorityQueue<>(Comparator.comparing(node -> node.freq, Comparator.reverseOrder()));
+// 或者
+PriorityQueue<Node> maxHeap = new PriorityQueue<>(Comparator.comparing((Node node) -> node.freq).reversed());
+```
 
 ## innitial an array
 
@@ -248,6 +325,10 @@ int[][] wrong = new int[][]; // not OK, you must specify 1st dimension
 
 Perhaps by design, Strings are immutable, and all of the top-level Collection subclasses are mutable. So where you see "length" you know that's constant, and where you see "size" it isn't.
 
+```
+List nums;
+int size = nums.size();
+```
 
 ## sort
 - Collections.sort operates on a List
@@ -305,6 +386,13 @@ The left and right subtree each must also be a binary search tree.
 
 `deleteCharAt(int index)`
 
+## StrintBuffer VS StringBuilder
+### Thread Safety:
+* StringBuffer is thread-safe because its methods are synchronized, meaning only one thread can access it at a time. 
+* StringBuilder is not thread-safe, as its methods are not synchronized, making it faster but potentially unsafe in multithreaded environments. 
+### Performance:
+* Due to synchronization overhead, StringBuffer is generally slower than StringBuilder in single-threaded scenarios. 
+* StringBuilder is faster because it doesn't have the overhead of synchronization. 
 ## Set
 - TreeSet
 	+ A  NavigableSet implementation based on a __TreeMap__. The elements are <span style="color:blue">**ordered** </span>using their natural ordering, or by a Comparator provided at set creation time, depending on which constructor is used.

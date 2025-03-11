@@ -1,0 +1,53 @@
+# LeetCode Problems List
+
+- [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/) - 29.0%, Hard
+- [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) - 41.9%, Easy
+- [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) - 64.3%, Hard
+- [51. N-Queens](https://leetcode.com/problems/n-queens/) - 71.7%, Hard
+- [54. Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) - 53.0%, Medium
+- [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/) - 48.8%, Medium
+- [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/) - 42.8%, Medium
+- [68. Text Justification](https://leetcode.com/problems/text-justification/) - 47.1%, Hard
+- [72. Edit Distance](https://leetcode.com/problems/edit-distance/) - 58.2%, Medium
+- [75. Sort Colors](https://leetcode.com/problems/sort-colors/) - 66.4%, Medium
+- [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) - 44.7%, Hard
+- [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) - 40.9%, Hard
+- [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) - 47.2%, Medium
+- [198. House Robber](https://leetcode.com/problems/house-robber/) - 52.0%, Medium
+- [199. Binary Tree Right Side View](https://leetcode.com/problems/binary-tree-right-side-view/) - 65.7%, Medium
+- [200. Number of Islands](https://leetcode.com/problems/number-of-islands/) - 61.6%, Medium
+- [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) - 78.7%, Easy
+- [207. Course Schedule](https://leetcode.com/problems/course-schedule/) - 48.5%, Medium
+- [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) - 52.7%, Medium
+- [211. Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/) - 46.7%, Medium
+- [224. Basic Calculator](https://leetcode.com/problems/basic-calculator/) - 44.9%, Hard
+- [227. Basic Calculator II](https://leetcode.com/problems/basic-calculator-ii/) - 45.3%, Medium
+- [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) - 74.7%, Medium
+- [253. Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) - 51.9%, Medium
+- [295. Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) - 53.0%, Hard
+- [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) - 57.2%, Medium
+- [309. Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/) - 59.8%, Medium
+- [317. Shortest Distance from All Buildings](https://leetcode.com/problems/shortest-distance-from-all-buildings/) - 43.9%, Hard
+- [380. Insert Delete GetRandom O(1)](https://leetcode.com/problems/insert-delete-getrandom-o1/) - 54.9%, Medium
+- [415. Add Strings](https://leetcode.com/problems/add-strings/) - 51.8%, Easy
+- [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) - 47.2%, Medium
+- [417. Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/) - 56.9%, Medium
+- [452. Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/) - 60.0%, Medium
+- [475. Heaters](https://leetcode.com/problems/heaters/) - 39.4%, Medium
+- [678. Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/) - 38.6%, Medium
+- [772. Basic Calculator III](https://leetcode.com/problems/basic-calculator-iii/) - 51.9%, Hard
+- [863. All Nodes Distance K in Binary Tree](https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/) - 65.9%, Medium
+- [875. Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) - 48.8%, Medium
+- [902. Numbers At Most N Given Digit Set](https://leetcode.com/problems/numbers-at-most-n-given-digit-set/) - 43.1%, Hard
+- [981. Time Based Key-Value Store](https://leetcode.com/problems/time-based-key-value-store/) - 49.4%, Medium
+- [983. Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/) - 67.4%, Medium
+- [1010. Pairs of Songs With Total Durations Divisible by 60](https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/) - 53.2%, Medium
+- [1584. Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/) - 68.4%, Medium
+- [1642. Furthest Building You Can Reach](https://leetcode.com/problems/furthest-building-you-can-reach/) - 50.1%, Medium
+- [1802. Maximum Value at a Given Index in a Bounded Array](https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/) - 38.9%, Medium
+- [2402. Meeting Rooms III](https://leetcode.com/problems/meeting-rooms-iii/) - 43.9%, Hard
+- [2673. Make Costs of Paths Equal in a Binary Tree](https://leetcode.com/problems/make-costs-of-paths-equal-in-a-binary-tree/) - 58.6%, Medium
+- [2931. Maximum Spending After Buying Items](https://leetcode.com/problems/maximum-spending-after-buying-items/) - 61.5%, Hard
+- [3389. Minimum Operations to Make Character Frequencies Equal](https://leetcode.com/problems/minimum-operations-to-make-character-frequencies-equal/) - 24.3%, Hard
+- [3441. Minimum Cost Good Caption](https://leetcode.com/problems/minimum-cost-good-caption/) - 18.4%, Hard
+- [3474. Lexicographically Smallest Generated String](https://leetcode.com/problems/lexicographically-smallest-generated-string/) - 26.1%, Hard
