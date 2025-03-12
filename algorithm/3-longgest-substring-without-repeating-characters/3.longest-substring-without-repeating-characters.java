@@ -53,5 +53,68 @@ class Solution {
         
     }
 }
+
+
+// Solution 2
+// same idea, but different implementation,
+// valid 标准不一样，expand的不一样
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+
+        int left = 0, right = 0, count = 0;
+        int ans = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        
+        while(right < s.length()) {
+            // expand
+            char c = s.charAt(right);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+            if(map.getOrDefault(c, 0) >  1) {
+                count++;
+            }
+
+            if(count > 0) {
+                char cl = s.charAt(left);
+                map.put(cl, map.get(cl)-1);
+                if(map.get(cl) > 0) {
+                    count--;
+                }
+                // shrink
+                left++;
+            }
+            right++;
+            ans = Math.max(ans, right - left);
+        }
+        return ans;
+
+    }
+}
+
+// Version 3 
+// also slicing window, using set to count duplication, 
+// left, right to keep the windows,
+// I thought about a solution like this, but give up half way
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int left = 0, right = 0;
+        int ans = 0;
+        Set<Character> set = new HashSet<>();
+        while(right < s.length()) {
+            char c = s.charAt(right);
+            if(!set.contains(c)) {
+                set.add(c);
+                ans = Math.max(ans, right - left + 1);
+            } else {
+                while(set.contains(c)) {
+                    set.remove(s.charAt(left));
+                    left++;
+                }
+                set.add(c);
+            }
+            right++;
+        }
+        return ans;
+    }
+}
 // @lc code=end
 
