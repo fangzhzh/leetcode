@@ -50,6 +50,27 @@ int binarySearch(int[] nums, int target) {
 ## 代码示例
 
 ```java
+// Template 1
+// [left, right], return index of target or -f if not found
+int binary_search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) {
+            return mid;  // Found target, return immediately
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+}
+
+// Template 2 for lower bound and upper bound
+// [left, right)
+// return boundary position 
+// frist element >= target for lower bound
+// first element <= target for upper bound
 int lower_bound(int[] numbers, int target) {
     int left = 0, right = nums.length;
     while(left < right) {
