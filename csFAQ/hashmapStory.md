@@ -44,7 +44,7 @@ The HashMap's structure combines **arrays with linked lists and red-black trees*
 
 Alice configured the HashMap's **initial capacity** to 16 with a **load factor** of 0.75. Passing 'k' as the initial capacity initializes the HashMap to the nearest power of 2 greater than k. This ensures efficient memory use and minimizes collisions.
 
-To distribute keys effectively, Alice implemented a **hash function**. Taking the key's 32-bit integer hash code, she applied a **扰动函数** (perturbation function), performing an XOR operation between the high and low 16 bits. This reduces **collisions** by ensuring both high and low bits contribute to the hash calculation. The index is calculated using a bitwise AND operation: `散列值 & 数组长度-1`, equivalent to `hash % length`. Bitwise operations are favored for their speed over modulo. The array length is a power of 2 so that `(length-1)` is the array length modulus.
+To distribute keys effectively, Alice implemented a **hash function**. Taking the key's 32-bit integer hash code, she applied a **扰动函数** (hash spreading function), performing an XOR operation between the high and low 16 bits. This reduces **collisions** by ensuring both high and low bits contribute to the hash calculation. The index is calculated using a bitwise AND operation: `散列值 & 数组长度-1`, equivalent to `hash % length`. Bitwise operations are favored for their speed over modulo. The array length is a power of 2 so that `(length-1)` is the array length modulus.
 
 Alice implemented the `put(key, value)` method. The process includes:
 *   Initializing the array if it's empty.

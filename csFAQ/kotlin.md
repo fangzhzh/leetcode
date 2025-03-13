@@ -4,7 +4,6 @@
 ## Kotlin Coroutine
 > Keyword: State Machine, Continuation Passing Style(CPS), suspend function, Coroutine, Coroutine builder, Coroutine Context, Coroutine scopes, Structured Concurrency
 
-
 ```
                        +----------------------+
                       |   Suspend Function   |  (Marks a function as suspendable)
@@ -66,7 +65,30 @@
 ```
 
 And the diagram is:
-![](static_files/KotlinCoroutineWeb.drawio.svg)
+![](images/KotlinCoroutineWeb.drawio.svg)
+
+### coroutine, suspend function, continuation, CPS
+* `coroutine` is a lightweight thread-like entity that can be suspended and resumed.
+    * it has a coroutine context, which contains information about the coroutine's execution environment.
+    * it can be suspended and resumed at any point in its execution.
+* `suspend` keyword can pausing the execution of a function and saving the current state of the function.
+* `continuation` is an object that holds the state of a coroutine.
+    * execution point
+    * local variables and values
+    * coroutine context(dispatcher, job, etc.)
+* `Continuation Passing Style(CPS)` a technical where control flow is passed explicitly as a continuation.
+    * In Kotlin coroutines, the `compiler` transfer **suspend** function inoto state machine using CPS.
+
+### coroutine, continuation, job and deferred
+* **job** and **deferred** is a handle for a coroutine's lifecycle.
+* **continuation** a low-level mechanism that represents the suspended state of a coroutine.(current execution point, local variables, coroutine context), **bookmark**
+
+#### Relationship
+* 0 launch{}
+* 1. a new **coroutine** is created
+* 2. a job(or deferred) is created to manager lifecycle, returned as a handle
+* 3. a continuation is created to manage the coroutine's state, use d internally by coroutine framework
+
 
 ## The coroutine run process
 
@@ -138,6 +160,7 @@ IO Thread Pool Stack:
 | }              |
 -----------------
 ```
+
 4. Resume
 ```
 UI Thread Stack (Restored):
@@ -224,6 +247,132 @@ Choose Flow when:
 - Need multiple collectors
 - Want reactive-style operations (map, filter, etc.)
 
+## The Magic Library: A Kotlin Coroutine Story
+
+Imagine a magical library where books can write themselves, but only one page at a time. This is the world of Kotlin Coroutines.
+
+### The Library and Its Workers
+
+The **Main Hall** (Main Thread) is where visitors come to request books. It must always remain responsive to new visitors.
+
+**Librarians** (Coroutines) are magical workers who can pause their work at any moment, save their exact place, and resume later - even in a different room. They're incredibly lightweight, so the library can have thousands of them.
+
+**Spell Books** (Suspend Functions) contain special incantations marked with the `suspend` keyword. These spells can be paused midway through recitation without blocking the entire library.
+
+```kotlin
+suspend fun findRareBook(title: String): Book {
+    delay(1000) // Pause without blocking
+    return bookRepository.fetch(title)
+}
+```
+
+### The Library Management System
+
+The **Head Librarian** (CoroutineScope) manages groups of librarians, ensuring they complete their tasks properly or cancel them when needed.
+
+```kotlin
+val libraryScope = CoroutineScope(Dispatchers.Main)
+```
+
+**Work Orders** (Coroutine Builders) are how tasks get assigned:
+- **launch** orders: "Complete this task, but don't worry about bringing back results"
+- **async** orders: "Complete this task and bring back the results when done"
+
+```kotlin
+// Launch order - fire and forget
+libraryScope.launch {
+    organizeShelf("History")
+}
+
+// Async order - we need the result
+val rareBookDeferred = libraryScope.async {
+    findRareBook("Ancient Coroutines")
+}
+val rareBook = rareBookDeferred.await() // Get the result when ready
+```
+
+### The Library Rooms and Communication
+
+The library has specialized rooms (Dispatchers) for different types of work:
+- **Main Hall** (Dispatchers.Main): For interacting with visitors
+- **Research Room** (Dispatchers.IO): For time-consuming searches and fetching
+- **Restoration Workshop** (Dispatchers.Default): For intensive book repair work
+
+```kotlin
+withContext(Dispatchers.IO) {
+    // Do time-consuming book search here
+}
+```
+
+When a librarian needs to switch rooms, they use a **Bookmark** (Continuation) to save their exact place in their work. This bookmark contains:
+- What they were working on
+- Where they left off
+- Where they should resume
+- How to get back to their original room
+
+### Communication Between Librarians
+
+Librarians communicate through two magical systems:
+
+**Pneumatic Tubes** (Channels) connect different parts of the library. When a librarian puts a book in the tube, exactly one other librarian will receive it. The tubes are "hot" - they work even if no one is waiting at the other end.
+
+```kotlin
+val bookRequests = Channel<BookRequest>()
+// Librarian 1 sends a request
+bookRequests.send(BookRequest("Kotlin Magic"))
+// Librarian 2 receives it
+val request = bookRequests.receive()
+```
+
+**Enchanted Scrolls** (Flows) are "cold" magical parchments that produce content only when someone is actively reading them. Multiple librarians can read copies of the same scroll, each getting all the information.
+
+```kotlin
+val newArrivals = flow {
+    while(true) {
+        val book = acquireNewBook()
+        emit(book) // Add book to the flow
+        delay(1000)
+    }
+}
+
+// Multiple collectors can observe
+newArrivals.collect { book -> displayInCatalog(book) }
+newArrivals.collect { book -> notifyInterestedReaders(book) }
+```
+
+### Library Organization and Safety
+
+The library follows **Structured Concurrency** principles - if a senior librarian stops working, all junior librarians under them must also stop. This prevents "ghost workers" who continue tasks no one cares about anymore.
+
+When accidents happen, the library has an **Exception Handling** system:
+```kotlin
+try {
+    riskyBookRestoration()
+} catch (e: BookDamageException) {
+    repairDamage()
+}
+```
+
+For complex tasks requiring coordination, librarians use **Select** to efficiently wait for the first available result from multiple sources:
+```kotlin
+select<Book> {
+    localCatalog.onReceive { it }
+    partnerLibraries.onReceive { it }
+    timeoutChannel.onReceive { fallbackBook }
+}
+```
+
+### The Library's State Machine
+
+Behind the scenes, the entire library operates as a **State Machine**. Each time a librarian pauses their work, the library:
+1. Saves their current state (what they're working on)
+2. Stores their continuation (how to resume)
+3. Frees them to do other work
+4. Later, restores their exact state and continues
+
+This is the magic of **Continuation Passing Style (CPS)** - the ability to save and resume work from exact points, making the library incredibly efficient without needing a separate full-time worker (thread) for each task.
+
+Through this magical system, the library handles thousands of book requests concurrently while using minimal resources, keeping the Main Hall responsive, and ensuring all work is properly completed or cleaned up.
 
 # Story "The Restaurant Coroutine Story"
 
@@ -294,4 +443,3 @@ This restaurant runs efficiently because:
 - Clear hierarchy exists (structured concurrency)
 ```
 
-This story makes the concepts more relatable and shows how they work together in a real-world scenario.

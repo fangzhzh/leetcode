@@ -163,11 +163,11 @@ public class CacheInvalidationProcess {
     // CPU1上的线程
     public void writeOnCPU1() {
         value = 42;
-        // 1. CPU!写入前发出占用总线信号（Bus Lock）
+        // 1. CPU1写入前发出占用总线信号（Bus Lock）
         // 2. CPU1将缓存行状态改为Modified
         // 3. 通过总线发出广播信号
         // 4. 其他CPU收到信号，将相应缓存行标记为Invalid
-        // 5. 写入前发出占用总线信号（Bus Lock）
+        // 5. 写入前发出解除锁总线信号（Bus Unlock）
     }
     
     // CPU2上的线程
@@ -189,7 +189,7 @@ Java里通过内存屏障保证有序性，详见下一部分Memory Barriers。
 #### 4.1 重排类型
 1）**编译器优化的重排序**: 编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。
 
-2）**指令级并行的重排序**: 现代处理器采用了指令级并行技术（Instruction-LevelParallelism，ILP）来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。
+2）**指令级并行的重排序**: 现代处理器采用了指令级并行技术（Instruction-Level Parallelism，ILP）来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。
 
 3）**内存系统的重排序**: 由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。
 
@@ -217,9 +217,11 @@ graph LR
 7. **对象终结规则**：一个对象的构造函数执行完毕 happens-before 于该对象的 finalize() 方法的开始。
 8. **传递性**：如果 A happens-before B，且 B happens-before C，那么 A happens-before C。
 
-通过理解和应用这些规则，开发者可以编写出线程安全的代码，避免由于指令重排导致的内存可见性问题。
-
 ## 4. JMM Memory Barriers内存屏障
+以下几种情况会自动插入内存屏障：
+* 1. JVM自动插入 ：当使用 volatile 、 synchronized 、 final 等关键字时，JVM会根据需要自动插入适当的内存屏障
+* 2. 并发工具类 ：使用 java.util.concurrent 包中的工具类时，内部实现会使用内存屏障
+* 3. 原子类操作 ： java.util.concurrent.atomic 包中的原子类操作也会使用内存屏障
 
 ### 4.1 四种屏障类型
 
@@ -281,7 +283,9 @@ public class BarrierExample {
 ```
 
 
-## Reference Escape
+### Reference Escape
+When `final` is used, the compiler only inserts a **StoreStore** barrier before the constructor's return statement which means the final only has correct value after constructure.
+
 Idea that if the reference to the object (this) is shared with other threads before the constructor finishes, those threads may see an incomplete state of the object.
 
 ```java
