@@ -61,6 +61,43 @@ class Solution {
 
     }
 }
+
+// 2025-03-13
+class Solution {
+    public String addBinary(String a, String b) {
+        int ca = 0;
+        int i = a.length()-1, j = b.length()-1;
+        StringBuilder sb = new StringBuilder();
+        while(i>=0 && j>=0) {
+            int left = a.charAt(i)-'0';
+            int right = b.charAt(j)-'0';
+            int sum = left + right + ca;
+            ca = sum / 2;
+            sb.append(sum%2);
+            i--;
+            j--;
+        }
+        while(i>=0 ) {
+            int left = a.charAt(i)-'0';
+            int sum = left +  ca;
+            ca = sum / 2;
+            sb.append(sum%2);
+            i--;
+        }
+        while( j >=0) {
+            int right = b.charAt(j)-'0';
+            int sum = right + ca;
+            ca = sum / 2;
+            sb.append(sum%2);
+            j--;
+        }
+        if(ca > 0){
+            sb.append(ca);
+        }
+        return sb.reverse().toString();
+
+    }
+}
 // @lc code=end
 
 

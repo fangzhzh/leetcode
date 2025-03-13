@@ -195,23 +195,100 @@ General signature of DFS solution
         }
     }
 
-// usually we denote BST using inOrder traversal
+    
+    // usually we denote BST using inOrder traversal
     // inOrder is  Left -> Root -> Right, so need to process left sub tree first, so keep going left before process any node
     void inOrderDFS(Node root) {
         if(root == null)
             return;
 
         Stack<Node> stack = new Stack<>();
-        Node p = root;
+        Node p = root;  // We need this separate pointer to track our current position in the tree
+
+        /* 
+         * Why we need a separate current pointer (p) for inOrder but not preOrder:
+         * 
+         * In preOrder, we visit the node first, then its children. So we can simply push the root,
+         * process it immediately when popping, and then push its children.
+         * 
+         * In inOrder, we must visit all left children before the node itself. We can't just push the root
+         * and pop it immediately because we need to process all its left descendants first.
+         * 
+         * The current pointer (p) allows us to traverse down the left side of any subtree
+         * before processing any nodes, which is essential for inOrder traversal.
+         */
 
         while(!stack.isEmpty() || p != null){
             if(p != null){ // if it is not null, push to stack and go down the tree to left
                 stack.push(p);
-                p = p.left;
-            } else { // if no left child pop stack, process the node then let p point to the right
+                p = p.left;  // Keep going left without processing nodes yet
+            } else { 
+                // When p is null, we've reached the leftmost node of the current subtree
+                // Now we can start processing nodes (left -> root -> right)
                 Node temp = (Node)stack.pop();
-                visit(temp);
-                p = temp.right;
+                visit(temp);  // Process the node (this happens after all left children)
+                p = temp.right;  // Move to the right child
+            }
+        }
+    }
+
+    // Alternative inOrder traversal implementation that might be easier to remember
+    // This approach uses a "fully process subtree" mental model
+    // 1. current to track where are you
+    // 2. Left-Push-Pop-Process-Righ
+    void inOrderDFSAlternative(Node root) {
+        if (root == null)
+            return;
+            
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+        
+        // Keep going until we've processed all nodes
+        while (current != null || !stack.isEmpty()) {
+            // Phase 1: Push all left nodes onto stack
+            // This ensures we'll process leftmost nodes first
+            while (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+            
+            // Phase 2: Process current node (which is the leftmost unprocessed node)
+            current = stack.pop();
+            visit(current);
+            
+            // Phase 3: Move to right subtree and repeat
+            current = current.right;
+        }
+    }
+    
+    // Another alternative using a "color" approach to mark if a node needs processing
+    // This approach uses the same pattern for all three traversals (pre, in, post)
+    void inOrderWithColorMarking(Node root) {
+        if (root == null)
+            return;
+            
+        // Use a pair to track if we've seen a node before
+        // false = first visit (push children), true = second visit (process node)
+        Stack<Pair<Node, Boolean>> stack = new Stack<>();
+        stack.push(new Pair<>(root, false));
+        
+        while (!stack.isEmpty()) {
+            Pair<Node, Boolean> pair = stack.pop();
+            Node node = pair.getKey();
+            Boolean processed = pair.getValue();
+            
+            if (node == null)
+                continue;
+                
+            if (processed) {
+                // Second visit - process the node
+                visit(node);
+            } else {
+                // First visit - push right, node, left (in reverse order for stack)
+                // For inorder: push right, node (marked for processing), left
+                stack.push(new Pair<>(node.right, false));
+                stack.push(new Pair<>(node, true));  // Mark for processing when seen again
+                stack.push(new Pair<>(node.left, false));
             }
         }
     }
