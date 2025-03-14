@@ -5,6 +5,7 @@
  */
 
 // @lc code=start
+// looking back, the i-1, i-2 looks horrible, this solution must involved a lot of trial and errors
 class Solution {
     public boolean isMatch(String s, String p) {
         int sLen = s.length();
@@ -35,6 +36,30 @@ class Solution {
             }
         }
         return match[sLen][pLen];
+    }
+}
+
+// version 2: 
+// much cleaner version where no  i-2, the code is much more readable and understandable
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if (p.length() == 0) {
+        return s.length() == 0;
+        }
+        if (p.length() > 1 && p.charAt(1) == '*') {  // second char is '*'
+            if (isMatch(s, p.substring(2))) {
+                return true;
+            }
+            if(s.length() > 0 && (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0))) {
+                return isMatch(s.substring(1), p);
+            }
+            return false;
+        } else {                                     // second char is not '*'
+            if(s.length() > 0 && (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0))) {
+                return isMatch(s.substring(1), p.substring(1));
+            }
+            return false;
+        }
     }
 }
 // @lc code=end
