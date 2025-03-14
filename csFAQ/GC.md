@@ -2,6 +2,7 @@
 Here's a text-based diagram visualizing the Java Garbage Collection concepts:
 
 ```
+## Heap area
                                   +-----------------------+
                                   |    Java Application   |
                                   +-----------------------+
@@ -15,13 +16,13 @@ Here's a text-based diagram visualizing the Java Garbage Collection concepts:
                         |                  |                  |
                         V                  V                  |
                 +-----------------+  +-----------------+  |
-                | **Young Generation**|  | **Old Generation**|  |
+                | Young Generation|  | Old Generation| |
                 +-----------------+  +-----------------+  |
                         |                  |                  |
             +-----------+-----------+      |      +-----------+
             |           |           |      |      |
     +---------+   +---------+   +---------+      |      +---------+
-    | **Eden**  |-->| **FromSpace**|-->| **ToSpace** |----->|   Old   |
+    | Eden    |-->| FromSpace|-->| ToSpace |----->       |   Old   |
     +---------+   +---------+   +---------+      |      |  Space  |
         ^             ^             ^             |      +---------+
         |             |             |             |
@@ -31,7 +32,7 @@ Here's a text-based diagram visualizing the Java Garbage Collection concepts:
                                                     V
                                        (**Major GC** Occurs Here)
 
-
+## Non-Heap area
                                   +-----------------------+
                                   |    Java Application   |
                                   +-----------------------+
@@ -87,7 +88,7 @@ Objects can be
 * Live - being used and referenced
 * Dead - no longer used or referenced
 
-The core concept is reachability
+The core concept is **reachability**.
 
 Garbage collectors work on the concept of Garbage Colelction Roots(GC Roots) to identify 
 
@@ -97,17 +98,18 @@ Garbage collectors work on the concept of Garbage Colelction Roots(GC Roots) to 
 ![GC roots](./images/GCRoot.drawio.svg)
 
 The main GC roots include:
-* Local variables in thread stacks
+* Local variables in thread stacks(Heap)
 * Static variables in classes
 * Active Java threads
 * JNI references
-* Boot class loader is one of the GC roots, but not the only one
-#### class loader
-* [all class loaders](./classLoader.md)
-*  Bootstrap (Boot) Class Loader
-* Extension Class Loader
-* Application Class Loader
-* Custom Class Loaders
+* Class loader 
+   * Boot class loader is one of the GC roots, but not the only one
+   * [all class loaders](./classLoader.md)
+   * 所有的类加载器，都是独立的GC root
+   * Bootstrap (Boot) Class Loader
+   * Extension Class Loader
+   * Application Class Loader
+   * Custom Class Loaders
 
 
 #### GC collector
@@ -130,7 +132,7 @@ STW is a phase where all application threads are paused to ensure memory consist
      * CMS: Minimal STW (only during initial mark and remark)
      * G1: Short STW during marking
 
-### GC phrases
+### GC phrases（垃圾回收的基本算法步骤）
 A general garbage collection phrases. And three different thinkings.
 
 * Mark
@@ -146,8 +148,11 @@ A general garbage collection phrases. And three different thinkings.
 #### cons
 * MARK and SWEEP: memory friction
 * MARK and COMPACT: coping is resource heavy and operational heavy.
+### JVM non-heap Garbage collection
+* Full GC 收集时一并回收
+* 类加载器不再引用时，被回收，因为non-heap一般类源数据，常量，方法，所以在类类等卸载。
 
-### Generational Garbage collection
+### JVM HEAP： Generational Garbage collection
 * Empirical analysis has shown that most objects in java are short lived.
 
 So the optimization is to categorizes objects by age.
@@ -164,7 +169,7 @@ the process goes
 3. New objects are created to Eden. some objects in Eden and S1 become dead.
 4. **Minor GC occurs** - all dead objects are removed from Eden and S1. All live are move3d to S2. Eden and S1 are empty.
 
-
+**Generational Garbage collection** 会在各个代中使用Mark-Sweep-Compact算法
 #### Old generations
 Long-lived objects are eventually moved from Young Generation to the Old Generations.
 

@@ -117,7 +117,7 @@ static int indexFor(int h, int length) {
 ```
 #### 为什么Hash函数这么设计
 
-**扰动函数**
+**扰动函数(hash spreading function)**
 
 高bit低bit都参与hash计算，降低**碰撞**。
 
@@ -368,6 +368,137 @@ JDK7, 头部插入
         // ...
     }
     ```
+### CAS和Syncronized 在ConcurrentHashMap中的应用    
+#### CAS的应用场景
+
+CAS（Compare And Swap）在ConcurrentHashMap中主要用于以下几个场景：
+
+1. **初始化哈希表**：
+   ```java
+   private final Node<K,V>[] initTable() {
+       // 使用CAS设置sizeCtl标志，确保只有一个线程执行初始化
+       if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
+           // 初始化逻辑
+       }
+   }
+   ```
+
+2. **更新节点**：
+   ```java
+   // 尝试用CAS更新指定位置的节点
+   static final <K,V> boolean casTabAt(Node<K,V>[] tab, int i, Node<K,V> c, Node<K,V> v) {
+       return U.compareAndSwapObject(tab, ((long)i << ASHIFT) + ABASE, c, v);
+   }
+   ```
+
+3. **计数器更新**：
+   ```java
+   // 使用CAS更新计数器，避免使用全局锁
+   private final void addCount(long x, int check) {
+       // 使用CAS更新baseCount或CounterCell
+       if (U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
+           // CAS成功，计数更新完成
+       } else {
+           // CAS失败，使用CounterCell数组分散计数压力
+       }
+   }
+   ```
+
+4. **扩容相关操作**：
+   ```java
+   // 标记节点正在被迁移
+   if (U.compareAndSwapInt(this, SIZECTL, sc, (rs << RESIZE_STAMP_SHIFT) + 2)) {
+       // 当前线程发起扩容
+   }
+   
+   // 协助扩容
+   if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1)) {
+       // 当前线程加入扩容操作
+   }
+   ```
+
+#### synchronized的应用场景
+
+synchronized主要用于确保对哈希桶的操作是线程安全的：
+
+1. **put操作**：
+   ```java
+   final V putVal(K key, V value, boolean onlyIfAbsent) {
+       // ...
+       // 对桶的首节点加锁，确保同一时刻只有一个线程操作这个桶
+       synchronized (f) {
+           if (tabAt(tab, i) == f) {
+               if (fh >= 0) {
+                   // 链表插入逻辑
+               }
+               else if (f instanceof TreeBin) {
+                   // 红黑树插入逻辑
+               }
+           }
+       }
+       // ...
+   }
+   ```
+
+2. **remove操作**：
+   ```java
+   final V removeNode(int hash, Object key, Object value, boolean matchValue, boolean movable) {
+       // ...
+       // 同样对桶的首节点加锁
+       synchronized (f) {
+           // 删除节点的逻辑
+       }
+       // ...
+   }
+   ```
+
+3. **replace操作**：
+   ```java
+   final V replaceNode(Object key, V value, Object cv) {
+       // ...
+       synchronized (f) {
+           // 替换节点值的逻辑
+       }
+       // ...
+   }
+   ```
+
+#### CAS和synchronized如何配合工作
+
+ConcurrentHashMap通过精妙的设计让CAS和synchronized各自发挥优势，协同工作：
+
+1. **粒度控制**：
+   - CAS用于无锁操作，处理全局状态（如初始化、扩容标记）
+   - synchronized用于细粒度锁定，只锁定需要修改的桶
+
+2. **性能平衡**：
+   - CAS适用于竞争不激烈的场景，避免线程阻塞
+   - synchronized适用于需要原子操作一系列步骤的场景
+
+3. **协作模式**：
+   ```java
+   // 简化的put流程展示CAS和synchronized配合
+   public V put(K key, V value) {
+       // 1. 使用CAS确保表已初始化
+       if (table == null) initTable(); // 内部使用CAS
+       
+       // 2. 使用CAS尝试直接插入（桶为空的情况）
+       if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
+           return null;
+           
+       // 3. CAS失败，说明有竞争，使用synchronized锁定桶
+       synchronized (f) {
+           // 确保首节点没变，否则重试
+           if (tabAt(tab, i) == f) {
+               // 执行实际的插入/更新逻辑
+           }
+       }
+       
+       // 4. 检查是否需要扩容，使用CAS更新计数
+       addCount(1, binCount);
+   }
+   ```
+
 #### 对比
 | 机制 | 优点 | 缺点 |
 |------|------|------|

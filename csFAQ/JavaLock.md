@@ -260,8 +260,8 @@ Key aspects of the CLH queue:
 ## FAQ
 ### CAS 原理
 1. **CAS操作的基本原理**
-   - CAS操作是一种原子操作，由硬件提供支持
-   - CAS操作包含三个参数 CAS(memory_location, expected_value, new_value):
+   - CAS操作是一种原子操作，由**硬件提供支持**
+   - CAS操作包含三个参数 **CAS(memory_location, expected_value, new_value):**
      - 内存位置(V)
      - 预期原值(A)
      - 新值(B)
@@ -272,7 +272,7 @@ Key aspects of the CLH queue:
    - 操作是原子的，不会被其他线程中断
 
 2. **CAS操作的实现**
-   - CAS操作是通过硬件指令实现的，如x86架构下的cmpxchg指令
+   - CAS操作是通过硬件指令实现的，如x86架构下的**cmpxchg**指令
    - 不同架构可能有不同的实现方式
    - CAS操作通常是原子的，不会被其他线程中断
    - In Java, CAS is implemented through classes like AtomicInteger , AtomicReference , etc.
@@ -308,8 +308,4 @@ Key aspects of the CLH queue:
                                                      stamp, stamp + 1);
      ```
    
-3. **其他注意事项**
-   - 版本号机制会带来额外开销
-   - 在实际应用中需要权衡ABA问题的风险和性能影响
-   - 某些场景下ABA问题可能不会造成实际影响
 
