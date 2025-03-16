@@ -41,3 +41,12 @@ The TCP/IP model consists of five layers, each with its own specific functions:
 
 3. **What is the difference between TCP and UDP?**  
    TCP is connection-oriented and ensures reliable data transfer, while UDP is connectionless and does not guarantee delivery.
+
+4. **Explain the concept of flow control in TCP**  
+   Flow control is a mechanism in TCP that prevents a sender from overwhelming a receiver with data. It ensures that a fast sender doesn't transmit more data than a slow receiver can process. TCP implements flow control using a sliding window protocol where:
+   - The receiver advertises a "receive window" indicating how much data it can buffer
+   - The sender can only send as much data as the receiver's window allows
+   - As the receiver processes data, it updates its window size
+   - If the window size becomes zero, the sender must stop transmitting until the receiver increases the window
+
+   This mechanism prevents buffer overflow at the receiver and optimizes network performance by matching transmission rates to processing capabilities.

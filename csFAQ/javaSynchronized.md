@@ -230,9 +230,9 @@ public class LockExample {
      public class ObjectMonitor {
          // 记录持有锁的线程
          private Thread owner;
-         // 等待队列，存放被阻塞的线程
+         // 等待队列，存放被阻塞的线程(Locked)
          private Queue<Thread> entryList;
-         // 等待和通知机制的等待队列
+         // 条件等待的等待队列(调用了object.wait()，主动放弃锁)
          private Queue<Thread> waitSet;
          // 记录该线程获得锁的次数（可重入）
          private int recursions;
@@ -410,8 +410,11 @@ public void method() {
 | 结构简洁性 | 好 | 差 |
 | 线程等待 | 不可中断 | 可中断 |
 | 锁粒度 | 固定 | 灵活 |
-| 性能 | 升级后还可以 | 稳定好 |
+| 性能 | (1.6引入锁升级)升级后还可以 | 稳定好 |
 
+Synchronized
+* 优点: 简单，性能好
+* 缺点: 不可中断，非公平锁，单一锁，锁粒度固定
 ### 2.3 Lock独有特性
 1. **可中断获取锁**
 ```java
@@ -433,3 +436,12 @@ if (lock.tryLock(5, TimeUnit.SECONDS)) {
 ```java
 ReentrantLock fairLock = new ReentrantLock(true);
 ```
+
+3.1 Advantangs
+    * They prevent thread starvation by ensuring that threads acquire locks in the order they requested them, giving every thread a fair chance to execute.
+    * Fair locks improve system predictability and determinism, making application behavior more consistent and easier to reason about during debugging.
+    * They reduce the maximum wait time for any individual thread, which is particularly important in time-sensitive applications where response time guarantees matter.
+    * Fair locks help distribute processing more evenly across threads, leading to better resource utilization and more balanced system performance.
+    * They are essential in systems where equitable access to shared resources is a requirement, such as in service-oriented architectures with quality-of-service guarantees.
+3.2 Disadvantages
+    * Fair locks can lead to increased contention and reduced **system throughput&&, especially when there are a large number of threads waiting for access to a shared resource.

@@ -101,7 +101,7 @@ classDiagram
 | 7 | 轻量级锁 | 锁优化技术 | 栈帧中的Lock Record和CAS操作 | JVM对重量级锁的优化，通过CAS操作实现加锁和解锁。适用于锁竞争不激烈的场景，可以避免线程阻塞。 |
 | 7 | 重量级锁 | synchronized | 操作系统互斥量，内核态切换 | 传统的synchronized实现，线程阻塞和唤醒需要操作系统介入，性能开销较大。 |
 | 8 | 分段锁 | ConcurrentHashMap | 散列算法和多个独立锁 | 将要加锁的数据分成多段，每段独立加锁。不同段的数据可以并发访问，提高并发度。 |
-
+| 9| 信号量| Semaphore |  AQS框架的共享模式 | 控制同时访问特定资源的线程数量，可用于限流、并发控制等场景。支持公平和非公平两种模式。 | 同时，可以考虑添加一个专门的小节来介绍 Semaphore，放在 2.11 位置，详细说明其用途、特性和使用场景。 |
 ### 2.1 悲观锁与乐观锁
 宏观分类
 
@@ -167,12 +167,12 @@ ConcurrentHashMap 是一个 Segment (size 16)数组， Segment 通过继承Reent
 
 ### 2.10 锁消除
 
-
-
 ## 3 ReentrantLock实现原理
 ReentrantLock的核心实现原理:
 
 1. 基于AQS(AbstractQueuedSynchronizer)框架实现
+  * exclusiveOwnerThread字段
+  * And below features are from AQS
 2. 使用volatile变量state表示锁状态:
    - state=0表示锁空闲
    - state>0表示锁被占用,值为重入次数
