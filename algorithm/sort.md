@@ -15,14 +15,54 @@ void quickSort(int[] array) {
     quickSort(array, 0, array.length-1);
 }
 
-void quickSort(int[] array, int left, int right) {
+void quickSort(int[] array, int left,   int right) {
     int index = partition(array, left, right);
     if (left < index - 1){ // Sort left half
         quickSort(array, left, index - 1);
     }
-    if (index < right) { // Sort right half
-        quickSort(array, index, right);
+    if (index + 1 < right) { // Sort right half
+        quickSort(array, index + 1, right);
     }
+}
+// 相向而行
+int partition(int[] array, int left, int right) {
+    int pivot = array[(left + right) / 2]; // Pick pivot point
+    // (when left > right ), the left index represents the first position where all elements to its left are less than the pivot, and all elements to its right are greater than or equal to the pivot.
+    while (left <= right) {
+        // Find element on left that should be on right, meaning the num >= pivot
+        while (array[left] < pivot)
+            left++;
+        // Find element on right that should be on left, meaning the num <= pivot
+        while (array[right] > pivot)
+            right--;
+
+        // Swap elements, and move left and right indices
+        if (left <= right) {
+            swap(array, left, right); // swaps elements
+            left++; // the very next element where num >= pivot
+            right--;
+        }
+    }
+    return left; // it's not returning the index of the pivot element itself, but rather the index that divides the array into two parts:
+                // - Elements less than the pivot (to the left of left )
+                // - Elements greater than or equal to the pivot (at left and to the right)
+}
+
+// 同向而行
+// [1,4,3,5,2,7]
+int partition(int[] array, int left, int right) {
+    // find a index, so that array[0, index-1] < array[index] and array[index, right) >= array[index]
+
+    int pivot = array[(left + right) / 2]; // Pick pivot point
+    int curR = left;
+    while(curR <= right) {
+        if(array[curR] < pivot) {
+            swap(array, left, curR);
+            left++;
+        }
+        curR++;
+    }
+    return left;
 }
 
 // Iterative implementation of quicksort
@@ -52,43 +92,6 @@ void quickSortIter(int[] array, int left, int right) {
 }
 
 
-// 相向而行
-int partition(int[] array, int left, int right) {
-    int pivot = array[(left + right) / 2]; // Pick pivot point
-    while (left <= right) {
-        // Find element on left that should be on right
-        while (array[left] < pivot)
-            left++;
-        // Find element on right that should be on left
-        while (array[right] > pivot)
-            right--;
-
-        // Swap elements, and move left and right indices
-        if (left <= right) {
-            swap(array, left, right); // swaps elements
-            left++;
-            right--;
-        }
-    }
-    return left;
-}
-
-// 同向而行
-// [1,4,3,5,2,7]
-int partition(int[] array, int left, int right) {
-    // find a index, so that array[0, index-1] < array[index] and array[index, right) >= array[index]
-
-    int pivot = array[(left + right) / 2]; // Pick pivot point
-    int curR = left;
-    while(curR <= right) {
-        if(array[curR] < pivot) {
-            swap(array, left, curR);
-            left++;
-        }
-        curR++;
-    }
-    return left;
-}
 
 void swap(int array[], int left, int right){
     int temp = array[left];
