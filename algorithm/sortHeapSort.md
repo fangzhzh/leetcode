@@ -17,6 +17,8 @@ A Binary Heap is a Complete Binary Tree where items are stored in a special orde
 * 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2]
 
 也就是说，大顶堆(max-heap)，小顶堆(min-heap)的是根据根节点的特性来命名的。
+
+**ALL the code snippet below build a max heap**
 ## 堆排序  Heapsort API
 
 ```java
@@ -50,7 +52,7 @@ void swimUp(int[] nums, int index, int value)
 /**
  * nums: the nums
  * index: the element at the index to sinkDown
- * size: the remainling element needed to handle
+ * size: the remaining elements need to be handled
  * 
  * 假设[index+1, size)中间已经有序，
  * 那么Sinkdown(index), 可以排序[index, size)
@@ -63,7 +65,7 @@ void sinkDown(int[] heap, int index, int size)
 ![上浮建堆过程](./graphs/bottom_up_heapify.drawio.svg)
 
 ```java
-// 上浮建堆
+// 上浮建堆, 
 void swimUp(int[] nums, int index, int value) {
     nums[index] = value;
     while(index > 0) {
