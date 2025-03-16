@@ -111,7 +111,7 @@ In this case:
 ### When using `right = mid`:
 
 This is typically used with the `while (left < right)` loop condition and half-open interval `[left, right)` representation:
-j
+
 ```java
 while (left < right) {
     int mid = left + (right - left) / 2;

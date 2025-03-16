@@ -420,6 +420,18 @@ The left and right subtree each must also be a binary search tree.
 ### Performance:
 * Due to synchronization overhead, StringBuffer is generally slower than StringBuilder in single-threaded scenarios. 
 * StringBuilder is faster because it doesn't have the overhead of synchronization. 
+
+## StringBuilder VS StringBuffer
+
+| Feature | StringBuilder | StringBuffer |
+|---------|--------------|--------------|
+| Thread Safety | Not thread-safe (no synchronization) | Thread-safe (methods are synchronized) |
+| Performance | Faster in single-threaded environments | Slower due to synchronization overhead |
+| Use Case | Preferred for single-threaded scenarios | Preferred when multiple threads access the same string buffer |
+| API | Same methods as StringBuffer | Same methods as StringBuilder |
+| Creation | `new StringBuilder()` | `new StringBuffer()` |
+| Introduced | Java 5 | Java 1.0 |
+
 ## Set
 - TreeSet
 	+ A  NavigableSet implementation based on a __TreeMap__. The elements are <span style="color:blue">**ordered** </span>using their natural ordering, or by a Comparator provided at set creation time, depending on which constructor is used.

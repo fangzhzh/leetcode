@@ -93,6 +93,8 @@ Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onS
 
 ## Android Architecture Components
 
+[Architecture Component and Jetpack](./androidLifeCycleGoogleEffort.md)
+
 ### 1. ViewModel
 
 ```kotlin
