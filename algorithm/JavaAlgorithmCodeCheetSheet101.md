@@ -82,6 +82,7 @@ List<Integer> list=new ArrayList<>(10);
 	+ entry.getKey()
 	+ entry.setValue
 * iterate keys:
+    * keySet
 ```java
 // Using keySet()
 Map<String, Integer> map = new HashMap<>();
@@ -104,8 +105,13 @@ Map<String, Integer> map = new HashMap<>();
 for (Map.Entry<String, Integer> entry : map.entrySet()) {
     System.out.println(entry.getKey() + ": " + entry.getValue());
 }
+
+or 
+for(String key:map.keyset()) {
+    // key
+    // value: map.get(key)
+}
 ```
-	
 ### HashMap
 * implement Map interface
 * HashTable
@@ -200,6 +206,23 @@ To get a guaranteed O(n log n) time for adding n elements you may state the size
 - **enqueing and dequeing methods (offer, poll, remove() and add) is O(log(n))**
 - **retrieval methods (peek, element, and size) O(1)**
 - **remove(Object) and contains(Object) O(n)**
+####
+`offer` -> [1,2,3,4,5] -> `poll`
+* offer: add an element into the queue, the queue will become a small queue
+* poll: Retrieves and removes the head of this queue, or returns null if this queue is empty.
+* remove(o): Removes a single instance of the specified element from this queue, if it is present.
+* peek: retrives the head of the queue without removing
+
+#### 示例说明：
+假设我们有数据：5, 3, 7, 1, 8
+
+1. 小顶堆 中的排列（内部）：[1, 3, 7, 5, 8]
+   - peek() 返回 1
+   - poll() 移除并返回 1，堆变成 [3, 5, 7, 8]
+2. 大顶堆 中的排列（内部）：[8, 5, 7, 1, 3]
+   
+   - peek() 返回 8
+   - poll() 移除并返回 8，堆变成 [7, 5, 3, 1]
 
 #### Priority Queue new comparator
 
@@ -208,7 +231,7 @@ PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length,
 
 #### PriorityQueue 比较器的简单理解方法
 
-1. **小顶堆**（最小元素优先出队）：
+1. **小顶堆**（最小元素优先出队,所以留下的是最大元素）：
    ```java
    // 按照自然顺序排列（小的在前）
     PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> a - b);
@@ -216,10 +239,12 @@ PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length,
    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
    ```
 
-2. **大顶堆**（最大元素优先出队）：
+2. **大顶堆**（最大元素优先出队，所以留下的是最小元素）：
    ```java
    // 按照逆序排列（大的在前）
    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+   // 或者更简单使用默认构造器
+   PriorityQueue<Integer> minHeap = new PriorityQueue<>(Collections.reverseOrder());
    ```
 
 #### 直观理解方法
@@ -277,6 +302,8 @@ void copy(int[] source, int[] target) {
     }
 }
 ```
+## 初始化array
+`Arrays.fill(dp, 1);`
 ## loop a array
 
 ### loop i
@@ -294,7 +321,7 @@ void copy(int[] source, int[] target) {
 
 ## initialise double array [][]
 
-``` 
+``` java
 // syntax
 data_type[1st dimension][2nd dimension][]..[Nth dimension] array_name = new data_type[size1][size2]….[sizeN];
 

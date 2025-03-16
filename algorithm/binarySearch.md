@@ -51,7 +51,9 @@ int binarySearch(int[] nums, int target) {
 
 ```java
 // Template 1
-// [left, right], return index of target or -f if not found
+// [left, right], exis consideration of left > right, meaning the search space is empty
+// return index of target or -f if not found
+
 int binary_search(int[] nums, int target) {
     int left = 0, right = nums.length - 1;
     while (left <= right) {
@@ -66,8 +68,8 @@ int binary_search(int[] nums, int target) {
     }
 }
 
-// Template 2 for lower bound and upper bound
-// [left, right)
+// Template 2 for lower bound and upper bound(looking for boundary)
+// [left, right), exit condition is left == right, which means you've found the boundary.
 // return boundary position 
 // frist element >= target for lower bound
 // first element <= target for upper bound

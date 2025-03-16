@@ -83,6 +83,39 @@ class MedianFinder {
     }
 }
 
+
+// version 2: 2025-03-15
+class MedianFinder {
+    // small number stack is using a max heap to keep the small number by popping out the largest number
+    PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder());
+    // large number stack is using a min heap to keep the large numbers by popping out the smallest number
+    PriorityQueue<Integer> large = new PriorityQueue<>();
+    // k, k-> add to large
+    // k, k+1 -> add to small
+    boolean even = true;
+    public MedianFinder() {
+        
+    }
+    public double findMedian() {
+        if(even) {
+            return (small.peek() + large.peek()) / 2.0;
+        } else {
+            return large.peek();
+        }
+    }
+
+
+    public void addNum(int num) {
+        if(even) {
+            small.offer(num);
+            large.offer(small.poll());
+        } else {
+            large.offer(num);
+            small.offer(large.poll());
+        }
+        even = !even;
+    }
+}
 /**
  * Your MedianFinder object will be instantiated and called as such:
  * MedianFinder obj = new MedianFinder();

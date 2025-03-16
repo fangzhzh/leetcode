@@ -1,3 +1,48 @@
+/*
+ * @lc app=leetcode id=54 lang=java
+ *
+ * [54] Spiral Matrix
+ */
+
+// @lc code=start
+// TC O(m*n)
+// 难点1: int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+// 难点2： 变量复杂，但是好在逻辑都清楚，只是写出来注意bug free
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+        int i = 0, j = 0;
+        int m = matrix.length, n = matrix[0].length;
+        List<Integer> ans = new LinkedList<>();
+        ans.add(matrix[0][0]);
+        int[][] visited = new int[m][n];
+        visited[0][0]=1;
+        int idx = 0;
+        while(ans.size() < m*n) {
+            int[] dir = dirs[idx%4];
+            while(i >= 0 && i <m && j >= 0 && j < n) {
+                i = i + dir[0];
+                j = j + dir[1];
+                if(i >= 0 && i <m && j >= 0 && j < n) {
+                    if(visited[i][j] == 1) {
+                        break;
+                    } 
+                    ans.add(matrix[i][j]);
+                    visited[i][j] = 1;
+                } 
+            }
+            i -= dir[0];
+            j -= dir[1];
+            idx++;
+        }
+        return ans;
+    }
+}
+// @lc code=end
+
+
+// version 1
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
         // 1 2 3
