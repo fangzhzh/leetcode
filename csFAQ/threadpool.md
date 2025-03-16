@@ -153,12 +153,47 @@ classDiagram
     ReentrantReadWriteLock --|> ReadWriteLock
 ```
 
-## Thread Pool Related (⭐⭐⭐)
+## Thread Pool
 
 ### 1. What is a thread pool and how is it used? Why use a thread pool?
 **Answer:** A thread pool is a container that holds multiple thread objects, allowing you to reuse threads instead of creating new ones each time. This saves the time required to create new threads and improves code execution efficiency.
 
-### 2. What types of thread pools are available in Java?
+### 2. What is the principle behind thread pools?
+
+From a data structure perspective, thread pools mainly use **blocking queues (BlockingQueue)** to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
+```mermaid
+flowchart TD
+    A[Submit Task] --> B{Threads < coreSize?}
+    B -- Yes --> C[Create Core Thread]
+    B -- No --> D{Queue Full?}
+    D -- No --> E[Add Task to Queue]
+    D -- Yes --> F{Threads < maxSize?}
+    F -- Yes --> G[Create Non-Core Thread]
+    F -- No --> H[Reject Task]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style H fill:#f00,stroke:#333,stroke-width:4px
+```
+
+1. If the number of running threads < coreSize, create a core thread to execute the task immediately.  
+   - A core thread is a thread that is always kept in the pool and reused to execute tasks.  
+   - Core threads are created when the pool is first created and are never terminated until the pool is shut down.
+2. If the number of running threads >= coreSize, place the task in a blocking queue.
+3. If the queue is full and the number of running threads < maximumPoolSize, create a new non-core thread to execute the task.  
+   - A non-core thread is a thread that is created when the pool needs more threads to execute tasks.  
+   - Non-core threads are terminated when the pool reaches the idle timeout.
+4. If the queue is full and the number of running threads >= maximumPoolSize, the thread pool calls the handler's reject method to refuse the submission.
+
+5. What happens to the core threads after the thread pool is shut down?
+When a thread pool is shut down, the core threads are allowed to finish any tasks they are currently running. After all tasks are finished, the core threads are terminated and the pool is shut down gracefully.
+
+#### Typical setting: a thread pool size of 10:
+- The core size is typically set to 5, so 5 core threads are always kept in the pool and reused to execute tasks.
+- The task queue size is typically set to 10, so up to 10 tasks can be queued for execution.
+- The maximum pool size is typically set to 10, so the pool can grow up to 10 threads to execute tasks.
+
+
+### 3. What types of thread pools are available in Java?
 Java has four types of thread pools:
 
 - **newCachedThreadPool**:  
@@ -201,37 +236,6 @@ Java has four types of thread pools:
     }
     ```
 
-### 3. What is the principle behind thread pools?
-
-From a data structure perspective, thread pools mainly use **blocking queues (BlockingQueue)** to store tasks that are submitted to the thread pool. The process of submitting tasks involves the following steps:
-```mermaid
-flowchart TD
-    A[Submit Task] --> B{Threads < coreSize?}
-    B -- Yes --> C[Create Core Thread]
-    B -- No --> D{Queue Full?}
-    D -- No --> E[Add Task to Queue]
-    D -- Yes --> F{Threads < maxSize?}
-    F -- Yes --> G[Create Non-Core Thread]
-    F -- No --> H[Reject Task]
-    
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style H fill:#f00,stroke:#333,stroke-width:4px
-```
-
-1. If the number of running threads < coreSize, create a core thread to execute the task immediately.  
-   - A core thread is a thread that is always kept in the pool and reused to execute tasks.  
-   - Core threads are created when the pool is first created and are never terminated until the pool is shut down.
-2. If the number of running threads >= coreSize, place the task in a blocking queue.
-3. If the queue is full and the number of running threads < maximumPoolSize, create a new non-core thread to execute the task.  
-   - A non-core thread is a thread that is created when the pool needs more threads to execute tasks.  
-   - Non-core threads are terminated when the pool reaches the idle timeout.
-4. If the queue is full and the number of running threads >= maximumPoolSize, the thread pool calls the handler's reject method to refuse the submission.
-For example, for a thread pool size of 10:
-- The core size is typically set to 5, so 5 core threads are always kept in the pool and reused to execute tasks.
-- The queue size is typically set to 10, so up to 10 tasks can be queued for execution.
-- The maximum pool size is typically set to 10, so the pool can grow up to 10 threads to execute tasks.
-5. What happens to the core threads after the thread pool is shut down?
-When a thread pool is shut down, the core threads are allowed to finish any tasks they are currently running. After all tasks are finished, the core threads are terminated and the pool is shut down gracefully.
 
 ### 4. How to understand bounded and unbounded queues?
 - **Bounded Queue**: Limits the number of tasks that can be queued. If the queue is full, tasks may be rejected or may block until space becomes available.
@@ -308,6 +312,12 @@ public class ExecutorExample {
 }
 ```
 
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| Core Pool Size | 3 | Always maintained, even when idle |
+| Maximum Pool Size | 3 | Fixed size, never grows beyond this limit |
+| Task Queue Size | Unbounded | Uses LinkedBlockingQueue with no capacity limit |
+
 #### Benefits of Using the Executor Framework:
 - **Simplified Thread Management**: The framework handles thread creation, scheduling, and management for you.
 - **Improved Resource Management**: It allows for better control over the number of concurrent threads and helps avoid resource exhaustion.
@@ -342,6 +352,41 @@ public class ThreadLocalExample {
     }
 }
 ```
+### ThreadLocal 的工作原理解释
 
+`ThreadLocal` 变量虽然被声明为 `static final`，但这并不意味着它的值在所有线程间共享。这里有一个关键的区别需要理解：
+
+- **ThreadLocal 存储的值**是线程隔离的，每个线程都有自己独立的副本
+
+1. 每个 `Thread` 对象内部都有一个 `ThreadLocalMap` 字段
+2. 这个 Map 以 `ThreadLocal` 对象为键，以线程特定的值为值
+3. 当调用 `threadLocalValue.set(value)` 时：
+   - 获取当前线程的 `ThreadLocalMap`
+   - 将 `threadLocalValue`（静态 ThreadLocal 对象）作为键
+   - 将值存储在当前线程的 Map 中
+
+4. 当调用 `threadLocalValue.get()` 时：
+   - 获取当前线程的 `ThreadLocalMap`
+   - 使用 `threadLocalValue` 作为键查找值
+   - 返回当前线程特定的值
+
+### 简化的内部结构
+
+```
+Thread-1:
+  threadLocalMap: {
+    threadLocalValue -> 42
+  }
+
+Thread-2:
+  threadLocalMap: {
+    threadLocalValue -> 17
+  }
+
+Thread-3:
+  threadLocalMap: {
+    threadLocalValue -> 99
+  }
+```
 
 ThreadLocal works by maintaining a map (actually a ThreadLocalMap ) inside each thread. When you call get() or set() , it looks up or stores the value in the current thread's map. This is why each thread has its own independent copy of the variable.
