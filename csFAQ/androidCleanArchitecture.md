@@ -110,7 +110,7 @@ app/
     └── viewmodel/    # ViewModel / ViewModel
 代码示例：
 
-```kotlin
+```java
 // 领域层 - 实体
 data class User(val id: Int, val name: String)
 
@@ -279,13 +279,15 @@ class UserFragment : Fragment() {
    - 问题：UI状态管理复杂
    - 解决方案：单向数据流，状态容器
 
+### Example
+
 ## 8. 架构的未来趋势
 
 ### 8.1 声明式UI与架构
 
 Jetpack Compose等声明式UI框架正在改变架构思想：
 
-```kotlin
+```java
 @Composable
 fun UserScreen(viewModel: UserViewModel = viewModel()) {
     val state by viewModel.state.collectAsState()
@@ -306,7 +308,7 @@ fun UserScreen(viewModel: UserViewModel = viewModel()) {
 
 函数式编程思想正在影响架构设计：
 
-```kotlin
+```java
 // 函数式架构示例
 data class State(val user: User? = null, val isLoading: Boolean = false, val error: String? = null)
 
@@ -352,46 +354,3 @@ fun reducer(state: State, action: Action): State = when (action) {
 - 按功能垂直切分
 - 共享核心模块
 - 动态特性交付
-
-## 9. 总结与实践建议
-
-### 9.1 架构选择指南
-
-1. **从简单开始**：
-   - 小项目从MVC/MVVM开始
-   - 随着项目增长逐步引入更复杂架构
-
-2. **关注业务领域**：
-   - 架构应该服务于业务需求
-   - 核心业务逻辑应该独立于框架
-
-3. **平衡理想与实用**：
-   - 理想架构可能过于复杂
-   - 寻找适合团队和项目的平衡点
-
-### 9.2 实践建议
-
-1. **测试驱动架构**：
-   - 编写测试验证架构决策
-   - 测试困难通常表明架构问题
-
-2. **持续重构**：
-   - 架构是演进的，不是一成不变的
-   - 定期重构保持架构健康
-
-3. **文档和共识**：
-   - 记录架构决策和理由
-   - 确保团队理解和遵循架构原则
-
-4. **学习和适应**：
-   - 关注行业最佳实践
-   - 愿意尝试新方法和技术
-
-### 9.3 最终思考
-
-好的架构不是目的，而是手段。它应该：
-
-- 使开发更高效
-- 使代码更可维护
-- 使团队更有生产力
-- 使产品更有质量

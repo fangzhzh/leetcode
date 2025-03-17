@@ -39,448 +39,6 @@
 - Configuration changes
 - Process death
 - Background resource management
-
-## Fragment Lifecycle
-
-### States
-1. **onAttach()**
-   - Fragment attached to Activity
-
-2. **onCreate()**
-   - Fragment instance initialized
-
-3. **onCreateView()**
-   - Inflate/create view hierarchy
-   - Return View or null
-
-4. **onViewCreated()**
-   - View setup
-   - Initialize UI components
-
-5. **onStart()**
-   - Fragment visible
-
-6. **onResume()**
-   - Fragment interactive
-
-7. **onPause()**
-   - Fragment partially visible
-
-8. **onStop()**
-   - Fragment not visible
-
-9. **onDestroyView()**
-   - View hierarchy destroyed
-
-10. **onDestroy()**
-    - Fragment destroyed
-
-11. **onDetach()**
-    - Fragment detached from Activity
-
-### Lifecycle binding Activity and Fragment
-```
-# Creation Sequence
-Activity onCreate() → Fragment onAttach() → Fragment onCreate() → Fragment onCreateView() → Fragment onViewCreated() → Fragment onStart() → Activity onStart() → Fragment onResume() → Activity onResume()
-
-# Destruction Sequence
-Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onStop() → Fragment onDestroyView() → Fragment onDestroy() → Fragment onDetach()
-```
-#### OnStart
-* Fragment onStart() before Activity onStart():
-    * This ensures the Fragment's view hierarchy is fully visible before the Activity completes its visibility phase
-
-
-## Android Architecture Components
-
-### 1. ViewModel
-
-```kotlin
-class MyViewModel : ViewModel() {
-    private val _data = MutableLiveData<String>()
-    val data: LiveData<String> = _data
-
-    fun updateData(newData: String) {
-        _data.value = newData
-    }
-}
-```
-
-- Survives configuration changes
-- Stores UI-related data
-- Cleared when Activity/Fragment destroyed
-
-### 2. LiveData
-```kotlin
-class MyActivity : AppCompatActivity() {
-    private val viewModel: MyViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.data.observe(this) { data ->
-            // Update UI
-        }
-    }
-}
-```
-- Lifecycle-aware
-- Automatically manages subscriptions
-- Ensures UI consistency
-
-### 3. Lifecycle
-```kotlin
-class MyObserver : LifecycleObserver {
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
-        // Handle resume
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
-        // Handle pause
-    }
-}
-```
-
-### 4. SavedStateHandle
-```kotlin
-class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var state: String
-        get() = savedStateHandle.get<String>("key") ?: ""
-        set(value) = savedStateHandle.set("key", value)
-}
-```
-- Survives process death
-- Automatic state saving/restoration
-
-## Modern Solutions for Lifecycle Issues
-
-### 1. Coroutines with Lifecycle
-```kotlin
-class MyFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            // Automatically cancelled when view destroyed
-        }
-    }
-}
-```
-
-### 2. Flow with Lifecycle
-```kotlin
-class MyViewModel : ViewModel() {
-    private val _stateFlow = MutableStateFlow<UiState>()
-    val stateFlow = _stateFlow.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            // Handle state updates
-        }
-    }
-}
-```
-
-### 3. Jetpack Compose
-```kotlin
-@Composable
-fun MyScreen(viewModel: MyViewModel) {
-    val state by viewModel.stateFlow.collectAsState()
-    
-    LaunchedEffect(Unit) {
-        // Side effects
-    }
-}
-```
-- Declarative UI
-- Built-in lifecycle management
-- Simplified state handling
-
-## Best Practices
-
-1. **Use ViewModel**
-   - Keep UI logic and state
-   - Survive configuration changes
-
-2. **LiveData/Flow for UI updates**
-   - Lifecycle-aware
-   - Handle UI state updates
-
-3. **Coroutines for async operations**
-   - Lifecycle-scoped
-   - Clean cancellation
-
-4. **SavedStateHandle for process death**
-   - Save crucial UI state
-   - Restore after process death
-
-5. **Single Activity Architecture**
-   - Navigation component
-   - Fragment-based navigation
-
-
-
-# Activity and Fragment Interview Questions
-
-## Activity Questions
-
-1. **What happens when you rotate the screen?**
-   - Activity is destroyed and recreated
-   - Configuration change triggers lifecycle: onPause → onStop → onDestroy → onCreate → onStart → onResume
-   - ViewModel survives rotation
-   - SavedInstanceState can preserve data
-
-2. **Difference between finish() and onBackPressed()?**
-   - `finish()`: Directly closes current activity
-   - `onBackPressed()`: System back button behavior, can be overridden for custom handling
-
-3. **Launch Modes differences?**
-   - `standard`: Creates new instance every time
-   - `singleTop`: Reuses instance if on top of stack
-   - `singleTask`: Single instance per task, clears stack above it
-   - `singleInstance`: Exclusive task with single activity
-
-4. **How to handle configuration changes manually?**
-```kotlin
-android:configChanges="orientation|screenSize"
-override fun onConfigurationChanged(newConfig: Configuration)
-```
-
-## Fragment Questions
-
-1. **Fragment vs Activity?**
-   - Fragments are reusable UI components
-   - Multiple fragments in one activity
-   - Fragments have their own lifecycle
-   - Fragments must be hosted by activity or another fragment
-
-2. **Why use Fragment Transaction?**
-```kotlin
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, fragment)
-    .addToBackStack(null)
-    .commit()
-```
-   - Manages fragment operations
-   - Provides back stack functionality
-   - Allows animations between fragments
-
-3. **Fragment Communication Methods?**
-   - ViewModel (recommended)
-   - Interface callbacks
-   - Fragment result API
-   - SharedViewModel between fragments
-
-4. **Fragment Lifecycle vs Activity Lifecycle?**
-   - More complex due to view lifecycle
-   - Additional methods: onAttach, onCreateView, onViewCreated, onDestroyView, onDetach
-   - ViewLifecycleOwner for view-related operations
-## Fragment 事务管理
-### 1. 什么是Fragment事务？
-Fragment事务是对Fragment进行添加、删除、替换等操作的一系列原子操作。类似数据库事务，要么全部执行成功，要么全部回滚。
-
-### 2. 基本操作示例
-```kotlin
-// 基本的Fragment添加操作
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commit()
-
-// 替换Fragment
-supportFragmentManager.beginTransaction()
-    .replace(R.id.container, NewFragment())
-    .commit()
-
-// 删除Fragment
-supportFragmentManager.beginTransaction()
-    .remove(fragmentToRemove)
-    .commit()
-```
-
-### 3. Fragment事务的提交方式
-
-1. **commit() vs commitAllowingStateLoss()**
-```kotlin
-// 标准提交方式
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commit()
-
-// 允许状态丢失的提交方式
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commitAllowingStateLoss()
-```
-- `commit()`：如果Activity已保存状态（调用了onSaveInstanceState），会抛出异常
-- `commitAllowingStateLoss()`：即使Activity已保存状态也可以提交，但可能丢失Fragment状态
-
-2. **commitNow() vs commit()**
-```kotlin
-// 立即执行
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commitNow()
-
-// 异步执行
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commit()
-```
-
-### 4. 回退栈管理
-```kotlin
-// 添加到回退栈
-supportFragmentManager.beginTransaction()
-    .replace(R.id.container, NewFragment())
-    .addToBackStack("fragment_tag")  // 可以给回退栈加标签
-    .commit()
-
-// 弹出回退栈
-supportFragmentManager.popBackStack()
-
-// 弹出到指定标签
-supportFragmentManager.popBackStack("fragment_tag", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-```
-
-### 5. Fragment动画
-```kotlin
-// 使用系统预定义动画
-supportFragmentManager.beginTransaction()
-    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-    .replace(R.id.container, NewFragment())
-    .commit()
-
-// 使用自定义动画
-supportFragmentManager.beginTransaction()
-    .setCustomAnimations(
-        R.anim.enter_from_right,  // 新Fragment进入动画
-        R.anim.exit_to_left,      // 旧Fragment退出动画
-        R.anim.enter_from_left,   // 返回时新Fragment进入动画
-        R.anim.exit_to_right      // 返回时旧Fragment退出动画
-    )
-    .replace(R.id.container, NewFragment())
-    .commit()
-```
-
-自定义动画文件示例（`enter_from_right.xml`）：
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <translate
-        android:duration="300"
-        android:fromXDelta="100%"
-        android:toXDelta="0%" />
-</set>
-```
-
-### 6. 状态保存和恢复
-```kotlin
-class MyFragment : Fragment() {
-    private var myData: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // 恢复保存的状态
-        savedInstanceState?.let {
-            myData = it.getString("my_data")
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // 保存状态
-        outState.putString("my_data", myData)
-    }
-}
-```
-
-### 7. 最佳实践
-
-1. **事务提交时机**
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private var canCommitTransaction = true
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        canCommitTransaction = false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        canCommitTransaction = true
-    }
-
-    private fun safeCommitTransaction(transaction: FragmentTransaction) {
-        if (canCommitTransaction) {
-            transaction.commit()
-        } else {
-            transaction.commitAllowingStateLoss()
-        }
-    }
-}
-```
-
-2. **Fragment切换工具类**
-```kotlin
-object FragmentSwitcher {
-    fun switchFragment(
-        activity: FragmentActivity,
-        containerId: Int,
-        fragment: Fragment,
-        addToBackStack: Boolean = true,
-        tag: String? = fragment.javaClass.simpleName
-    ) {
-        activity.supportFragmentManager.beginTransaction().apply {
-            replace(containerId, fragment, tag)
-            if (addToBackStack) {
-                addToBackStack(tag)
-            }
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        }.commit()
-    }
-}
-```
-
-## Architecture Component Questions
-
-1. **Why use ViewModel?**
-   - Survives configuration changes
-   - Separates UI logic from UI controllers
-   - Proper lifecycle management
-   - Shared between fragments
-
-2. **LiveData vs Flow?**
-   - LiveData: Lifecycle-aware, value caching
-   - Flow: More flexible, transformations, cold stream
-   - StateFlow: Hot stream, value caching like LiveData
-
-3. **SavedStateHandle purpose?**
-   - Survives process death
-   - Automatic state saving/restoration
-   - Bundle-based persistence
-
-## Best Practices Questions
-
-1. **How to prevent memory leaks?**
-   - Use ViewBinding/DataBinding
-   - Clear references in onDestroy/onDestroyView
-   - Use weak references when needed
-   - Proper coroutine scope management
-
-2. **Single Activity vs Multiple Activities?**
-   - Single Activity: Better navigation, shared ViewModel
-   - Multiple Activities: Simple apps, deep linking
-   - Modern trend favors Single Activity
-
-3. **Handle Process Death?**
-   - SavedInstanceState
-   - SavedStateHandle in ViewModel
-   - Persistent storage for important data
-   - Test by enabling "Don't keep activities"
-
-
-### Activity相关面试题
-
 #### **Activity生命周期**
 1. **Activity生命周期方法及其调用顺序**
    - `onCreate()`：Activity创建时调用，用于初始化
@@ -511,7 +69,7 @@ object FragmentSwitcher {
    - 主要区别：Activity的可见程度不同，执行时间限制不同，资源释放的优先级不同
 
 
-#####. **Activity启动模式**
+##### **Activity启动模式**
 1. **Android中的四种启动模式**
 
    - `standard`（标准模式）：
@@ -555,45 +113,32 @@ object FragmentSwitcher {
 
 #### **Activity数据传递**
 1. Activity之间怎么传输数据
-* Intent
-* Bundle `intent.putExtras(bundle)`
-* ViewModel, activity间共享
-* OnActivityResult
+    * Intent
+    * Bundle `intent.putExtras(bundle)`
+    * ViewModel, activity间共享
+    * OnActivityResult
 
-1. **`Intent`和`Bundle`的区别**
+2. **`Intent`和`Bundle`的区别**
    - `Intent`：用于启动Activity/Service，包含目标组件、操作和数据
    - `Bundle`：仅用于存储和传递数据，不包含目标信息
    - `Intent`内部使用`Bundle`存储数据
 
-2. **传递大量数据或复杂对象**
+3. **传递大量数据或复杂对象**
    - 使用`Parcelable`或`Serializable`接口序列化对象
    - 通过`ViewModel`共享数据
    - 使用持久化存储（如Room数据库）
    - 通过`Application`类存储全局数据
    - 使用`LiveData`或`Flow`进行数据共享
 
- 3. parcelable 和serializable 不同
- 在Android应用中，`Serializable`和`Parcelable`是两种用于对象序列化的机制，主要区别如下：
-
-1. **实现方式**：
-   - **`Serializable`**：Java自带的序列化接口，属于标记接口，实现简单，只需让类实现该接口即可。
-   - **`Parcelable`**：Android专有的序列化接口，需要开发者手动实现序列化和反序列化的方法，代码量相对较多。
-
-2. **性能**：
-   - **`Serializable`**：在序列化过程中使用了I/O操作和反射机制，可能会产生大量临时变量，导致频繁的垃圾回收（GC），因此性能相对较低。
-   - **`Parcelable`**：直接在内存中进行读写操作，效率更高，性能优于`Serializable`。
-
-3. **使用场景**：
-   - **`Serializable`**：适用于将对象持久化存储到磁盘或通过网络传输的场景。
-   - **`Parcelable`**：适用于在Android应用内部传递对象，特别是在Activity之间传递大数据量的对象时，性能提升尤为显著。
 
 | Aspect         | `Serializable`                          | `Parcelable`                          |
 |----------------|-----------------------------------------|---------------------------------------|
 | **Implementation** | Java built-in interface (marker interface) | Android-specific interface            |
 | **Complexity** | Simple (just implement the interface)    | More complex (manual implementation)  |
 | **Performance**| Uses I/O and reflection, slower, GC prone         | Direct memory operations, faster      |
-| **Use Cases**  | - Object persistence to disk<br>- Network transmission | - In-memory data transfer<br>- Activity communication |
-| **Recommendation** | Use for persistence/network scenarios | Use for in-memory data transfer in Android |
+| **Use Cases**  | Object persistence to disk, Network transmission | In-memory data transfer, Activity communication |
+| **Recommendation** | Use for persistence/network scenarios | in-memory data transfer in Android |
+
 综上所述，在Android开发中，如果需要在内存中传递数据，推荐使用`Parcelable`；如果需要将数据持久化或进行网络传输，建议使用`Serializable`。 
 
 ####  **Activity与Fragment通信**
@@ -613,53 +158,159 @@ object FragmentSwitcher {
    - 当Activity因配置更改（如屏幕旋转）而重建时，如何保存和恢复数据？
    - `onSaveInstanceState()`和`onRestoreInstanceState()`的作用是什么？
 
-### Fragment相关面试题
+## Fragment Fundamentals
 
-#### 1. **Fragment生命周期**
-**Fragment生命周期方法及其调用顺序**
-- `onAttach()`: Fragment与Activity关联
-- `onCreate()`: Fragment初始化
-    * Non-UI, variable, data
-- `onCreateView()`: 创建视图
-- `onViewCreated()`: 视图创建完成
-    * 初始化，事件监听，数据绑定
-- `onStart()`: Fragment可见
-- `onResume()`: Fragment可交互
-- `onPause()`: Fragment部分可见
-- `onStop()`: Fragment不可见
-- `onDestroyView()`: 视图销毁
-- `onDestroy()`: Fragment销毁
-    * clean up resources
-- `onDetach()`: Fragment与Activity解绑
-    * 释放Activity引用
+### Lifecycle
+1. **onAttach()**
+   - Fragment attached to Activity
 
-**`onAttach()`和`onDetach()`的作用**
-- `onAttach()`: 建立Fragment与Activity的关联，获取Activity引用
-- `onDetach()`: 断开Fragment与Activity的关联，释放Activity引用
+2. **onCreate()**
+   - Fragment instance initialized
 
-**`onCreateView()`和`onViewCreated()`的区别**
-- `onCreateView()`: 负责创建和返回Fragment的视图，专注视图创建和返回
-- `onViewCreated()`: 在视图创建完成后调用，用于初始化视图组件，专注视图初始化和配置
+3. **onCreateView()**
+   - Inflate/create view hierarchy
+   - Return View or null
 
-2. **Fragment与Activity的关系**
-   - Fragment如何与宿主Activity进行交互？
-   - 如何在Activity中动态添加或替换Fragment？
+4. **onViewCreated()**
+   - View setup
+   - Initialize UI components
 
-3. **Fragment事务**
-   - 什么是Fragment事务？如何提交一个Fragment事务？
-   - `addToBackStack()`的作用是什么？
-   - `commit()`和`commitAllowingStateLoss()`的区别是什么？
+5. **onStart()**
+   - Fragment visible
 
-4. **Fragment通信**
-   - 如何实现两个Fragment之间的通信？
-   - 使用`FragmentManager`和`FragmentTransaction`进行通信的优缺点是什么？
+6. **onResume()**
+   - Fragment interactive
 
-5. **Fragment状态保存**
-   - 当Fragment被销毁并重新创建时，如何保存和恢复其状态？
-   - `setRetainInstance(true)`的作用是什么？它有什么限制？
+7. **onPause()**
+   - Fragment partially visible
 
-### 综合问题
+8. **onStop()**
+   - Fragment not visible
 
+9. **onDestroyView()**
+   - View hierarchy destroyed
+
+10. **onDestroy()**
+    - Fragment destroyed
+
+11. **onDetach()**
+    - Fragment detached from Activity
+
+### Fragment 事务管理
+#### 1. 什么是Fragment事务？
+Fragment事务是对Fragment进行添加、删除、替换等操作的一系列原子操作。类似数据库事务，要么全部执行成功，要么全部回滚。
+
+#### 2. 基本操作示例
+```java
+// 基本的Fragment添加操作
+supportFragmentManager.beginTransaction()
+    .add(R.id.container, MyFragment())
+    .commit()
+
+// 替换Fragment
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, NewFragment())
+    .commit()
+
+// 删除Fragment
+supportFragmentManager.beginTransaction()
+    .remove(fragmentToRemove)
+    .commit()
+```
+
+### 3. Fragment事务的提交方式
+- commit() : Standard, fails after onSaveInstanceState
+- commitAllowingStateLoss() : Works after onSaveInstanceState, may lose state
+- commitNow() : Executes immediately, cannot use with back stack
+
+### 4. 回退栈管理
+```java
+// 添加到回退栈
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, NewFragment())
+    .addToBackStack("fragment_tag")  // 可以给回退栈加标签
+    .commit()
+
+// 弹出回退栈
+supportFragmentManager.popBackStack()
+
+// 弹出到指定标签
+supportFragmentManager.popBackStack("fragment_tag", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+```
+
+### 5. Fragment动画
+```java
+// 使用系统预定义动画
+supportFragmentManager.beginTransaction()
+    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+    .replace(R.id.container, NewFragment())
+    .commit()
+
+// 使用自定义动画
+supportFragmentManager.beginTransaction()
+    .setCustomAnimations(
+        R.anim.enter_from_right,  // 新Fragment进入动画
+        R.anim.exit_to_left,      // 旧Fragment退出动画
+        R.anim.enter_from_left,   // 返回时新Fragment进入动画
+        R.anim.exit_to_right      // 返回时旧Fragment退出动画
+    )
+    .replace(R.id.container, NewFragment())
+    .commit()
+```
+
+自定义动画文件示例（`enter_from_right.xml`）：
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:duration="300"
+        android:fromXDelta="100%"
+        android:toXDelta="0%" />
+</set>
+```
+
+### 6. 状态保存和恢复
+```java
+class MyFragment : Fragment() {
+    private var myData: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 恢复保存的状态
+        savedInstanceState?.let {
+            myData = it.getString("my_data")
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // 保存状态
+        outState.putString("my_data", myData)
+    }
+}
+```
+
+###  Fragment Communication
+1. Fragment to Activity Communication
+   
+   - Interface callbacks
+   - ViewModel sharing
+   - Direct method calls (not recommended)
+2. Fragment to Fragment Communication
+   
+   - Shared ViewModel (recommended)
+   - Fragment Result API
+   - Interface callbacks through Activity
+   - FragmentManager direct access
+3. ViewModel Communication Benefits
+   
+   - Lifecycle awareness
+   - Data persistence through configuration changes
+   - Decoupled UI and business logic
+   - Thread safety
+   - Testability
+
+### Advanced pattern 
 #### **ViewPager与Fragment**
 - 如何在`ViewPager`中使用Fragment？
 - `FragmentPagerAdapter`和`FragmentStatePagerAdapter`的区别是什么？
@@ -668,7 +319,7 @@ object FragmentSwitcher {
 ##### 如何在`ViewPager`中使用Fragment？
 
 1. **基本使用步骤**：
-```kotlin
+```java
 class MyPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
@@ -685,14 +336,6 @@ class MyPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fr
 val viewPager = findViewById<ViewPager>(R.id.viewPager)
 viewPager.adapter = MyPagerAdapter(supportFragmentManager)
 ```
-
-2. **关键点**：
-   - 继承`FragmentPagerAdapter`或`FragmentStatePagerAdapter`
-   - 实现`getItem()`和`getCount()`方法
-   - 在`getItem()`中返回对应的Fragment实例
-   - 将Adapter设置给ViewPager
-
-##### `FragmentPagerAdapter`和`FragmentStatePagerAdapter`的区别
 
 | 特性 | `FragmentPagerAdapter` | `FragmentStatePagerAdapter` |
 |------|------------------------|-----------------------------|
@@ -721,9 +364,54 @@ viewPager.adapter = MyPagerAdapter(supportFragmentManager)
    - 考虑使用`Navigation Component` + `BottomNavigationView`
    - 对于复杂场景，可以使用`ViewPager2` + `RecyclerView.Adapter`
 
+```java
+// 1. 在布局文件中添加 ViewPager2
+// activity_main.xml
+<androidx.viewpager2.widget.ViewPager2
+    android:id="@+id/viewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 
+// 2. 创建 FragmentStateAdapter
+class ViewPager2Adapter(fragmentActivity: FragmentActivity) : 
+    FragmentStateAdapter(fragmentActivity) {
+    
+    // 页面数量
+    override fun getItemCount(): Int = 3
+    
+    // 创建Fragment
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> HomeFragment()
+            1 -> DashboardFragment()
+            2 -> NotificationsFragment()
+            else -> throw IndexOutOfBoundsException()
+        }
+    }
+}
 
-#### . **Fragment懒加载**
+// 3. 在Activity中设置适配器
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.adapter = ViewPager2Adapter(this)
+        
+        // 可选：设置页面切换动画
+        viewPager.setPageTransformer(MarginPageTransformer(50))
+        
+        // 可选：设置方向（默认水平）
+        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        
+        // 可选：预加载页面数量
+        viewPager.offscreenPageLimit = 1
+    }
+}
+```
+
+####  **Fragment懒加载**
    - 如何实现Fragment的懒加载？
    - 为什么需要懒加载？懒加载的实现原理是什么？
 Fragment懒加载是一种优化技术，主要用于解决ViewPager中Fragment预加载导致的性能问题。以下是详细解释：
@@ -744,30 +432,16 @@ Fragment懒加载是一种优化技术，主要用于解决ViewPager中Fragment�
 
 #### 实现方式
 
-1. **传统实现**：
-```kotlin
+1. **现代实现（推荐）**：
+```java
 class LazyFragment : Fragment() {
     private var isDataLoaded = false
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser && !isDataLoaded) {
-            loadData()
-            isDataLoaded = true
-        }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        // Setup views but don't load data yet
     }
-
-    private fun loadData() {
-        // 加载数据
-    }
-}
-```
-
-2. **现代实现（推荐）**：
-```kotlin
-class LazyFragment : Fragment() {
-    private var isDataLoaded = false
-
+    // onViewCreated is not realiable, 在 onResume() 方法中加载数据
     override fun onResume() {
         super.onResume()
         if (!isDataLoaded) {
@@ -783,10 +457,10 @@ class LazyFragment : Fragment() {
 ```
 
 3. **结合ViewPager2**：
-```kotlin
+```java
 class LazyFragment : Fragment() {
     private var isDataLoaded = false
-
+    // 在ViewPager2中， onViewCreated() 会在Fragment视图创建完成后调
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -818,86 +492,203 @@ class LazyFragment : Fragment() {
    - 提供了 BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT 标志
    - 确保只有当前可见的Fragment会进入 RESUMED 状态
    - 简化了懒加载的实现
-#### 其他优化
-###### 结合 viewLifecycleOwner ：
 
-- 确保生命周期感知操作与Fragment视图生命周期一致
-- 避免内存泄漏
-- 简化资源管理
-- 使用 FragmentStateAdapter ：
 
-###### 提供更好的Fragment状态管理
-- 支持 BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT 标志
-- 优化内存使用
 
-### 4. **Fragment重叠问题**
-- 在什么情况下会出现Fragment重叠问题？如何解决？
-   * activity重建恢复Fragment状态
-   * 异步操作完成，activity已不可用
-   * Fragment事务
+## Lifecyle Integration
+### Lifecycle binding Activity and Fragment
+```
+# Creation Sequence
+Activity onCreate() → Fragment onAttach() → Fragment onCreate() → Fragment onCreateView() → Fragment onViewCreated() → Fragment onStart() → Activity onStart() → Fragment onResume() → Activity onResume()
 
-#### **Fragment与ViewModel**
+# Destruction Sequence
+Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onStop() → Fragment onDestroyView() → Fragment onDestroy() → Fragment onDetach()
+```
 
-### 1. 如何在Fragment中使用`ViewModel`？
+###  Configuration Changes and State Preservation
+1. Activity State Preservation
+   
+   - onSaveInstanceState/onRestoreInstanceState
+   - ViewModel
+   - Handling configuration changes manually
+2. Fragment State Preservation
+   
+   - Bundle savedInstanceState(above, onCreate and onSaveInstanceState)
+   - setRetainInstance (deprecated)
+   - ViewModel with SavedStateHandle(details below)
 
-```kotlin
-class MyFragment : Fragment() {
-    // 使用Fragment的viewModels()扩展函数获取ViewModel
+#### 触发时机
+ctivity 中的 onSaveInstanceState() 在以下情况会被触发：
+
+1. 用户按下 Home 键（Activity 进入后台）
+2. 用户按下电源键（屏幕关闭）
+3. 用户切换到其他应用
+4. 屏幕旋转等配置变化
+5. 系统内存不足，可能被回收前
+6. 启动新的 Activity
+
+#### 恢复流程与生命周期方法
+当 Activity 被重新创建时，恢复流程会触发以下生命周期方法（按顺序）：
+
+1. onCreate(Bundle savedInstanceState) - 传入保存的状态
+2. onStart()
+3. onRestoreInstanceState(Bundle savedInstanceState) - 在 onStart() 之后， onResume() 之前调用
+4. onResume()
+onRestoreInstanceState() 只有在有状态需要恢复时才会被调用（即 savedInstanceState 不为 null）。
+
+#### 当 Fragment 被重新创建时，恢复流程会触发以下生命周期方法（按顺序）：
+
+1. onAttach(Context) - Fragment 附加到 Activity
+2. onCreate(Bundle savedInstanceState) - 传入保存的状态
+3. onCreateView(LayoutInflater, ViewGroup, Bundle) - 创建视图
+4. onViewCreated(View, Bundle) - 视图创建完成
+5. onActivityCreated(Bundle) (已弃用，但在旧代码中可能存在)
+6. onViewStateRestored(Bundle) - 在 onStart() 之前调用，用于恢复视图状态
+7. onStart()
+8. onResume()
+注意 ：Fragment 没有单独的 onRestoreInstanceState() 方法，状态恢复主要在 onCreate() 和 onViewStateRestored() 中处理。
+
+## Android Architecture Components
+
+[Architecture Component and Jetpack](./androidLifeCycleGoogleEffort.md)
+
+### 1. ViewModel
+
+```java
+class MyViewModel : ViewModel() {
+    private val _data = MutableLiveData<String>()
+    val data: LiveData<String> = _data
+
+    fun updateData(newData: String) {
+        _data.value = newData
+    }
+}
+```
+
+- Survives configuration changes
+- Stores UI-related data
+- Cleared when Activity/Fragment destroyed
+
+### 2. LiveData
+```java
+class MyActivity : AppCompatActivity() {
     private val viewModel: MyViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.data.observe(this) { data ->
+            // Update UI
+        }
+    }
+}
+```
+- Lifecycle-aware
+- Automatically manages subscriptions
+- Ensures UI consistency
+### 3 Fragment with ViewModel
+```java
+class MyFragment : Fragment() {
+    // Fragment-scoped ViewModel
+    private val viewModel: MyViewModel by viewModels()
+    
+    // Activity-scoped ViewModel (shared)
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        // 观察LiveData
+        // Always use viewLifecycleOwner for view-related observations
         viewModel.data.observe(viewLifecycleOwner) { data ->
-            // 更新UI
+            // Update UI
+        }
+    }
+}
+ ```
+
+
+### 3. Lifecycle
+```java
+class MyObserver : LifecycleObserver {
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        // Handle resume
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onPause() {
+        // Handle pause
+    }
+}
+```
+
+### 4. SavedStateHandle
+```java
+class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    var state: String
+        get() = savedStateHandle.get<String>("key") ?: ""
+        set(value) = savedStateHandle.set("key", value)
+}
+```
+- Survives process death
+- Automatic state saving/restoration
+
+## Modern Solutions for Lifecycle Issues
+### 3. Jetpack 
+```java
+@Composable
+fun MyScreen(viewModel: MyViewModel) {
+    val state by viewModel.stateFlow.collectAsState()
+    
+    LaunchedEffect(Unit) {
+        // Side effects
+    }
+}
+```
+- Declarative UI
+- Built-in lifecycle management
+- Simplified state handling
+
+### 1. Coroutines with Lifecycle
+```java
+class MyFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Automatically cancelled when view destroyed
         }
     }
 }
 ```
 
-**关键点**：
-- 使用`viewModels()`扩展函数获取ViewModel实例
-- 使用`viewLifecycleOwner`而不是`this`来观察LiveData
-- ViewModel的作用域可以是Fragment或Activity
+### 2. Flow with Lifecycle
+```java
+class MyViewModel : ViewModel() {
+    private val _stateFlow = MutableStateFlow<UiState>()
+    val stateFlow = _stateFlow.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            // Handle state updates
+        }
+    }
+}
+```
 
 
-
-### 3. 与Activity使用的区别
-
-| 特性 | Fragment中使用ViewModel | Activity中使用ViewModel |
-|------|------------------------|------------------------|
-| **获取方式** | `viewModels()` | `viewModels()`或`ViewModelProvider` |
-| **生命周期Owner** | `viewLifecycleOwner` | `this` |
-| **作用域** | 可以是Fragment或Activity | 只能是Activity |
-| **共享性** | 可以在Fragment之间共享 | 可以在Activity之间共享 |
-### 4. ViewModel生命周期与onViewCreated()的关系
-- 创建时机 ： ViewModel 在Fragment首次创建时创建， onViewCreated() 在视图创建完成后调用，因此 ViewModel 在 onViewCreated() 之前已经存在。
-- 数据绑定 ： onViewCreated() 是绑定 ViewModel 数据到视图的理想位置，确保视图和数据的生命周期一致。
-- 配置改变 ： ViewModel 在配置改变时保持不变， onViewCreated() 在每次视图创建时调用，确保视图重新绑定到 ViewModel 的数据。
-
-
-#### 1. **Fragment与Activity的通信**
-   - **Fragment Result API**：
-     - 如何使用`setFragmentResult()`和`FragmentResultListener`进行通信？
-     - 与接口回调相比，Fragment Result API的优势是什么？
-   - **SharedViewModel**：
-
-#### 2. **Fragment事务管理**
-   - **Fragment事务的提交**：
-     - `commit()`和`commitAllowingStateLoss()`的区别？
-     - 如何在Activity的`onSaveInstanceState()`之前提交Fragment事务？
-   - **Fragment回退栈**：
-     - 如何使用`addToBackStack()`管理Fragment回退栈？
-     - 如何处理Fragment回退栈中的状态恢复？
-   - **Fragment动画**：
-     - 如何为Fragment事务添加自定义动画？
-     - 如何处理Fragment动画的性能问题？
-
-#### 3. **Fragment与Activity的生命周期协调**
-   - **Fragment生命周期与Activity生命周期的关系**：
-     - Fragment的生命周期如何与Activity的生命周期同步？
-     - 如何处理Fragment与Activity生命周期不同步的情况？
-   - **ViewLifecycleOwner**：
-     - 什么是`ViewLifecycleOwner`？如何使用它管理Fragment的视图生命周期？
-     - `ViewLifecycleOwner`与`LifecycleOwner`的区别？
+## 6. Common Issues and Best Practices
+### 6.1 Common Issues
+1. Fragment Overlap Issues
+   
+   - Causes: Activity recreation, async operations, transaction issues
+   - Solutions: Proper transaction management, unique container IDs
+2. Memory Leaks
+   
+   - Causes: Static references, inner classes, background tasks
+   - Solutions: WeakReferences, proper lifecycle management, viewLifecycleOwner
+3. Configuration Changes
+   
+   - Causes: Screen rotation, language change, theme change
+   - Solutions: ViewModel, savedInstanceState, onSaveInstanceState
+4. Process Death
+   
+   - Causes: System kills app in background
+   - Solutions: SavedStateHandle, persistent storage, proper state restoration

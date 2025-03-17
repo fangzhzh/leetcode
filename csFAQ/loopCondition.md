@@ -111,7 +111,7 @@ In this case:
 ### When using `right = mid`:
 
 This is typically used with the `while (left < right)` loop condition and half-open interval `[left, right)` representation:
-j
+
 ```java
 while (left < right) {
     int mid = left + (right - left) / 2;
@@ -135,4 +135,8 @@ In this case:
 2. **Convergence**: Ensure your algorithm will eventually terminate
 3. **Off-by-one errors**: Be careful about inclusive vs. exclusive bounds
 
+<<<<<<< HEAD
 The choice ultimately depends on what you're trying to achieve with your binary search implementation.
+=======
+The choice ultimately depends on what you're trying to achieve with your binary search implementation.
+>>>>>>> 281cf69 (Right boundary update in binary search:)

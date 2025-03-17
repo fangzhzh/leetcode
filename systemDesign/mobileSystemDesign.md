@@ -243,7 +243,7 @@ AS STAR
 * A/B TEST
 ## android 安卓相关
 * 架构相关: 
-    * MVP, MVVM, MVC, MVI, VIPER, MV*, RIBS,MV-Flow
+    * MVP, MVVM, MVC, MVI, VIPER, MV*, RIBS, MV-Flow
     * 能说出优缺点
 * MV-Flow
     * The library introduces few - if any - new concepts outside MVI, Kotlin coroutines, and Kotlin flows.
@@ -271,7 +271,7 @@ AS STAR
 			* view holder pattern
 			* layout manager
 			* item animation
-    * 图片缓存(how Glide/Picasso works basically  
+    * 图片缓存(how Glide/Picasso works basically)
     * Activity/Fragment/Navigation
 * Kotlin相关
     * lifecycleScope or viewModelScope 
