@@ -61,12 +61,14 @@ word1 and word2 consist of lowercase English letters.
 class Solution {
     public int minDistance(String word1, String word2) {
         int len1 = word1.length(), len2 = word2.length();
-        int[] dp = new int[len2+1];
+        int[] dp = new int[len1+1][len2+1];
+
+        // these are boundary/base conditions
         for(int i = 1; i <= len1; i++) {
-            dp[i][0] = i;
+            dp[i][0] = i; // word1 要删除i个字符才能变成word2
         }
         for(int j = 1; j <= len2; j++) {
-            dp[0][j] = j;
+            dp[0][j] = j; // word2 要删除j个字符才能变成word1
         }
         for(int i = 1; i < len1+1; i++) {
             for(int j = 1; j < len2+1; j++) {
@@ -86,6 +88,33 @@ class Solution {
 
         }
         return dp[len1][len2];
+    }
+}
+
+// 2025-03-17
+// version recursive, 
+// TC O(m*n), SC O(m*n)
+class Solution {
+    public int minDistance(String word1, String word2) {
+        if(word1.compareTo(word2) == 0) {
+            return 0;
+        }
+        if(word1.length() == 0) {
+            return word2.length();
+        }
+        if(word2.length() == 0) {
+            return word1.length();
+        }
+        char c1 = word1.charAt(0), c2 = word2.charAt(0);
+        if(c1 == c2) {
+            return minDistance(word1.substring(1), word2.substring(1));
+        }
+        return Math.min(
+            minDistance(word1.substring(1), word2.substring(1)) +  1, // replace
+            Math.min(minDistance(word1, word2.substring(1)) + 1, // insert
+            minDistance(word1.substring(1), word2) + 1 // delete
+            )
+        );
     }
 }
 // @lc code=end
