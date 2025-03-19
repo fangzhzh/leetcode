@@ -45,5 +45,37 @@ class Solution {
         return dp[target];
     }
 }
+
+
+// 2025-03-19
+// TLE, MLE(memory limit exceeded)
+class Solution {
+    // TC O(k*n)
+    public int combinationSum4(int[] nums, int target) {
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for(int i = 0; i < nums.length; i++) {
+            List<Integer> cur = new ArrayList<>();
+            cur.add(nums[i]);
+            dfs(nums, i, target-nums[i], cur, ans);
+            cur.remove(cur.size()-1);
+        }
+        return ans.size();
+    }
+    private void dfs(int[] nums, int index, int target, List<Integer> cur, List<List<Integer>> ans)  {
+        if(target == 0) {
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+        if(target < 0) {
+            return;
+        }
+        for(int i = 0; i < nums.length; i++) {
+            cur.add(nums[i]);
+            dfs(nums, i, target-nums[i], cur, ans);
+            cur.remove(cur.size()-1);
+        }
+    }
+}
 // @lc code=end
 

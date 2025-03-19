@@ -42,7 +42,7 @@ live streaming
     * streaming数据分成不同的段fragments，size可以由客户端和服务器动态商议决定。所以可以传输大量的data，latency可以降到5秒钟。
 * 减少缓冲时间
 * 带宽自适应streaming Adaptive Bitrate Streaming
-    * ABS 根据客户端的带宽，自动调整压缩率和图像质量
+    * ABS 根据客户端的带宽，自动调整压缩率和图像质量
 * 快进和回放    
 * 业界规范
 

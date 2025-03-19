@@ -2,8 +2,6 @@
 
 ## High-Level Architecture
 
-I'll design a movie cinema app using MVVM, Clean Architecture, and modern Android development practices. Here's the high-level architecture:
-
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     Presentation Layer                       │
