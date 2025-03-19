@@ -185,6 +185,7 @@ classDiagram
 ```
 
 #### Movie List UI Mockup
+```
 ┌─────────────────────────────────────────────────────┐
 │                     CINEMA APP                       │
 ├─────────────────────────────────────────────────────┤
@@ -210,6 +211,8 @@ classDiagram
 │ └─────────┘ └─────────┘ └─────────┘ └─────────┘     │
 │                                                     │
 └─────────────────────────────────────────────────────┘
+```
+
 #### Domain Layer
 ```kotlin
 // Domain Entities
@@ -294,7 +297,7 @@ fun MovieListScreen(
 
 #### Seat Selection UI Mockup
 
-
+```
 ┌─────────────────────────────────────────────────────┐
 │                                                     │
 │  ┌─────────────────────────────────────────────┐    │
@@ -356,6 +359,7 @@ fun MovieListScreen(
 │                                                     │
 │             [     CONFIRM SELECTION     ]           │
 └─────────────────────────────────────────────────────┘
+```
 
 #### Seat Booking State Diagram
 ```mermaid
@@ -651,7 +655,7 @@ class SeatStatusWebSocketClient @Inject constructor() {
 ```
 
 ### 4. Payment and Checkout System
-
+```
 ┌─────────────────────────────────────────────────────┐
 │                     CHECKOUT                         │
 ├─────────────────────────────────────────────────────┤
@@ -685,7 +689,7 @@ class SeatStatusWebSocketClient @Inject constructor() {
 │  [               CONFIRM PAYMENT                ]   │
 │                                                     │
 └─────────────────────────────────────────────────────┘
-
+```
 #### Secure Payment Flow
 ```mermaid
 sequenceDiagram
@@ -822,10 +826,6 @@ class CheckoutViewModel(
             try {
                 // Combine reservation and payment methods data
                 combine(
-                    getReservationUseCase(reservationId),
-I'll continue with the rest of the CheckoutViewModel implementation and then cover the security aspects of the payment system.
-
-```kotlin:/Users/fangzhzh/workspace/leetcode/csFAQ/androidDesignMovieApp.md
                     getReservationUseCase(reservationId),
                     getPaymentMethodsUseCase(getCurrentUserId())
                 ) { reservation, paymentMethods ->

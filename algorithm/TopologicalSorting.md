@@ -263,15 +263,17 @@ class Solution {
         return canFinishDFS(numCourses,     graph);
     }
 
-    // Time O(numCouse ^2 )
+    // Time O(numCourse + E(num dependancy))
     boolean canFinishDFS(int numCourses, List<List<Integer>>graph) {
         // 有向无环图
         // dfs
         int[] visited = new int[numCourses];
         // 对每一个节点进行dfs
         for(int i=0; i<numCourses; i++) {
+            // O(V)
             if(visited[i] == 0) {
                 if(!dfs(graph, i, visited)) {
+                    // O(E)
                     return false;
                 }
             }

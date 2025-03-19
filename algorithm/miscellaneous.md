@@ -213,7 +213,103 @@ public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode 
     * `gcd(a, b) = gcd(b, a % b)`
 ## 数学与排列组合
 * [62. 不同路径](https://leetcode.com/problems/unique-paths/)
-## Bellman–Ford 算法
+## Bellman-Ford 算法
+### 算法思想三维度
+1. 松弛哲学 （Relaxation Philosophy）
+    - 通过V-1轮对所有边的松弛操作，逐步逼近最短路径，也就是每轮（单轮）处理所有边
+    - 每次松弛都是局部最优向全局最优的演进（类似 `dynamicProgramming.md` 中的最优子结构）
+2. 路径构造模型
+```java
+// 关键松弛操作代码结构
+for (int i = 0; i < n-1; i++) {
+    for (Edge edge : edges) {
+        if (dist[edge.u] + edge.weight < dist[edge.v]) {
+            dist[edge.v] = dist[edge.u] + edge.weight; // 状态转移
+        }
+    }
+}
+ ```
+
+3. 负权环检测机制
+- 额外执行第V轮松弛，若仍可更新则存在负权环
+- 体现 `dynamicProgramming.md` 中的子问题重叠检测思想
+
+### 关键组成要素表
+| 组件            | 动态规划对应概念          | 时间复杂度贡献 | LeetCode应用场景          |
+|-----------------|---------------------------|----------------|---------------------------|
+| 距离数组dist[]  | 状态存储数组              | O(V)           | 743.网络延迟时间          |
+| 边遍历顺序      | 状态转移顺序              | O(E)           | 787.K站中转最便宜航班     |
+| V-1次松弛迭代   | 自底向上的计算顺序        | O(V)           | 带限制的最短路径问题      |
+| 负权环检测      | 无效子问题识别            | O(1)           | 含负权值的图问题         |
+
+### 动态规划视角解析
+1. **状态定义**：
+   - `dist[k][v]`：最多经过k条边到达节点v的最小成本
+   - 空间优化后简化为`dist[v]`（滚动数组技巧）
+
+2. **状态转移方程**：
+   ```python
+   dist[v] = min(dist[v], dist[u] + w(u, v))  # ∀(u,v)∈E
+   ```
+
+3. **边界条件**：
+   ```java
+   dist[source] = 0;          // 起点初始状态
+   dist[v] = INF ∀v ≠ source  // 未访问节点初始状态
+   ```
+
+### 算法实现模板
+```java
+class Solution {
+    public int bellmanFord(int[][] edges, int n, int src, int dst, int k) {
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        
+        for (int i = 0; i <= k; i++) { // 允许k次中转→k+1条边
+            int[] temp = Arrays.copyOf(dist, n); // 防止并行更新
+            boolean updated = false;
+            
+            for (int[] edge : edges) {
+                int u = edge[0], v = edge[1], w = edge[2];
+                // dist[u] 上一轮的计算结果
+                // temp[v] 本轮咱村结果
+                if (dist[u] != Integer.MAX_VALUE && temp[v] > dist[u] + w) {
+                    temp[v] = dist[u] + w;
+                    updated = true;
+                }
+            }
+            
+            if (!updated) break; // 提前终止
+            dist = temp;
+        }
+        
+        return dist[dst] == Integer.MAX_VALUE ? -1 : dist[dst];
+    }
+}
+```
+
+### 复杂度双维度分析
+1. **时间复杂度**：
+   - 基础版本：O(V*E)
+   - 空间优化版：保持相同复杂度但常数更优
+   - 提前终止优化：最佳情况O(E)
+
+2. **空间复杂度**：
+   - 未优化：O(V) （使用滚动数组）
+   - 原始版：O(V^2) （若保留所有中间状态）
+
+### 应用模式识别
+1. **必须使用Bellman-Ford的场景**：
+   - 含负权边的最短路径问题
+   - 有边数限制的最短路径问题（如LC787）
+   - 需要检测负权环的图问题
+
+2. **应避免使用的场景**：
+   - 仅含正权边的图（Dijkstra更高效）
+   - 稠密图（V接近E时复杂度接近O(V^3)）
+   - 需要处理全源最短路径（应使用Floyd-Warshall）
+### 应用
 * [787. K 站中转内最便宜的航班](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
 * [743. 网络延迟时间](https://leetcode.com/problems/network-delay-time/)
 
