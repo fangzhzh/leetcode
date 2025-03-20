@@ -17,7 +17,12 @@ Union Find = Disjoint Set
 ## Core concepts
 * `find(x)`: Determine which set x belongs to.
 * `union(x, y)`: Merge two sets together
+### 复杂度分析
+在优化后的并查集实现中， find 和 union 操作的时间复杂度实际上是阿克曼函数(Ackerman function)的逆函数O(α(n))，这是一个增长极其缓慢的函数（远小于O(log n)）。
+路经压缩和ranking合并，是复杂度趋近O(1)的原因。
 
+* 如果只使用路经压缩的话，根据Hopcroft-Ullman的研究，仅使用路径压缩时，m次操作的摊还时间复杂度为O(m log n)。此时的树高度会被压缩到O(log n)级别。
+* 当同时使用路径压缩和秩优化时（如Tarjan的优化方案），时间复杂度提升到O(m α(n))，其中α(n)是阿克曼函数的反函数，对于任何实际可输入的n值（n ≤ 10^600），α(n) ≤ 5
 ## Common applications
 * Finding connected components in a graph
 * Detecting cycles in a graph
@@ -374,44 +379,6 @@ Visualization:
    - union(): ~O(1)
    ```
 
-## Common Operations Visualization
-
-### find(x) Operation
-```
-1. Start at node x
-2. Follow parent pointers until reaching root
-3. (With path compression) Make all nodes point to root
-
-Before:    After path compression:
-  1           1
- /           / \
-2           2   3
- \
-  3
-```
-
-### union(x, y) Operation
-```
-1. Find roots of x and y
-2. Compare ranks
-3. Attach smaller rank tree to larger rank tree
-
-Before:     After union(1,4):
-1    4           1
-|    |          / \
-2    5         2   4
-                   |
-                   5
-```
-
-## Common applications
-* Finding connected components in a graph
-* Detecting cycles in a graph
-* Network connectivity
-    * [[0, 1], [1, 2], [3, 4]]
-* Image processing (connected pixels)
-
-
 ## 例题
 * Number of Connected Components in an Undirected Graph
 * Friend Circles / Number of Provinces
@@ -501,4 +468,3 @@ class Solution {
 * 有多少个连通分量
 * 连通分量的个数
 * 连通分量有没有环
-* 
