@@ -5,7 +5,7 @@
 | Insert at index | `arr.insert(i, val)` | `arr.insert(i, val)` | `arr.insert(i, val)` |
 | Get element | `arr.get(i)` | `arr[i]` | `arr[i]` |
 | Set element | `arr.set(i, val)` | `arr[i] = val` | `arr[i] = val` |
-| Remove element | `arr.remove(val)` | `arr.remove(val)` | `-` |
+| Remove element | `arr.remove(val: index)` | `arr.remove(val)` | `-` |
 | **Linked List** | LinkedList | None | list |
 | Add element | `ll.add(val)` | - | `ll.push_back(val)` |
 | Add front | `ll.addFirst(val)` | - | `ll.push_front(val)` |
