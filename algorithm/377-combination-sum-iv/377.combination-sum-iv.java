@@ -46,9 +46,9 @@ class Solution {
     }
 }
 
-
-// 2025-03-19
-// TLE, MLE(memory limit exceeded)
+// 2025-03-19 
+// DFS version, TLE, but to brush up the dfs template
+// For string/array, we use it, dfs, then backtrack
 class Solution {
     // TC O(k*n)
     public int combinationSum4(int[] nums, int target) {
