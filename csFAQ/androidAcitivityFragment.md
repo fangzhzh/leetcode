@@ -502,7 +502,7 @@ class LazyFragment : Fragment() {
 Activity onCreate() → Fragment onAttach() → Fragment onCreate() → Fragment onCreateView() → Fragment onViewCreated() → Fragment onStart() → Activity onStart() → Fragment onResume() → Activity onResume()
 
 # Destruction Sequence
-Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onStop() → Fragment onDestroyView() → Fragment onDestroy() → Fragment onDetach()
+Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onStop() → Fragment onDestroyView() → Fragment onDestroy() → Fragment onDetach() -> Activity onDestroy()
 ```
 
 ###  Configuration Changes and State Preservation

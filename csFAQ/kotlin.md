@@ -247,6 +247,80 @@ Choose Flow when:
 - Need multiple collectors
 - Want reactive-style operations (map, filter, etc.)
 
+
+## Kotlin Lambda Functions
+
+### 核心特性
+1. **函数字面量**：可作为参数传递或存储的代码块
+   ```kotlin
+   val sum = { a: Int, b: Int -> a + b }
+   println(sum(2,3)) // 输出5
+   ```
+
+2. **协程构建器中的lambda**：
+   ```kotlin
+   // 与launch协程构建器结合
+   launch(Dispatchers.IO) { 
+       delay(1000)
+       println("Async operation completed")
+   }
+   ```
+
+3. **带接收者的lambda**（DSL风格）：
+   ```kotlin
+   val myChannel = Channel<Int>().apply { 
+       send(1)
+       send(2)
+   }
+   ```
+
+### 特殊语法糖
+| 特性                | 示例                                      | 对应协程应用场景         |
+|--------------------|-----------------------------------------|---------------------|
+| 单个参数隐式`it`      | `list.filter { it > 5 }`                | `onReceive { ... }` |
+| 下划线忽略参数         | `view.setOnClickListener { _ -> ... }`  | 事件回调处理            |
+| Lambda返回值最后表达式 | `val result = run { 2 + 3 }`            | 协程作用域返回值          |
+
+### 与Java Lambda对比
+```kotlin
+// Kotlin lambda（支持SAM转换）
+val androidRunnable = Runnable { 
+    println("Running in Android")
+}
+
+// Java lambda（需要@FunctionalInterface）
+public interface MyJavaInterface {
+    void execute();
+}
+
+val javaLambda: MyJavaInterface = MyJavaInterface { 
+    println("Java style")
+}
+```
+
+### 在协程中的高级用法
+```kotlin
+// 1. Channel生产者lambda
+val channel = produce {
+    for (i in 1..5) send(i * i)
+}
+
+// 2. Flow构建器lambda
+val flow = flow {
+    emit("Start")
+    delay(100)
+    emit("End")
+}
+
+// 3. 挂起lambda（suspend lambda）
+val suspendLambda: suspend (Int) -> String = { num ->
+    delay(num.toLong())
+    "Delayed $num ms"
+}
+```
+
+
+
 ## The Magic Library: A Kotlin Coroutine Story
 
 Imagine a magical library where books can write themselves, but only one page at a time. This is the world of Kotlin Coroutines.
@@ -443,3 +517,4 @@ This restaurant runs efficiently because:
 - Clear hierarchy exists (structured concurrency)
 ```
 
+Define the kotlin lambda function.
