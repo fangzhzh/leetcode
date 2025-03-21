@@ -49,6 +49,40 @@ Follow up:
 If all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
 If 99% of all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
  */
+
+// @lc code=start
+// Naive solution, just list and find the median
+class MedianFinder {
+
+    ArrayList<Integer> list = new ArrayList<>();
+    int size = 0;
+    public MedianFinder() {
+        
+    }
+    // TC O(n)
+    public double findMedian() {
+        if(size % 2 == 0) {
+            return (list.get(size/2) + list.get(size/2-1))/2.0;
+        } else {
+            return list.get((int)Math.floor(size/2));
+        }
+    }
+
+    // TC O(nlog n) if adding and sorting
+    // TC O(log n) for binary search insertion
+    public void addNum(int num) {
+        int index = Collections.binarySearch(list, num);
+        // If not found, binarySearch returns (-insertion point - 1)
+        if (index < 0) {
+            index = -index - 1;
+        }
+        
+        list.add(index, num);
+        size++;
+    }
+}
+
+
 // @lc code=start
 class MedianFinder {
     private PriorityQueue<Integer> large;
@@ -86,9 +120,9 @@ class MedianFinder {
 
 // version 2: 2025-03-15
 class MedianFinder {
-    // small number stack is using a max heap to keep the small number by popping out the largest number
+    // small number stack is using a max heap to keep the **small number** by popping out the largest number
     PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder());
-    // large number stack is using a min heap to keep the large numbers by popping out the smallest number
+    // large number stack is using a min heap to keep the **large numbers** by popping out the smallest number
     PriorityQueue<Integer> large = new PriorityQueue<>();
     // k, k-> add to large
     // k, k+1 -> add to small
