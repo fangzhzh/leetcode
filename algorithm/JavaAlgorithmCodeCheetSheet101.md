@@ -35,10 +35,11 @@ body {
 | Singly Linked list	| O(N)| 	O(N)	| O(1) |	O(1) |
 | Doubly Linked List	| O(N)| 	O(N)	| O(1)|	O(1) |
 | Hash Table| 	O(1)	| O(1)| 	O(1)	| O(1) |
+| HashMap| 	O(1)	| O(1)| 	O(1)(collision are rare)	| O(1) |
 | Binary Search Tree	| O(log N)	| O(log N)	| O(log N)| 	O(log N)| 
 | AVL Tree	| O(log N)	| O(log N)	| O(log N)| 	O(log N) | 
 | B Tree	| O(log N)	| O(log N)	|  O(log N)	| O(log N) | 
-Red Black Tree| 	O(log N)	| O(log N)	| O(log N)	| O(log N)| 
+| Red Black Tree| 	O(log N)	| O(log N)	| O(log N)	| O(log N)| 
 
 ## initialise List<Integer>
 
