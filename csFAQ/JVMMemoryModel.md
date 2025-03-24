@@ -226,7 +226,7 @@ graph LR
 ### 4.1 四种屏障类型
 
 * LoadLoad屏障：确保Load1数据的装载先于Load2及后续装载指令完成
-    * inserted between tow load operations, after a volatile read
+    * inserted between two load operations, after a volatile read
     *   ```
         int x = volatile_y; // Load1 (volatile read)
         // LoadLoad barrier inserted here

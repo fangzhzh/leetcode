@@ -35,7 +35,7 @@ return its length 5.
  * - Typical BFS, loopping, adding and iterating
  * - so it's not friendly to large set of small str
  * 
- * ## another solutino is tow sets in leetcode
+ * ## another solutino is two sets in leetcode
  */
 // @lc code=start
 class Solution {
