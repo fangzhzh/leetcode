@@ -128,7 +128,7 @@ public class VisibilityProblem {
 }
 ```
 
-### 3.2 缓存一致性协议（MESI）
+### 3.2 缓存一致性协议 Cache Coherence Protocol（MESI）
 缓存一致性协议定义了以下四种缓存状态
 
 ```

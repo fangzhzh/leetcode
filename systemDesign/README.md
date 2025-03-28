@@ -100,11 +100,12 @@ Over time, many different people will work on the system (engineering and operat
 
 ### Latency Comparison Numbers
 --------------------------
-L1 cache reference                           0.5 ns
+CPU register access                          0.3 ns       1 cycle (3GHz CPU)
+L1 cache reference                           0.5 ns       ~2 cycles
 Branch mispredict                            5   ns
-L2 cache reference                           7   ns                      14x L1 cache
+L2 cache reference                           7   ns       14x L1 cache
 Mutex lock/unlock                           25   ns
-Main memory reference                      100   ns                      20x L2 cache, 200x L1 cache
+Main memory reference                      100   ns       20x L2 cache, 200x L1 cache 
 Compress 1K bytes with Zippy            10,000   ns       10 us
 Send 1 KB bytes over 1 Gbps network     10,000   ns       10 us
 Read 4 KB randomly from SSD*           150,000   ns      150 us          ~1GB/sec SSD

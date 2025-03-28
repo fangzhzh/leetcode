@@ -72,12 +72,92 @@ And the diagram is:
     * it has a coroutine context, which contains information about the coroutine's execution environment.
     * it can be suspended and resumed at any point in its execution.
 * `suspend` keyword can pausing the execution of a function and saving the current state of the function.
+    * State Machine Generation
+    * Continuation Parameter addition
+    * Return Type transformation: Any
+    * `suspend fun fetchUser(userId: String): User` to
+    * `fun fetchUser(userId: String, continuation: Continuation<User>): Any`
 * `continuation` is an object that holds the state of a coroutine.
     * execution point
     * local variables and values
     * coroutine context(dispatcher, job, etc.)
+    * Resume Callback: lambda to resume coroutine
 * `Continuation Passing Style(CPS)` a technical where control flow is passed explicitly as a continuation.
     * In Kotlin coroutines, the `compiler` transfer **suspend** function inoto state machine using CPS.
+## Coroutine Context
+
+**Coroutine Context** is a set of elements that define the behavior and environment of a coroutine:
+
+1. **Definition**: A persistent, immutable collection of key-value pairs where each element has a unique key
+2. **Purpose**: Provides configuration information for how a coroutine executes
+3. **Components**:
+   - **Dispatcher**: Controls which thread(s) the coroutine runs on
+   - **Job**: Manages the coroutine's lifecycle
+   - **CoroutineExceptionHandler**: Handles uncaught exceptions
+   - **CoroutineName**: Names the coroutine for debugging
+   - Custom elements (user-defined)
+
+```kotlin
+// Example of creating a context with multiple elements
+val myContext = Dispatchers.IO + Job() + CoroutineName("DataLoader")
+```
+
+## Coroutine Scope
+
+**Coroutine Scope** is a boundary for coroutine execution that provides lifecycle management:
+
+1. **Definition**: An interface that provides a scope for launching coroutines
+2. **Purpose**: Defines the lifetime boundaries for coroutines and enables structured concurrency
+3. **Functionality**:
+   - Keeps track of all coroutines launched within it
+   - Cancels all child coroutines when the scope is cancelled
+   - Ensures coroutines don't leak or run indefinitely
+
+```kotlin
+// Creating a custom scope
+val myScope = CoroutineScope(Dispatchers.Main)
+
+// Launching a coroutine in this scope
+myScope.launch {
+    // This coroutine belongs to myScope
+    fetchData()
+}
+
+// Later, we can cancel all coroutines in this scope
+myScope.cancel()
+```
+
+## Key Differences
+
+| Aspect | Coroutine Context | Coroutine Scope |
+|--------|-------------------|-----------------|
+| **Nature** | Data structure (collection of elements) | Structural concept (boundary) |
+| **Purpose** | Configures how coroutines execute | Manages coroutine lifecycles |
+| **Mutability** | Immutable | Maintains mutable state (active coroutines) |
+| **Relationship** | A scope contains a context | A context is part of a scope |
+| **Usage** | Passed to coroutine builders | Used to launch coroutines |
+| **Inheritance** | Child coroutines inherit parent's context | Child coroutines belong to parent's scope |
+
+## Relationship Between Them
+
+Every `CoroutineScope` has a `coroutineContext` property, but a `CoroutineContext` doesn't necessarily have a scope:
+
+```kotlin
+// The scope contains a context
+val scope = CoroutineScope(Dispatchers.IO + Job())
+val context = scope.coroutineContext // Access the context from the scope
+
+// When launching a coroutine, you're creating it within a scope
+scope.launch {
+    // This coroutine has access to the scope's context
+    println("My dispatcher: ${coroutineContext[CoroutineDispatcher]}")
+    
+    // And can create child coroutines that inherit the context
+    launch {
+        // Child coroutine with inherited context
+    }
+}
+```
 
 ### coroutine, continuation, job and deferred
 * **job** and **deferred** is a handle for a coroutine's lifecycle.
@@ -93,33 +173,6 @@ And the diagram is:
 ## The coroutine run process
 
 ### Overview
-```
-UI Thread Stack
------------------
-| launch {       |
-|   val newName =|  <--- Stack frame for launch block
-|   fetchNewName()|
-|   updateUI(newName) |
-| }              |
------------------
-
-Continuation Object
------------------
-| Stack Frame:   |
-| - newName      |
-| - Execution Point (after fetchNewName) |
-| Context: Dispatchers.IO |
-| Resume Callback: lambda to resume coroutine |
------------------
-
-IO Thread Stack
------------------
-| withContext {  |
-|   delay(1000)  |  <--- Stack frame for withContext block
-|   return "New Name" |
-| }              |
------------------
-```
 
 ### Step by step
 
@@ -134,43 +187,103 @@ UI Thread Stack
 | }              |
 -----------------
 ```
-
-2. suspend
+2. Inside fetchNewName() - Suspension Point
+```plaintext
+UI Thread Stack
+-----------------
+| suspend fun fetchNewName() {
+|   // About to switch contexts
+|   withContext(Dispatchers.IO) {  |  <--- Suspension point
+|     // IO operations will happen here
+|   }
+| }
+-----------------
+```
+3. State Saved in Continuation
 it run to the `fetchNewName` the coroutine suspends, The current stack frame (including newName and the execution point) is saved into a Continuation object.
 
 ```
 Continuation Object:
 -----------------
 | Stack Frame:   |
-| - newName      |
-| - Execution Point (after fetchNewName) |
-| Context: Dispatchers.IO |
+| - newName (uninitialized) |
+| - Execution Point (at withContext in fetchNewName) |
+| - Original Context: Dispatchers.Main |
 | Resume Callback: lambda to resume coroutine |
 -----------------
 ```
 
-
-3. UI thread
-```
+4. IO Thread Execution
+```plaintext
 IO Thread Pool Stack:
 -----------------
-| withContext {  |
-|   delay(1000)  |  <--- Stack frame for withContext block
-|   return "New Name" |
-| }              |
+| withContext block {  |
+|   delay(1000)        |  <--- Work happening on IO thread
+|   return "New Name"  |
+| }                    |
 -----------------
 ```
 
-4. Resume
+5. Resumption on UI Thread
 ```
 UI Thread Stack (Restored):
 -----------------
 | launch {       |
-|   val newName = "New Name" |
-|   updateUI(newName) |  <--- Stack frame restored
+|   val newName = "New Name" |  <--- Value returned from fetchNewName()
+|   updateUI(newName) |  <--- Execution continues here
 | }              |
 -----------------
 ```
+
+## Storage Locations for Continuations
+
+1. **In the Suspending Function's Implementation**
+   - For built-in suspending functions like `delay()`, the continuation is stored in internal data structures managed by the coroutine library
+   - For example, `delay()` registers the continuation with a timer service that will trigger resumption after the specified time
+
+2. **In Dispatcher Queues**
+   - When using `withContext()` to switch dispatchers, the continuation is queued in the target dispatcher's task queue
+   - The dispatcher is responsible for executing the continuation when a thread becomes available
+
+3. **In Channel/Flow Implementation**
+   - When suspending on a channel operation (like `send()` or `receive()`), the continuation is stored in the channel's internal queues
+   - For example, if a channel is full, the sender's continuation is stored in a queue of suspended senders
+
+4. **In Deferred/Job Objects**
+   - When using `async`/`await`, the continuation from `await()` is stored in the `Deferred` object
+   - When the async operation completes, it resumes all stored continuations
+
+## Example: Continuation Storage in withContext
+
+In your specific example:
+
+```
+Continuation Object:
+-----------------
+| Stack Frame:   |
+| - newName (uninitialized) |
+| - Execution Point (at withContext in fetchNewName) |
+| - Original Context: Dispatchers.Main |
+| Resume Callback: lambda to resume coroutine |
+-----------------
+```
+
+This continuation is:
+
+1. Created on the UI thread when `withContext(Dispatchers.IO)` is called
+2. Stored in an internal queue managed by the `Dispatchers.IO` dispatcher
+3. The IO dispatcher takes responsibility for resuming this continuation when the IO work completes
+4. When resumed, the continuation contains the result ("New Name") that will be assigned to the `newName` variable
+
+## Technical Implementation Details
+
+At a lower level:
+
+- Continuations are implemented as objects that implement the `Continuation` interface
+- They're typically stored in thread-safe data structures (like ConcurrentLinkedQueue)
+- References to these continuations are managed by the coroutine framework to prevent memory leaks
+- When a continuation is resumed, it's removed from its storage location and scheduled for execution
+
 ## Channel VS Flow
 Let me explain the key differences between Flow and Channel in Kotlin Coroutines:
 
