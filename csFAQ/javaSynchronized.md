@@ -182,9 +182,18 @@ public class LockExample {
 3. **轻量级锁 (Lightweight Lock) → 重量级锁 (Heavyweight Lock)**
    * 当线程自旋一定次数（默认10次）仍未获得锁
    * JVM会将锁升级为重量级锁
+        - JVM首先在堆中创建一个ObjectMonitor对象
+        - 将对象头Mark Word中的锁标志位改为"10"，表示重量级锁状态
+        - 将Mark Word中的内容替换为指向新创建的ObjectMonitor对象的指针
+        - 自旋失败的线程不再自旋等待，而是被封装成ObjectWaiter对象
+        - 这些ObjectWaiter对象被放入ObjectMonitor的EntryList队列中
+        - 线程状态从RUNNABLE变为BLOCKED，释放CPU资源
    * 未获得锁的线程进入阻塞队列 (Monitor's EntryList)
    * 等待操作系统来调度
-   
+
+#### 2.3.5 锁升级的不可逆性   
+这种升级过程是不可逆的，一旦锁升级为重量级锁，即使没有竞争了，也不会降级回轻量级锁或偏向锁，这是为了避免频繁的锁状态转换带来的性能开销。   
+
 #### 2.3.1 为什么需要锁升级？
 * 线程竞争的概率是非常低的
 * 大部分情况下，锁总是由同一个线程获得
@@ -444,4 +453,4 @@ ReentrantLock fairLock = new ReentrantLock(true);
     * Fair locks help distribute processing more evenly across threads, leading to better resource utilization and more balanced system performance.
     * They are essential in systems where equitable access to shared resources is a requirement, such as in service-oriented architectures with quality-of-service guarantees.
 3.2 Disadvantages
-    * Fair locks can lead to increased contention and reduced **system throughput&&, especially when there are a large number of threads waiting for access to a shared resource.
+    * Fair locks can lead to increased contention and reduced **system throughput, especially when there are a large number of threads waiting for access to a shared resource.

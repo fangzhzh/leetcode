@@ -258,7 +258,7 @@ Key aspects of the CLH queue:
    - 性能影响
 
 ## FAQ
-### CAS 原理
+### CAS（Compare And Swap） 原理
 1. **CAS操作的基本原理**
    - CAS操作是一种原子操作，由**硬件提供支持**
    - CAS操作包含三个参数 **CAS(memory_location, expected_value, new_value):**
