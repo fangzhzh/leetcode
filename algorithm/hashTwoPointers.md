@@ -2,7 +2,7 @@
 ## HashMap
 O(1) find 所以HashMap会被用在很多需要查找的场景
 
-hashmap的使用通常是tow pass，第一遍build map,第二遍使用
+hashmap的使用通常是two pass，第一遍build map,第二遍使用
 
 但是有时候one pass hash也很好，一边build一边使用，可避免在处理某个元素的时候，从hashmap里取出自己
 

@@ -5,7 +5,8 @@
  */
 
 // @lc code=start
-// tow dimentions
+// tw
+//  dimentions
 class Solution {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
         int m = obstacleGrid.length, n = obstacleGrid[0].length;

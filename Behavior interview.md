@@ -73,7 +73,7 @@ The STAR method is a really popular approach for answering behavioral questions 
 	* two of the most successful products in the world with billions of users. React is one of most successful Front end libary in the world. I want to build or contribute to those successful product.
 
 - People. 
-	+ tow colleges
+	+ two colleges
 		+ Both of them are the most creative and optimistic guy in out team. Sometimes I check their Facebook post, I feel like they have a very bright, happy life. They do lot of cool work and a lot of cool playing. They do a lot of cool works in a lot of cool planes I feel like I want to be one of them.
 
 - Values

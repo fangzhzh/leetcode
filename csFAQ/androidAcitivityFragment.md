@@ -692,3 +692,34 @@ class MyViewModel : ViewModel() {
    
    - Causes: System kills app in background
    - Solutions: SavedStateHandle, persistent storage, proper state restoration
+
+
+
+## 其他组件的生命周期
+### Service 生命周期
+Service有两种启动方式，每种方式对应不同的生命周期流程：
+
+#### 通过startService()启动
+1. onCreate() - 首次创建Service时调用，只调用一次
+2. onStartCommand() - 每次通过startService()启动Service时调用
+3. onDestroy() - Service被销毁时调用
+#### 通过bindService()启动
+1. onCreate() - 首次创建Service时调用，只调用一次
+2. onBind() - 当组件通过bindService()绑定到Service时调用
+3. onUnbind() - 当所有客户端都断开连接时调用
+4. onDestroy() - Service被销毁时调用
+
+
+### Content Provider 生命周期
+Content Provider的生命周期相对简单：
+
+1. onCreate() - 当Provider被初始化时调用，通常在应用启动时
+2. query() , insert() , update() , delete() - 不是生命周期方法，但是Provider的主要操作方法
+3. 没有明确的销毁方法，随应用进程终止而终止
+
+
+## Broadcast Receiver 生命周期
+Broadcast Receiver的生命周期非常短暂：
+
+1. onReceive() - 当接收到广播时调用
+2. 一旦onReceive()方法执行完毕，Receiver就被视为不活动状态

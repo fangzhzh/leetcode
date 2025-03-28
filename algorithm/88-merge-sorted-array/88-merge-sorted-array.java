@@ -27,7 +27,7 @@ Output: [1,2,2,3,5,6]
  * Typical two pointers. --two pointer--
  * Idea is simple but the boundary checking is very tricky.
  * 
- * Edit: it's not really a "two pointer" algorithm, it just accidentyly uses tow pointers
+ * Edit: it's not really a "two pointer" algorithm, it just accidentyly uses two pointers
  */
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {

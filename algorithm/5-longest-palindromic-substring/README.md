@@ -15,7 +15,7 @@ Output: "bb"
 
 
 ### the brutal force 
-tow loop and check palindromic for every combination
+two loop and check palindromic for every combination
 
 ### Manancher's 
 ```

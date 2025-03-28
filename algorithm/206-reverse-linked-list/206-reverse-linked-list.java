@@ -46,7 +46,7 @@ class Solution {
 
     // Top down, every iteration, the parent sub problem is resolved, we only need to take care of the sub problems.
 
-    // every recursive, iteration, we split the list into tow parts
+    // every recursive, iteration, we split the list into two parts
     // | reverted linked list| -> Cur -> |linked list needs to be reverted|
    /*
     * 1. Problem resolved iteratively in top-down manner
