@@ -32,7 +32,7 @@ The core challenge was multi-dimensional:
 
 2. **Experimentation Integrity**: Our A/B testing framework became compromised because users were being placed into multiple experiment buckets simultaneously, making it impossible to isolate the impact of individual features.
 
-3. **System Performance**: Each feature check added latency to the request path, and as we scaled to dozens of feature flags, we saw significant performance degradation in our critical ad serving path.
+3. **System Performance**: Each feature required its own GraphQL endpoint with similar but slightly different logic, creating significant technical debt. This redundancy not only increased maintenance complexity but also introduced subtle race conditions and inconsistent behavior that resulted in a 35% increase in production incidents.
 
 4. **Developer Experience**: Teams were stepping on each other's toes, with changes to one feature flag system breaking others, leading to emergency rollbacks and delayed launches.
 
