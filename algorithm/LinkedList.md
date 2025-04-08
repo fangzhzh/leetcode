@@ -26,6 +26,75 @@ Most of the linked list problem can be resolved by recursive because of it's rec
         dfsO_n(?)
     }
     ```
+### 反转链表
+
+```java
+    // 反转链表
+    ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode cur = head;
+        while(cur != null) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+```
+#### reverse linked list 2(reverse between)
+
+1. **切割重组思想**（核心解题思路）
+   - 通过虚拟头节点建立安全边界：dummy
+   - 定位四关键节点：
+     ```java
+     prev（反转区间前驱节点）
+     start（反转起点）
+     end（反转终点）
+     post（反转区间后继节点）
+     ```
+   - 操作流程：定位→切断→反转→连接
+
+2. **指针操作本质**
+   ```java
+   // 关键操作代码段
+   nextTemp.next = prev.next; // 头插法核心
+   prev.next = nextTemp;      // 重组连接
+   ```
+
+
+3. **指针操作时序**
+   - 必须严格遵守操作顺序：
+     1. 保存断点
+     2. 重新接线
+     3. 移动指针
+
+### 四、标准实现代码
+```java
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        
+        // 定位前驱节点
+        ListNode prev = dummy;
+        for (int i = 1; i < left; i++) {
+            prev = prev.next;
+        }
+        
+        // 头插法反转
+        ListNode curr = prev.next;
+        for (int i = 0; i < right - left; i++) {
+            ListNode temp = curr.next;
+            curr.next = temp.next;
+            temp.next = prev.next;
+            prev.next = temp;
+        }
+        
+        return dummy.next;
+    }
+}
+```
 
 ### middleNode模板    
 

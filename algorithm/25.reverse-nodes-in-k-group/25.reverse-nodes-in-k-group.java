@@ -66,15 +66,60 @@ class Solution {
             }
             node = node.next;
         }
-        ListNode pre = reverseKGroup(node, k);
+        ListNode curr = reverseKGroup(node, k);
 
         for(int i = 0; i < k; i++){
             ListNode tmp = head.next;
-            head.next = pre;
-            pre = head;
+            head.next = curr;
+            curr = head;
             head = tmp;
         }
-        return pre;
+        return curr;
+    }
+}
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+
+// Non-recursive solution
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int size = 0;
+        ListNode node = head;
+        while(node != null) {
+            node = node.next;
+            size++;
+        }
+        ListNode cur=head;
+        for(int i = 0; i+k <= size; i+=k) {
+            cur = reverseBetween(cur, i, i+k-1);
+        }
+        return cur;
+    }
+    private ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode before = dummy;
+        for(int i = 0; i < left; i++) {
+            before = before.next;
+        }
+        ListNode cur = before.next;
+        for(int i = 0; i < right - left; i++) {
+            ListNode tmp = cur.next;
+            cur.next = tmp.next;
+            tmp.next = before.next;
+            before.next = tmp;
+        }
+        System.out.println("dummy.next:" + dummy.next.val);
+        return dummy.next;
     }
 }
 // @lc code=end
