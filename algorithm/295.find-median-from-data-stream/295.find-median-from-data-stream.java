@@ -59,7 +59,7 @@ class MedianFinder {
     public MedianFinder() {
         
     }
-    // TC O(n)
+    // TC O(1)
     public double findMedian() {
         if(size % 2 == 0) {
             return (list.get(size/2) + list.get(size/2-1))/2.0;
@@ -68,7 +68,7 @@ class MedianFinder {
         }
     }
 
-    // TC O(nlog n) if adding and sorting
+    // TC O(n) if adding and sorting
     // TC O(log n) for binary search insertion
     public void addNum(int num) {
         int index = Collections.binarySearch(list, num);

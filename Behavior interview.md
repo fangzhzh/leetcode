@@ -168,6 +168,9 @@ The STAR method is a really popular approach for answering behavioral questions 
 		
 	</details>
 
+- Tell me about a time you failed at something you were trying to achieve
+	<details><summary>The product welcome message project</summary>
+	</details>
 
 - Mentorship/ coaching
 	
@@ -186,6 +189,8 @@ The STAR method is a really popular approach for answering behavioral questions 
 
 
 - Setting directions or driving changes for the teams/ organization 
+	<details><summary>Mobile</summary>
+	</details>
 	<details><summary>room & redis</summary>
 
 	</details>
@@ -255,7 +260,16 @@ The STAR method is a really popular approach for answering behavioral questions 
 
 	</details>
 - Tell me a time when you went out of your way to help someone
+	<details><summary>Mobile oncall shift</summary>
+	</details>
+
 - Tell me about a time you had to step up and take responsibility for others
+	<details><summary>TL on leave</summary>
+	* 1:1 with every engineers and keep track of their progress
+	* update the progress of every engineer in the weekly meeting
+	* make monthsly progress report in the work group for all the stakeholders
+	* keep update with all the stakeholders for any potential blockers and risks, and make sure they are aware of the progress
+	</details>
 
 	<details><summary>surprising one: Introducing redux</summary>
 
@@ -283,16 +297,18 @@ The STAR method is a really popular approach for answering behavioral questions 
 ## Conflict/Disagreement
 
 - Describe a time where you had a disagreement or conflict within your manager or colleague.
-	<details><summary>testing half done install/uninstall</summary>
-	
+	<details><summary>Messenger shop eligibility check migration</summary>
+	* Collaboration
+	* Boundary
+	* Clarification of timeline
+	* Clarification of scope
+	</details>
+	<details><summary>Phrase out the product welcome message</summary>
+	Team priority.
 	</details>
 - Can you describe a situation where you had to work with a decision that you didn't agree with?
-	<details><summary>Kotlin</summary>
-	I liked kotlin, but my colleges are afraid that introducing kotlin will break our production app. I proved many times that the migrated app is working good, but they said ok, but the management team said no. As a business they don't want to take this risk especially kotlin looks quite new. 
+	<details><summary></summary>
 
-	I still wrote Java and learn Kotlin in spare time. 
-
-	As long as I start new project, I use 100% kotlin.
 	</details>
  
 - Tell me about your worst boss and why they were bad
@@ -314,6 +330,8 @@ The STAR method is a really popular approach for answering behavioral questions 
 	Corehub needs a machanism to persistant data and support publisher/producer. I  initially select Room. It 
 	</details>
 - What's the most difficult/challenging problem you have had to solve?
+	<details><summary>Shop visibility Optimization</summary>
+	</details>
 	<details><summary>corheub</summary>
 	</details>
 	<details><summary>Phone calling/receiving</summary>
@@ -337,6 +355,11 @@ The STAR method is a really popular approach for answering behavioral questions 
 	</details>
  
 - Tell me about a time you struggled on one of your software projects
+	<details><summary>The product welcome message project</summary>
+	* Opsite outcome 
+	* High expectation from stakeholders
+	</details>
+
 	<details><summary>If else refactor</summary>
 
 		- Wow it is experience that I can never forgot. I did a very good interview and was hired as a senior software engineer who is the company the companies working on the security product state stock and stalking application. Summer for logis A silver complete it because of the nature of the stock. Increasing in seven days decreasing is like 30 days in one year and one month in this scenario you have to replace this I'd put in the scenario you have to generate another output. This is crazy that you have like 50 conditions to process process some sort of data and then generate some output.
@@ -351,6 +374,9 @@ The STAR method is a really popular approach for answering behavioral questions 
 ## Self Starter/Proactive
 
 - If things aren’t going according to plan, how do you move yourself/your projects forward?
+	<details><summary>The product welcome message project</summary>
+	</details>
+
 	<details><summary>Choices</summary>
 	Discuss
 	Identify
@@ -359,7 +385,7 @@ The STAR method is a really popular approach for answering behavioral questions 
 
 	</details>
 - Describe a time when you worked on something that is outside of your job scope (we really like candidates who are proactive in fixing/improving things)
-	<details><summary></summary>
+	<details><summary>TL on leave</summary>
 	</details>
  
 
