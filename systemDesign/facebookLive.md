@@ -33,7 +33,7 @@ live streaming
 ### first mile协议对比
 | 协议 | 端对端延迟 | 问题 |
 |------|---------|-----|
-| WebRTC|       | UDP|
+| WebRTC|       | UDP| 
 | Http Upload|  blocking | 会导致网络高延迟 |
 | RTMPS| good | good |
 
@@ -54,7 +54,7 @@ live streaming
 
 ### last mile协议
 * HLS
-    * by Apple, for HTTP LIve Streaming
+    * by Apple, for HTTP Live Streaming
     * most used last-mile delivery.
 * MPET-dash
     * open-source alternative to HLS for last-mile delivery
