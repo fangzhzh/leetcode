@@ -1,4 +1,4 @@
-[timer](http://www.intervaltimer.com/timers/9835337-interview)
+[Example timer](http://www.intervaltimer.com/timers/9835337-interview)
 
 # 系统设计最好的模板
 

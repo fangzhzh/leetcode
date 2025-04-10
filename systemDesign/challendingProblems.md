@@ -3,7 +3,7 @@
 
 ## M
 
-1. **Ads Format Optimization**
+1. **Shop visibility Optimization**
    * multiple features concurrent development and A/B testing upon same set of sellers and buyers, causing a fraction of fisibility issues
       * Backend:
          * 1. Create a single interface to check for all features
@@ -20,7 +20,7 @@
    - Managing code health across massive Android repositories with thousands of contributors
    - Implementing automated checks that catch issues without creating false positives
    - Balancing strict code quality requirements with rapid development cycles
-### Ads Format Optimization Deep dive: The Challenge: Feature Flag Management at Scale
+### Shop visibility Optimization Deep dive: The Challenge: Feature Flag Management at Scale
 
 One of the most challenging problems I faced was at M, where we were developing multiple concurrent features for our ads platform targeting the same set of sellers and buyers in Southeast Asia. This created significant feasibility issues where features would interact in unexpected ways, causing inconsistent user experiences and making it difficult to measure the true impact of each feature.
 
