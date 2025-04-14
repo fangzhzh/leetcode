@@ -217,3 +217,67 @@ class TicTacToe {
  * int param_1 = obj.move(row,col,player);
  */
 ```
+
+##  Rotate
+### Clock wise rotate
+/*
+ * clockwise rotate
+ * first reverse up to down, then swap the symmetry 
+ * 1 2 3     7 8 9     7 4 1
+ * 4 5 6  => 4 5 6  => 8 5 2
+ * 7 8 9     1 2 3     9 6 3
+*/
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        // reverse
+        int m = matrix.length;
+        for(int i = 0; i < m/2; i++) {
+            int[] tmp = matrix[i];
+            matrix[i] = matrix[m-i-1];
+            matrix[m-1-i] = tmp;
+        }
+        // swap the Synmmetry
+        for(int i = 0; i < m; i++) {
+            for(int j = i+1; j < m; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = tmp;
+            }
+        }
+    }
+}
+```
+### Anti-clockwise rotate
+/*
+ * anticlockwise rotate
+ * first reverse left to right, then swap the symmetry
+ * 1 2 3     3 2 1     3 6 9
+ * 4 5 6  => 6 5 4  => 2 5 8
+ * 7 8 9     9 8 7     1 4 7
+*/
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        // reverse
+        int m = matrix.length;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < m/2; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[i][m-1-j];
+                matrix[i][m-1-j] = tmp; 
+            }
+        }
+        // swap the Synmmetry
+        for(int i = 0; i < m; i++) {
+            for(int j = i+1; j < m; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = tmp;
+            }
+        }
+    }
+}
+```
