@@ -518,7 +518,7 @@ Fragment onPause() → Activity onPause() → Fragment onStop() → Activity onS
    - ViewModel with SavedStateHandle(details below)
 
 #### 触发时机
-ctivity 中的 onSaveInstanceState() 在以下情况会被触发：
+activity 中的 onSaveInstanceState() 在以下情况会被触发：
 
 1. 用户按下 Home 键（Activity 进入后台）
 2. 用户按下电源键（屏幕关闭）
