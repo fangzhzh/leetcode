@@ -1,4 +1,4 @@
-# 如何在不使用外部工具的情况下识别和解决Android内存泄漏问题
+# 识别和解决Android内存泄漏问题
 
 在Android开发中，内存泄漏是一个常见的问题，即使不使用专业工具如LeakCanary或Android Profiler，我们也有一些方法可以识别和解决内存泄漏。
 
