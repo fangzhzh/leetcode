@@ -181,7 +181,7 @@ add, remove, containsKey, time complexity is O(log n) where n is number of eleme
 ```
 
 ## Deque
-* HEAD VAlue(队列)
+* HEAD Value(队列)
     * offerFirst(e)
     * pollFirst
     * peekFirst()
@@ -332,7 +332,7 @@ String[][] cities = new String[3][3];  // 2D String array with 3 rows
                                           and 3 columns
 
 int[][] wrong = new int[][]; // not OK, you must specify 1st dimension
- int[][] right = new int[2][]; // OK
+int[][] right = new int[2][]; // OK
 
 ```
 ```
