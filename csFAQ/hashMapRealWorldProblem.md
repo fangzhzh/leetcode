@@ -1,6 +1,6 @@
 # Learn Java Hashmap in real world problems
 
-## Problem 1
+## Problem 1. Currency Exchange
 
 ```java
 /*
@@ -12,14 +12,6 @@ We are a currency exchange that maintains the current exchange rates between cur
 (CNY, RUB, 14.6)
 */
 
-// GBP-> EUR = 10
-// GBP -> USD => GPB -> EUR -> USD
-
-// <CUR, MAP> 
-// GBP -> MAP<CUR, num> -> EUR -> 10
-// GBP -> MAP<CUR, MAP<>> -> EUR<CUR, num>
-
-// n pair currentcy,  2n currencies
 
 class Solution {
     public static void main(String[] args) {
@@ -27,24 +19,8 @@ class Solution {
 }
 
 ```
-### Follow up
 
-1. **Concurrency:**
-   - How would you handle concurrent updates to exchange rates while ensuring rate lookups remain accurate?
-   - Implement a thread-safe version of your currency exchange system that allows multiple threads to read rates while updates are happening.
-   - What synchronization mechanism would be most appropriate for a system where reads are much more frequent than writes?
-
-2. **Scaling:**
-   - How would your solution change if you needed to handle millions of currency pairs?
-   - Design a sharding strategy for your currency exchange system to distribute the load across multiple servers.
-   - How would you implement a caching layer to reduce computation for frequently requested currency conversions?
-
-3. **Optimization:**
-   - How would you optimize the path-finding algorithm to always find the most favorable exchange rate between currencies?
-   - Implement a solution that minimizes the number of conversions needed to get from one currency to another.
-   - How would you handle rate updates that might invalidate previously calculated paths?
-
-## Question 2
+## Question 2. Operator Assignment
 ```java
 - Initializes with a set of available operators.
 - set_limit(operator_name, n)
@@ -54,21 +30,6 @@ class Solution {
 - get_assignment_queue(n)
   Returns the list of possible operators in the order they will be assigned to conversations, not real assignment yet.
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle race conditions when multiple requests try to assign conversations simultaneously?
-   - Implement a lock-free algorithm for operator assignment that maintains fairness.
-   - What data structures would you use to ensure thread safety without sacrificing performance?
-
-2. **Scaling:**
-   - How would your design change if you needed to support 10,000+ operators and millions of conversations?
-   - Design a distributed version of your operator assignment system that works across multiple data centers.
-   - How would you handle operator availability that changes frequently?
-
-3. **Optimization:**
-   - How would you optimize the assignment algorithm to minimize wait times for conversations?
-   - Implement priority-based assignment for premium customers while maintaining fairness for regular customers.
-   - How would you handle load balancing when some operators can handle more conversations than others?
 
 
 
@@ -92,21 +53,6 @@ Implement methods:
 - String getPeakHour()
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you design the log analyzer to process logs from multiple sources concurrently?
-   - What synchronization mechanisms would you use to update statistics safely?
-   - Implement a producer-consumer pattern for log processing that maximizes throughput.
-
-2. **Scaling:**
-   - How would your solution change if you needed to process billions of log entries per day?
-   - Design a distributed log processing system using MapReduce or a similar paradigm.
-   - How would you handle time-based aggregations efficiently across a large dataset?
-
-3. **Optimization:**
-   - How would you optimize memory usage when processing very large log files?
-   - Implement an approximation algorithm (like Count-Min Sketch) for tracking top IPs with bounded memory.
-   - How would you design the system to provide real-time analytics while still processing historical data?
 
 ## Question 4. Product Inventory System
 ```java
@@ -122,21 +68,6 @@ Products have: ID, name, price, and quantity.
 Optimize for fast lookups by ID and efficient range queries.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent inventory updates to prevent overselling?
-   - Implement optimistic vs. pessimistic locking strategies for inventory management.
-   - Design a system that allows high concurrency for reads while ensuring consistency for writes.
-
-2. **Scaling:**
-   - How would your design change to handle millions of products across multiple warehouses?
-   - Implement a partitioning strategy for product data based on access patterns.
-   - How would you handle inventory synchronization across distributed data centers?
-
-3. **Optimization:**
-   - How would you optimize range queries for price ranges?
-   - Implement an efficient indexing strategy for quickly finding low-stock products.
-   - How would you design the system to handle seasonal spikes in certain product categories?
 
 ## Question 5. Word Frequency Counter with Synonyms
 ```java
@@ -158,22 +89,6 @@ Implement:
 */
 ```
 
-### Follow up
-1. **Concurrency:**
-   - How would you design the system to process multiple documents concurrently?
-   - What synchronization mechanisms would you use for updating word frequencies?
-   - Implement a parallel processing strategy for large documents.
-
-2. **Scaling:**
-   - How would your solution change to handle a corpus of millions of documents?
-   - Design a distributed word counting system using a framework like Hadoop or Spark.
-   - How would you handle synonym groups that grow over time?
-
-3. **Optimization:**
-   - How would you optimize memory usage when processing very large documents?
-   - Implement an efficient algorithm for synonym resolution that minimizes lookups.
-   - How would you design the system to quickly update results when new documents are added?
-
 
 ## Question 6. LRU Cache Implementation
 ```java
@@ -189,22 +104,6 @@ The cache should have a fixed capacity and automatically evict the least recentl
 Optimize for O(1) time complexity for all operations.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you make your LRU cache thread-safe without sacrificing performance?
-   - Implement a fine-grained locking strategy that allows concurrent reads.
-   - What are the trade-offs between different synchronization approaches for an LRU cache?
-
-2. **Scaling:**
-   - How would you design a distributed LRU cache across multiple machines?
-   - Implement a consistent hashing scheme for cache key distribution.
-   - How would you handle cache coherence in a distributed environment?
-
-3. **Optimization:**
-   - How would you optimize your LRU implementation to reduce lock contention?
-   - Implement an approximation of LRU that has better concurrency properties.
-   - How would you handle variable-sized cache entries efficiently?
-
 
 ## Question 7. Flight Booking System
 ```java
@@ -224,21 +123,7 @@ Optimize for:
 - Efficient booking management
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you prevent overbooking when multiple users try to book the last seats?
-   - Implement a reservation system that handles concurrent bookings with fairness.
-   - What isolation level would you use for database transactions in this system?
 
-2. **Scaling:**
-   - How would your design change to handle millions of flights and passengers?
-   - Design a sharding strategy for flight data based on temporal and geographic patterns.
-   - How would you implement a caching layer for frequently accessed flights?
-
-3. **Optimization:**
-   - How would you optimize flight search for complex queries (multi-city, flexible dates)?
-   - Implement an efficient algorithm for finding connecting flights with minimal layover time.
-   - How would you design the system to handle flight schedule changes that affect bookings?
 ## Question 8. Social Network Friend Recommendation
 ```java
 /*
@@ -253,21 +138,6 @@ Implement a friend recommendation system for a social network:
 Optimize for efficient friend lookup and recommendation generation.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent friendship requests and updates?
-   - Implement a lock-free algorithm for updating the social graph.
-   - What data structures would provide the best concurrency for friend lookups?
-
-2. **Scaling:**
-   - How would your design change to handle billions of users and connections?
-   - Design a partitioning strategy for the social graph that minimizes cross-partition queries.
-   - How would you implement friend recommendations in a distributed environment?
-
-3. **Optimization:**
-   - How would you optimize mutual friend calculations for very popular users?
-   - Implement an approximation algorithm for friend recommendations that trades accuracy for speed.
-   - How would you design the system to precompute recommendations while still handling graph changes?
 
 ## Question 9. Online Shopping Cart
 ```java
@@ -284,21 +154,6 @@ Products have varying prices and some may have discounts.
 Multiple discount codes may be applied with different rules.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent cart updates from multiple devices for the same user?
-   - Implement a conflict resolution strategy for simultaneous cart modifications.
-   - What synchronization approach would you use to ensure price consistency during checkout?
-
-2. **Scaling:**
-   - How would your design change to handle millions of active shopping carts?
-   - Design a distributed cart system that maintains session affinity.
-   - How would you handle cart persistence and recovery in a distributed environment?
-
-3. **Optimization:**
-   - How would you optimize discount code application for carts with many items?
-   - Implement an efficient algorithm for calculating shipping costs based on complex rules.
-   - How would you design the system to handle flash sales with sudden spikes in traffic?
 
 ## Question 10. Task Scheduler with Dependencies
 ```java
@@ -314,21 +169,6 @@ Tasks cannot start until all dependencies are completed.
 Detect and handle circular dependencies.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent task additions and dependency updates?
-   - Implement a lock-free algorithm for updating the dependency graph.
-   - What synchronization approach would you use for task execution in a multi-threaded environment?
-
-2. **Scaling:**
-   - How would your design change to handle millions of tasks with complex dependencies?
-   - Design a distributed task execution system that respects dependencies across nodes.
-   - How would you implement fault tolerance for long-running tasks?
-
-3. **Optimization:**
-   - How would you optimize the topological sort algorithm for large dependency graphs?
-   - Implement an efficient algorithm for detecting and reporting circular dependencies.
-   - How would you design the system to maximize parallelism while respecting dependencies?
 
 ## Question 11. Stock Portfolio Tracker
 ```java
@@ -344,21 +184,6 @@ Implement a stock portfolio tracker:
 Track multiple transactions per stock and handle partial sells correctly.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent buy/sell operations for the same stock?
-   - Implement a thread-safe portfolio update mechanism that maintains accurate P&L.
-   - What synchronization approach would you use to handle real-time price updates?
-
-2. **Scaling:**
-   - How would your design change to handle millions of portfolios and transactions?
-   - Design a sharding strategy for portfolio data that allows efficient aggregation.
-   - How would you implement historical performance tracking at scale?
-
-3. **Optimization:**
-   - How would you optimize P&L calculations for portfolios with many positions?
-   - Implement an efficient algorithm for tax-lot optimization (FIFO, LIFO, specific lot).
-   - How would you design the system to handle high-frequency trading scenarios?
 
 ## Question 12. Document Indexing System
 ```java
@@ -374,21 +199,6 @@ Design a document indexing system for fast keyword searches:
 Optimize for fast search operations across many documents.
 */
 ```
-### Follow up
-1. **Concurrency:**
-   - How would you handle concurrent document updates and searches?
-   - Implement a read-write lock strategy for the index that favors search performance.
-   - What synchronization approach would you use for updating inverted indices?
-
-2. **Scaling:**
-   - How would your design change to handle billions of documents?
-   - Design a distributed indexing system with partitioning and replication.
-   - How would you implement efficient cross-partition searches?
-
-3. **Optimization:**
-   - How would you optimize keyword searches for very common terms?
-   - Implement an efficient ranking algorithm that considers term frequency and document relevance.
-   - How would you design the system to handle real-time indexing while maintaining search performance?
 
 ## Challenges
 Real-world challenges including:
@@ -397,3 +207,161 @@ Real-world challenges including:
 - Handling relationships between entities
 - Implementing business logic
 - Optimizing for specific access patterns
+
+
+          
+# HashMap Problem Categories Analysis
+
+```mermaid
+graph TD
+    A[HashMap Problems] --> B[Basic HashMap Operations]
+    A --> C[HashMap with Specialized Data Structures]
+    A --> D[HashMap with Advanced Indexing]
+    A --> E[HashMap with Semantic Grouping]
+    
+    B --> B1[Direct Key-Value Lookups]
+    B --> B2[Simple Aggregation]
+    B --> B3[Basic CRUD Operations]
+    
+    C --> C1[HashMap + Graph]
+    C --> C2[HashMap + Queue]
+    C --> C3[HashMap + Linked List]
+    C --> C4[HashMap + DAG]
+    
+    D --> D1[Multiple Indices]
+    D --> D2[Range Queries]
+    D --> D3[Inverted Indices]
+    
+    E --> E1[Synonym Resolution]
+    E --> E2[Semantic Normalization]
+    
+    %% Properties
+    F[HashMap Properties] --> F1[Key Uniqueness]
+    F --> F2[Ordered Collections]
+    F --> F3[Range Queries]
+    F --> F4[Value Aggregation]
+    F --> F5[Bidirectional Lookups]
+    
+    %% Problem Mapping
+    B1 --> Q7[Q7: Flight Booking]
+    B1 --> Q9[Q9: Shopping Cart]
+    B1 --> Q11[Q11: Stock Portfolio]
+    
+    C1 --> Q1[Q1: Currency Exchange]
+    C1 --> Q8[Q8: Social Network]
+    C2 --> Q2[Q2: Operator Assignment]
+    C3 --> Q6[Q6: LRU Cache]
+    C4 --> Q10[Q10: Task Scheduler]
+    
+    D1 --> Q3[Q3: Log Analyzer]
+    D2 --> Q4[Q4: Product Inventory]
+    D3 --> Q12[Q12: Document Indexing]
+    
+    E1 --> Q5[Q5: Word Frequency Counter]
+    
+    %% Property Connections
+    F2 --> Q6
+    F2 --> Q10
+    F2 --> Q3
+    
+    F3 --> Q4
+    F3 --> Q3
+    
+    F4 --> Q3
+    F4 --> Q5
+    F4 --> Q8
+    F4 --> Q11
+    
+    F5 --> Q1
+    F5 --> Q8
+    
+    %% All connect to Key Uniqueness
+    F1 --> Q1
+    F1 --> Q2
+    F1 --> Q3
+    F1 --> Q4
+    F1 --> Q5
+    F1 --> Q6
+    F1 --> Q7
+    F1 --> Q8
+    F1 --> Q9
+    F1 --> Q10
+    F1 --> Q11
+    F1 --> Q12
+```
+
+## Problems Categories
+
+### 1. Basic HashMap Operations (Vanilla)
+Problems that primarily use hashmaps for direct key-value lookups with minimal additional logic:
+- **Question 7: Flight Booking System** - Uses hashmaps for direct lookups of flights by ID, source/destination cities, and passenger bookings
+- **Question 9: Online Shopping Cart** - Simple key-value mapping between product IDs and quantities/prices
+- **Question 11: Stock Portfolio Tracker** - Basic mapping of stock symbols to quantities and prices
+
+### 2. HashMap with Specialized Data Structures
+Problems that combine hashmaps with other data structures to solve more complex problems:
+- **Question 1: Currency Exchange** - HashMap + Graph (for currency conversion paths)
+- **Question 2: Operator Assignment** - HashMap + Queue (for tracking operator availability)
+- **Question 6: LRU Cache** - HashMap + Doubly Linked List (for O(1) access and ordering)
+- **Question 8: Social Network** - HashMap + Graph (for friend relationships)
+- **Question 10: Task Scheduler** - HashMap + Directed Acyclic Graph (for dependencies)
+
+### 3. HashMap with Advanced Indexing
+Problems that require specialized indexing or querying capabilities:
+- **Question 3: Log Analyzer** - Multiple indices for different query types (IPs, URLs, timestamps)
+- **Question 4: Product Inventory** - Range queries on price and quantity
+- **Question 12: Document Indexing** - Inverted indices for keyword searches
+
+### 4. HashMap with Semantic Grouping
+Problems that require grouping or normalizing keys based on semantic meaning:
+- **Question 5: Word Frequency Counter** - Synonym resolution and frequency counting
+
+## Properties-Based Classification
+
+We can also classify these problems based on the specific hashmap properties they leverage:
+
+### A. Key Uniqueness
+- All problems leverage this fundamental property
+
+### B. Ordered Collections
+- **Question 6: LRU Cache** - Ordering by recency
+- **Question 10: Task Scheduler** - Ordering by dependencies
+- **Question 3: Log Analyzer** - Time-based ordering for peak traffic analysis
+
+### C. Range Queries
+- **Question 4: Product Inventory** - Price range queries
+- **Question 3: Log Analyzer** - Time range queries
+
+### D. Value Aggregation
+- **Question 3: Log Analyzer** - Counting occurrences
+- **Question 5: Word Frequency** - Counting word frequencies
+- **Question 8: Social Network** - Counting mutual friends
+- **Question 11: Stock Portfolio** - Aggregating transactions
+
+### E. Bidirectional Lookups
+- **Question 1: Currency Exchange** - Bidirectional rate lookups
+- **Question 8: Social Network** - Bidirectional friendship relationships
+
+## Problem Categorization
+
+Based on the refined categories, here's how I would classify each problem:
+
+### 1. Basic HashMap Operations (Vanilla)
+- **Question 7: Flight Booking System**
+- **Question 9: Online Shopping Cart**
+- **Question 11: Stock Portfolio Tracker**
+
+### 2. HashMap with Specialized Data Structures
+- **Question 1: Currency Exchange** (HashMap + Graph)
+- **Question 2: Operator Assignment** (HashMap + Queue)
+- **Question 6: LRU Cache** (HashMap + Linked List)
+- **Question 8: Social Network** (HashMap + Graph)
+- **Question 10: Task Scheduler** (HashMap + DAG)
+
+### 3. HashMap with Advanced Indexing
+- **Question 3: Log Analyzer**
+- **Question 4: Product Inventory**
+- **Question 12: Document Indexing**
+
+### 4. HashMap with Semantic Grouping
+- **Question 5: Word Frequency Counter**
