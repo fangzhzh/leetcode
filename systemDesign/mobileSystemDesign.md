@@ -1,5 +1,12 @@
 # mobileSystemDesign 移动系统设计知识点
 
+## Common Categories of Clarification Questions
+1. Scale and Performance : Questions about data volume, operation frequency, and performance requirements.
+2. Edge Cases : Identifying boundary conditions and unusual inputs.
+3. Error Handling : How to handle invalid inputs or failure conditions.
+4. Concurrency : Whether thread safety is required and how to handle concurrent access.
+5. Persistence : Whether data needs to persist beyond program execution.
+
 ## 系统设计时间模板
 * 时间分配
 * 5 minutes - acquaintance 寒暄
