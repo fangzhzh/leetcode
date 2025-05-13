@@ -56,6 +56,11 @@ Implement methods:
 
 ## Question 4. Product Inventory System
 ```java
+import java.util.TreeMap
+import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.withLock
+
 /*
 Design a product inventory system with the following operations:
 - add(productId, quantity): Add products to inventory
@@ -67,6 +72,132 @@ Design a product inventory system with the following operations:
 Products have: ID, name, price, and quantity.
 Optimize for fast lookups by ID and efficient range queries.
 */
+
+data class Product(val id: String, val price: Double)
+class ProductInventory {
+    private val products = mapOf(
+        Pair("1", Product("1" , 1.1)),
+        Pair("2", Product("2" , 1.1)),
+        Pair("3", Product("3" , 1.1)),
+        Pair("4", Product("4" , 1.1)),
+        Pair("5", Product("5" , 1.1)),
+        Pair("6", Product("6" , 1.1)),
+        Pair("7", Product("7" , 1.1)),
+    )
+
+    private val inventory: MutableMap<String, Int> = HashMap<String, Int>()
+    private val priceMap = TreeMap<Double, MutableSet<String>>() // price -> set(products)
+    private val stockMap = TreeMap<Int, MutableSet<String>>() // stock -> set(products)
+    private val lock = ReentrantReadWriteLock()
+    // populate priceMap
+    init {
+        products.forEach {
+            product ->
+            priceMap.computeIfAbsent(product.value.price, {HashSet()}).add(product.key)
+        }
+
+    }
+    /***
+     *
+     * @param productId
+     * @param quantity
+     * Initial:
+     *  - inventory: current
+     *  - priceMap
+     *  - stockMap
+     * Operation: add quantity
+     * Final:
+     *  - inventory:
+     *    - 0: add
+     *    - 1: current + addition
+     *  - priceMap:
+     *    - 0:
+     *  - stockMap:
+     *    - 0: quantity -> productid
+     *    - 1: remove [stock] - productid, add [stock + quantity] + prodcutid
+     *
+     */
+    fun add(productId: String, quantity: Int)  { // : Add products to inventory
+        assert(quantity > 0)
+        lock.writeLock().withLock {
+            var stock = inventory.computeIfAbsent(productId, {0})
+            if(stock == 0) {
+                inventory[productId] = quantity
+                stockMap.computeIfAbsent(stock, { hashSetOf() }).add(productId)
+            } else {
+                inventory[productId] = stock + quantity
+                stockMap.get(stock)?.remove(productId)
+                stockMap.computeIfAbsent(stock+quantity, {HashSet()}).add(productId)
+            }
+        }
+    }
+
+    /***
+     *
+     * @param productId
+     * @param quantity
+     * Initial:
+     *  - inventory: current
+     *  - priceMap
+     *  - stockMap
+     * Operation: remove quantity
+     * Final:
+     *  - inventory: stock
+     *      stock + quantity <= 0, remove, else update
+     *  - priceMap:
+     *  - stockMap:
+     *      stock + quantity <= 0, remove
+     *      else
+     *          [stock].remove(prdId)
+     *          [stock+quality]{new set}.add(proId)
+     *
+     */
+    fun remove(productId: String, quantity: Int) { // : Remove products from inventory
+        assert(quantity > 0)
+        lock.writeLock().withLock {
+            val stock = inventory.computeIfAbsent(productId, {0})
+            if(stock - quantity <= 0) {
+                inventory.remove(productId)
+                stockMap.get(stock)?.remove(productId)
+            } else {
+                inventory[productId] = stock - quantity
+                stockMap.get(stock)?.remove(productId)
+                stockMap.computeIfAbsent(stock - quantity, {HashSet()}).add(productId)
+            }
+        }
+
+    }
+
+    fun getAvailableQuantity(productId: String): Int { // Get current quantity
+        lock.readLock().withLock {
+            return inventory.getOrDefault(productId, 0)
+        }
+    }
+
+    fun getProductsInRange(minPrice: Double, maxPrice: Double): List<Product?> { //Get
+        lock.readLock().withLock {
+            val result = mutableListOf<Product?>()
+            for (price in priceMap.subMap(minPrice, maxPrice)) {
+                for (productId in price.value) {
+                    result.add(products.get(productId))
+                }
+            }
+            return result
+        }
+    }
+    fun getLowStockProducts(threshold: Int): List<Product?> { //Get products below threshold quantity
+        lock.readLock().withLock {
+            val result = mutableListOf<Product?>()
+            for (productset in stockMap.subMap(0, threshold)) {
+                for (productId in productset.value) {
+                    result.add(products.get(productId))
+                }
+            }
+            return result
+        }
+    }
+
+}
 ```
 
 ## Question 5. Word Frequency Counter with Synonyms
