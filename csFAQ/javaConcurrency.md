@@ -1,3 +1,91 @@
+# Concurrency concepts
+```mermaid
+graph LR
+    A[Concurrent Programming] --> B[Concurrency Models]
+    A --> C[Thread Safety]
+    A --> D[Synchronization Primitives]
+    A --> E[Concurrency Patterns]
+    A --> F[Concurrency Challenges]
+    
+    %% Concurrency Models
+    B --> B1[Thread-based]
+    B --> B2[Event-based]
+    B --> B3[Coroutines]
+    B --> B4[Actor Model]
+    
+    B1 --> B1a[Java Threads]
+    B1 --> B1b[POSIX Threads]
+    B1 --> B1c[Thread Pools]
+    
+    B3 --> B3a[Kotlin Coroutines]
+    B3 --> B3b[Go Goroutines]
+    B3 --> B3c[Python asyncio]
+    
+    %% Thread Safety
+    C --> C1[Immutability]
+    C --> C2[Thread-Safe Collections]
+    C --> C3[Thread Confinement]
+    C --> C4[Atomic Operations]
+    
+    C2 --> C2a[ConcurrentHashMap]
+    C2 --> C2b[CopyOnWriteArrayList]
+    C2 --> C2c[Synchronized Collections]
+    
+    C4 --> C4a[AtomicInteger/Long]
+    C4 --> C4b[AtomicReference]
+    C4 --> C4c[Compare-And-Swap]
+    
+    %% Synchronization Primitives
+    D --> D1[Locks]
+    D --> D2[Semaphores]
+    D --> D3[Barriers]
+    D --> D4[Latches]
+    D --> D5[Channels]
+    
+    D1 --> D1a[Mutex]
+    D1 --> D1b[ReadWriteLock]
+    D1 --> D1c[ReentrantLock]
+    
+    %% Concurrency Patterns
+    E --> E1[Producer-Consumer]
+    E --> E2[Readers-Writers]
+    E --> E3[Thread Pool]
+    E --> E4[Future/Promise]
+    E --> E5[Work Stealing]
+    
+    %% Concurrency Challenges
+    F --> F1[Race Conditions]
+    F --> F2[Deadlocks]
+    F --> F3[Livelocks]
+    F --> F4[Starvation]
+    F --> F5[Thread Leaks]
+    
+    %% Blocking vs Non-blocking
+    A --> G[Execution Models]
+    G --> G1[Blocking Operations]
+    G --> G2[Non-blocking Operations]
+    
+    G1 --> G1a[Thread.sleep]
+    G1 --> G1b[Synchronized Methods]
+    G1 --> G1c[I/O Operations]
+    
+    G2 --> G2a[Callbacks]
+    G2 --> G2b[Futures/Promises]
+    G2 --> G2c[Reactive Streams]
+    
+    %% Memory Models
+    A --> H[Memory Models]
+    H --> H1[Visibility]
+    H --> H2[Ordering]
+    H --> H3[Happens-Before]
+    
+    %% Performance Considerations
+    A --> I[Performance]
+    I --> I1[Context Switching]
+    I --> I2[Thread Overhead]
+    I --> I3[Lock Contention]
+    I --> I4[False Sharing]
+```
 # Learn Concurrency with examples
 
 [[hashMapRealWorldProblem.md]]
@@ -5,6 +93,14 @@
 ## Problem 1
 
 ```java
+/*
+We are a currency exchange that maintains the current exchange rates between currencies. A user can come to us with some amount in one currency and request the equivalent amount in a different currency. Given a list of exchange rates between currencies, write a function that calculates currency rate between any 2 currencies.
+
+(GBP, EUR, 10)     - read as "1 GBP equals 10 EUR"
+(EUR, USD, 1.1)    - "1 EUR equals 1.1 USD"
+(USD, JPY, 108.3)
+(CNY, RUB, 14.6)
+*/
 
 /*
 We are a currency exchange that maintains the current exchange rates between currencies. A user can come to us with some amount in one currency and request the equivalent amount in a different currency. Given a list of exchange rates between currencies, write a function that calculates currency rate between any 2 currencies.
@@ -15,103 +111,49 @@ We are a currency exchange that maintains the current exchange rates between cur
 (CNY, RUB, 14.6)
 */
 
-// GBP-> EUR = 10
-// GBP -> USD => GPB -> EUR -> USD
 
-// <CUR, MAP> 
-// GBP -> MAP<CUR, num> -> EUR -> 10
-// GBP -> MAP<CUR, MAP<>> -> EUR<CUR, num>
-//      
-
-// n pair currentcy,  2n currencies
-// TC O(n)
-// SC O(n)
-
-// Main class should be named 'Solution' and should not be public.
-
-/*
-We are a currency exchange that maintains the current exchange rates between currencies. A user can come to us with some amount in one currency and request the equivalent amount in a different currency. Given a list of exchange rates between currencies, write a function that calculates currency rate between any 2 currencies.
-
-(GBP, EUR, 10)     - read as "1 GBP equals 10 EUR"
-(EUR, USD, 1.1)    - "1 EUR equals 1.1 USD"
-(USD, JPY, 108.3)
-(CNY, RUB, 14.6)
-*/
-// GBP-> EUR = 10
-// GBP -> USD => GPB -> EUR -> USD
-// <CUR, MAP>
-// GBP -> MAP<CUR, num> -> EUR -> 10
-// GBP -> MAP<CUR, MAP<>> -> EUR<CUR, num>
-//
-
-data  class CurrentExchange(val source: String, val target: String, val rate: Double) {
+data  class CurrencyExchange(val source: String, val target: String, val rate: Double) {
 
 }
 
-internal object Solution {
+class CurrencyExchanger{
     private val currencyExchangeGraph: MutableMap<String, MutableMap<String, Double>> = HashMap()
-    private val visited: MutableMap<String, Boolean> = HashMap()
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        /*
-(GBP, EUR, 10)     - read as "1 GBP equals 10 EUR"
-(EUR, USD, 1.1)    - "1 EUR equals 1.1 USD"
-(USD, JPY, 108.3)
-(CNY, RUB, 14.6)
-*/
-        val records = arrayOf<CurrentExchange>(
-            CurrentExchange("GBP", "EUR", 10.0),
-            CurrentExchange("EUR", "USD", 1.1),
-            CurrentExchange("USD", "JPY", 108.3),
-            CurrentExchange("CNY", "RUB", 104.6)
-        )
-        currencyBuild(records)
-        var ans = getCurrencyRate("GBP", "EUR")
-        println("GBP->EUR:$ans")
-        visited.clear()
-        ans = getCurrencyRate("GBP", "USD")
-        println("GBP->USD:$ans")
-        visited.clear()
-        ans = getCurrencyRate("GBP", "JPY")
-        println("GBP->JPY:$ans")
-        visited.clear()
-        ans = getCurrencyRate("GBP", "CNY")
-        println("GBP->CNY:$ans")
+    
+    private fun addExchangeRate(exchangeRate: CurrencyExchange) {
+        val (source, target, rate) = exchangeRate
+        currencyExchangeGraph.computeIfAbsent(source, {HashMap()})[target] =
+            rate
+        currencyExchangeGraph.computeIfAbsent(target, {HashMap()})[source] = 1.0 / rate
     }
-
-
-    fun currencyBuild(currenciesExchanges: Array<CurrentExchange>) {
-        for (currencyChange in currenciesExchanges) {
-            val (source, target, rate) = currencyChange
-            currencyExchangeGraph.computeIfAbsent(source, {HashMap()})[target] =
-                rate
-            currencyExchangeGraph.computeIfAbsent(target, {HashMap()})[source] = 1.0 / rate
+    fun currencyGraphBuild(currenciesExchanges: Array<CurrencyExchange>) {
+        currenciesExchanges.forEach {
+            addExchangeRate(it)
         }
     }
-
-    // GBP -> USD
-    // GBP -> JPY
     fun getCurrencyRate(source: String, target: String): Double {
+        val visited: MutableMap<String, Boolean> = HashMap()
+        return getCurrencyRate(source, target, visited)
+    }
+    fun getCurrencyRate(source: String, target: String, visited: MutableMap<String, Boolean>): Double {
         if(visited.getOrDefault(source, false)) {
             return -1.0;
         }
         if(!currencyExchangeGraph.containsKey(source) || !currencyExchangeGraph.containsKey(target)) {
             return -1.0;
         }
-        return getCurrencyRateDFS(source, target)
+        return getCurrencyRateDFS(source, target, visited)
     }
 
-    fun getCurrencyRateDFS(source: String, target: String): Double {
+    private fun getCurrencyRateDFS(source: String, target: String, visited: MutableMap<String, Boolean>): Double {
         // Graph, BFS, DFS
         visited[source] = true
         currencyExchangeGraph[source]?.let {
-            sourceMap -> 
+                sourceMap ->
             if(sourceMap.getOrDefault(target, -1.0) != -1.0) {
                 return sourceMap[target]!!
             }
             for(neighbour in sourceMap.keys) {
-                val neighbourRate = getCurrencyRate(neighbour, target);
+                val neighbourRate = getCurrencyRate(neighbour, target, visited);
                 if(neighbourRate != -1.0) {
                     return sourceMap[neighbour]!! * neighbourRate
                 }
@@ -119,11 +161,38 @@ internal object Solution {
         }
         return -1.0;
     }
+
+}
+
+internal object Solution {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val currencyExchanger = CurrencyExchanger()
+        val records = arrayOf<CurrencyExchange>(
+            CurrencyExchange("GBP", "EUR", 10.0),
+            CurrencyExchange("EUR", "USD", 1.1),
+            CurrencyExchange("USD", "JPY", 108.3),
+            CurrencyExchange("CNY", "RUB", 104.6)
+        )
+        currencyExchanger.currencyGraphBuild(records)
+        var ans = currencyExchanger.getCurrencyRate("GBP", "EUR")
+        println("GBP->EUR:$ans")
+        ans = currencyExchanger.getCurrencyRate("GBP", "USD")
+        println("GBP->USD:$ans")
+        ans = currencyExchanger.getCurrencyRate("GBP", "JPY")
+        println("GBP->JPY:$ans")
+        ans = currencyExchanger.getCurrencyRate("GBP", "CNY")
+        println("GBP->CNY:$ans")
+    }
 }
 
 ```
-## Question 2
+## Question 2. Operator Assignment
 ```java
+/*
+When assigning a task to an operator, we want to assign it to the operator with the fewest tasks, and if there are multiple operators with the same number of tasks, assign to the operator having most ilde time, if idel time are same, assign alphbeta by name.
+
+
 - Initializes with a set of available operators.
 - set_limit(operator_name, n)
   Sets an operator’s limit.
@@ -131,27 +200,118 @@ internal object Solution {
   Assigns a given conversation to the next available operator.
 - get_assignment_queue(n)
   Returns the list of possible operators in the order they will be assigned to conversations, not real assignment yet.
+*/
+```
+### Code
+
+```kotlin
+import java.util.PriorityQueue
+import kotlin.concurrent.timerTask
+
+data class Operator(
+    val name: String, var capability: Int = 0, var workLoad: Int = 0, var lastOpTime: Long = 0L
+): Comparable<Operator>  {
+    override fun compareTo(other: Operator): Int {
+        if(this.workLoad != other.workLoad) {
+            return this.workLoad - other.workLoad
+        }
+        if(this.lastOpTime != other.lastOpTime) {
+            return (this.lastOpTime - other.lastOpTime).toInt()
+        }
+        return this.name.compareTo(other.name)
+    }
+
+}
+
+// a, 3
+// b, 3
+// c, 2
+
+// assign("1") => a
+// assign("1") => b
+// assign("1") => a
+class TaskAssigner {
+    private val operators: MutableMap<String, Operator> = HashMap()
+    private val availableOperators: PriorityQueue<Operator> = PriorityQueue()
+
+    constructor(operatorNames: List<String>) {
+        operatorNames.forEach {
+            val op = Operator(name = it)
+            operators.put(it, op)
+            availableOperators.add(op)
+        }
+    }
+
+    fun set_limit(operator_name: String, n: Int) {
+        operators[operator_name]?.let {
+            it.capability = n
+            availableOperators.remove(it)
+            it.capability = n
+            availableOperators.add(it)
+        }
+    }
+
+    fun assign(conversation_id: String): String? {
+        var bestOp: Operator? = null;
+        val tmpQueue = PriorityQueue<Operator>()
+        while(!availableOperators.isEmpty()) {
+            val op = availableOperators.poll()
+            if(op.workLoad < op.capability) {
+                bestOp = op;
+                break
+            }
+            tmpQueue.add(op)
+        }
+        availableOperators.addAll(tmpQueue)
+        if (bestOp == null) {
+            return null
+        }
+        availableOperators.remove(bestOp)
+        bestOp.lastOpTime = System.currentTimeMillis()
+        bestOp.workLoad+=1
+        availableOperators.add(bestOp)
+        return bestOp.name
+    }
+
+    fun get_assignment_queue(n: Int): List<String> {
+        val res = ArrayList<String>()
+        val tmpOperator = HashMap<String, Operator>()
+        operators.forEach {
+            tmpOperator.put(it.key, it.value.copy())
+        }
+        val tmpQueue = PriorityQueue<Operator>()
+        tmpQueue.addAll(tmpOperator.values)
+        for (i in 0 until n) {
+            val op = tmpQueue.poll()
+            if(op.workLoad >= op.capability) {
+                continue;
+            }
+            res.add(op.name)
+            tmpQueue.remove(op)
+            op.workLoad++
+            op.lastOpTime = System.currentTimeMillis()
+            tmpQueue.add(op)
+        }
+        return res
+    }
+}
 ```
 
 
 ## Question 3
-```java
-class UploadManager {
-    // 1. concurrency, multithread
-    // 2. save, 100 max
-    // 3. no missing events:
-    // 4. sequence
-    // channel<100> + newSingeThreadExecutor
-    // resolved: 1
 
+```java
+/**
+- concurrency, multithread, event uploader
+- Ordered processing through sequence numbers
+- No event loss during failures
+- Strict batch size of 100 (except final batch)
+ */
+class UploadManagerChannel {
     // FIFO
     val channel = Channel<String>(100)
-    val queue1 = ConcurrencyLinkedList(100);
-    val queue2 = ConcurrencyLinkedList(100);
-    var q1 = true;
-    val memoryQueue = ConcurrencyLinkedList();
     val scope = CoroutineScope<newSingleThreadExecutor>();
-    // val apiServer = APIServer();
+
 
     fun addEvent(event: String) {
         scope.launch{
@@ -159,63 +319,6 @@ class UploadManager {
           channel.offer(event);// suspend function
           print(5)
         }
-    }
-
-    fun addEvent2(event: String) {
-        // handle adding event
-        if(q1) {
-          if(queue1.size() < 100) {
-            queue1.add(event);
-            return
-          }
-
-        } else {
-          if(queue2.size() < 100) {
-            queue2.add(event);
-            return
-          }
-        }
-        memoryQueue.add(event)
-        // scope.launch{
-        //   print(1)//
-        //   channel.offer(event);// suspend function
-        //   print(5)
-        // }
-    }
-
-// upload(50) --10--> onFailure
-// 50,10
-// 10, 50
-
-    fun upload2() {
-      val curQ = if(q1)
-      val array = Array<String>;
-          while(String event: queue) {
-            array.add(event)
-          };
-      Network.post(
-            /* what */,
-          onSuccess = { response ->
-            // ?
-
-          },
-          onFailure = { error ->
-              print(3)
-              // ?
-              val newArray = Array<String>;
-              while(!channel.isEmpty()) {
-                newArray.add(channel.poll())
-              }
-              for(String event: array) {
-                channel.offer(event)
-              }
-
-              for(String event: newArray) {
-                channel.offer(event);
-              }
-
-
-          })
     }
 
     suspend fun upload() {
@@ -259,11 +362,327 @@ class UploadManager {
 class Network {
   fun post(data, onSuccess, onFailure);
 }
-
 ```
 
 
+### Channel solution
+```java
+class UploadManagerChannel {
+    // FIFO
+    val channel = Channel<String>(100)
+    val scope = CoroutineScope<newSingleThreadExecutor>();
 
+
+    fun addEvent(event: String) {
+        scope.launch{
+          print(1)//
+          channel.offer(event);// suspend function
+          print(5)
+        }
+    }
+
+    suspend fun upload() {
+        // handle uploading
+        scope.launch {
+          print(2)
+          val array = Array<String>;
+          while(!channel.isEmpty()) {
+            array.add(channel.poll())
+          }
+          // array => bytecode
+          Network.post(array
+            /* what */,
+          onSuccess = { response ->
+            // ?
+
+          },
+          onFailure = { error ->
+              print(3)
+              // ?
+              val newArray = Array<String>;
+              while(!channel.isEmpty()) {
+                newArray.add(channel.poll())
+              }
+              for(String event: array) {
+                channel.offer(event)
+              }
+
+              for(String event: newArray) {
+                channel.offer(event);
+              }
+
+
+          })
+
+        }
+    }
+}
+```
+### Improved Channel solution
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.ConcurrentLinkedQueue
+import kotlin.random.Random
+
+data class Event(val content: String, val seq: Int)
+object Network {
+    fun post(
+        events: List<Event>,
+        onSuccess: (String) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        // Simulate async network call
+        GlobalScope.launch {
+            try {
+                delay(50) // simulate latency
+                val rdm = Random.nextInt()
+                if(rdm % 2 == 0) {
+                    onSuccess("Uploaded ${events.size} events")
+                } else {
+                    onFailure(Exception("$rdm"))
+                }
+            } catch (e: Exception) {
+                onFailure(e)
+            }
+        }
+    }
+}
+class UploadManagerChannelImproved {
+    // FIFO
+    private val channel = Channel<List<Event>>(capacity = Channel.UNLIMITED)
+    private val scope = CoroutineScope(newSingleThreadContext("Single"))
+    private val events = mutableListOf<Event>();
+    private val mutex = Mutex()
+    private var sequence = 0
+
+    init {
+        scope.launch {
+            for(event in channel) {
+                this@UploadManagerChannelImproved.processEvent(batch = event)
+            }
+        }
+
+        scope.launch {
+            while(true) {
+                mutex.withLock {
+                    if(events.size >= 100) {
+                        val batch = mutableListOf<Event>()
+                        batch.addAll(events.take(100))
+                        events.drop(100)
+                        channel.send(batch)
+                    }
+                }
+                delay(100)
+            }
+        }
+    }
+
+    suspend fun addEvent(event: String) {
+        mutex.withLock {
+            val newE = Event(content = event, seq = sequence)
+            events.add(newE)
+            sequence++
+        }
+    }
+
+    suspend fun processEvent(batch: List<Event>) {
+        var retried = 0;
+        var expontial = 100L;
+
+        while (retried < 3) {
+            try {
+                upload(batch)
+                return
+            } catch (e:Throwable ) {
+                retried++
+                if(retried >= 3) {
+                    scope.launch {
+                        println("$batch failed and readded")
+                        mutex.withLock {
+                            events.addAll(batch)
+                            val cache  = events.sortedBy { it.seq }
+                            events.clear()
+                            events.addAll(cache)
+                        }
+                    }
+                }
+                delay(expontial)
+                expontial *= 2;
+            }
+
+        }
+
+    }
+
+
+
+    suspend fun upload(batch: List<Event>) {
+        val array = batch.sortedBy { it.seq }
+        // array => bytecode
+        Network.post(array
+            /* what */,
+            onSuccess = { response: String ->
+                // ?
+                println("$response success")
+
+            },
+            onFailure = { error: Throwable ->
+                println("Upload failed: ${error.message}")
+                throw error;
+            })
+
+    }
+
+    fun shutdown() {
+        runBlocking {
+            mutex.withLock {
+                channel.send(events)
+            }
+            delay(1000)
+            channel.close()
+            scope.cancel()     
+        }
+    }
+}
+```
+
+### Thread solution
+```kotlin
+import kotlinx.coroutines.processNextEventInCurrentThread
+import java.lang.Thread.sleep
+
+
+class UploadManagerChannelNoCoroutine {
+    private val events = mutableListOf<Event>();
+    private val mutex = Object()
+    private var sequence = 0
+    
+
+    fun addEvent(name: String) {
+        synchronized(mutex) {
+            events.add(Event(name, seq = sequence))
+            sequence++
+        }
+    }
+
+
+    fun uploadBatch() {
+        var retries = 0
+        var delay = 100
+        synchronized(mutex) {
+            val batch = events.take(100).toList()
+            val cache = events.drop(100)
+            events.clear()
+            events.addAll(cache)
+        }
+        while(retries < 3) {
+            try{
+                upload(batch)
+                return
+            } catch (e: Throwable) {
+                retries++
+                if(retries >= 3) {
+                    synchronized(mutex) {
+                        events.addAll(0, batch)
+                    }
+                    return
+                }
+                sleep(delay.toLong())
+                delay*=2
+            }
+        }
+
+    }
+    fun upload(batch: List<Event>) {
+        Network.post(batch
+            /* what */,
+            onSuccess = { response: String ->
+                // ?
+                println("$response success")
+
+            },
+            onFailure = { error: Throwable ->
+                println("Upload failed: ${error.message}")
+                throw error
+            })
+    }
+
+    fun shutdown() {
+        synchronized(mutex) {
+            if (events.isNotEmpty()) {
+                upload(events)
+                sleep(1000L)
+            }
+        }
+    }
+}
+```
+### Current collection solution
+```normal
+class UploadManagerThread {
+    // FIFO
+    val queue1 = ConcurrencyLinkedList(100);
+    val queue2 = ConcurrencyLinkedList(100);
+    val memoryQueue = ConcurrencyLinkedList();
+    // val apiServer = APIServer();
+
+    fun addEvent2(event: String) {
+        // handle adding event
+        if(q1) {
+          if(queue1.size() < 100) {
+            queue1.add(event);
+            return
+          }
+
+        } else {
+          if(queue2.size() < 100) {
+            queue2.add(event);
+            return
+          }
+        }
+        memoryQueue.add(event)
+
+    }
+
+// upload(50) --10--> onFailure
+// 50,10
+// 10, 50
+
+    fun upload2() {
+      val curQ = if(q1)
+      val array = Array<String>;
+          while(String event: queue) {
+            array.add(event)
+          };
+      Network.post(
+            /* what */,
+          onSuccess = { response ->
+            // ?
+
+          },
+          onFailure = { error ->
+              print(3)
+              // ?
+              val newArray = Array<String>;
+              while(!channel.isEmpty()) {
+                newArray.add(channel.poll())
+              }
+              for(String event: array) {
+                channel.offer(event)
+              }
+
+              for(String event: newArray) {
+                channel.offer(event);
+              }
+
+
+          })
+    }
+}
+```
 # Concurrency Challenges          
 ## 1. Read-Write Conflicts
 
@@ -407,6 +826,7 @@ class Network {
   ```
 
 - **Synchronized Collections:** For simpler thread-safety needs
+* locked in all operations
   ```java
   private final Map<K, V> map = Collections.synchronizedMap(new HashMap<>());
   
@@ -466,38 +886,6 @@ class Network {
   }
   ```
 
-## 6. Visibility and Happens-Before Guarantees
-
-**Challenge:** Ensuring changes made by one thread are visible to other threads.
-
-**General Solutions:**
-- **Volatile Variables:** For simple flags and counters
-  ```java
-  private volatile boolean running = true;
-  
-  public void stop() {
-      running = false;
-  }
-  
-  public void run() {
-      while (running) {
-          // Do work
-      }
-  }
-  ```
-
-- **Atomic Variables:** For numeric operations with visibility guarantees
-  ```java
-  private final AtomicBoolean initialized = new AtomicBoolean(false);
-  private Map<K, V> data;
-  
-  public void initialize() {
-      if (initialized.compareAndSet(false, true)) {
-          data = new HashMap<>();
-          // Initialization logic
-      }
-  }
-  ```
 
 ## 7. Thread Confinement
 
