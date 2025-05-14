@@ -413,6 +413,7 @@ The left and right subtree each must also be a binary search tree.
 ## StringBuilder	
 
 `deleteCharAt(int index)`
+`deleteAt(int index)`
 
 ## StrintBuffer VS StringBuilder
 ### Thread Safety:

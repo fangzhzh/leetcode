@@ -1,7 +1,3 @@
-
-
-
-          
 # Transaction Status Tracker System Design
 
 ## 1. Situation (Context Setting)
