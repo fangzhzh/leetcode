@@ -2,8 +2,29 @@
 
 ## Common Categories of Clarification Questions
 1. Scale and Performance : Questions about data volume, operation frequency, and performance requirements.
+	1. **Data Volume**:
+		- Storage requirements (how much data needs to be stored)
+		- Network bandwidth (how much data is transferred)
+		- Cache size requirements
+		- Media handling (images, videos, etc.)
+
+	2. **Operation Frequency**:
+		- This includes TPS and QPS, but also:
+		- Background sync frequency
+		- Polling intervals
+		- Push notification frequency
+		- Batch processing schedules
+
+	3. **Performance Requirements**:
+		- Response time expectations
+		- UI rendering performance
+		- Animation smoothness
+		- Battery consumption constraints
+		- Offline capabilities
+		- Cold start time
+
 2. Edge Cases : Identifying boundary conditions and unusual inputs.
-3. Error Handling : How to handle invalid inputs or failure conditions.
+3. Error Handling : How to handle invalid inputs or failure conditions, retry logic.
 4. Concurrency : Whether thread safety is required and how to handle concurrent access.
 5. Persistence : Whether data needs to persist beyond program execution.
 
