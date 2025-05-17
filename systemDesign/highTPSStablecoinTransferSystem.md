@@ -67,10 +67,11 @@ graph LR
 ### Core Components
 
 1. **API Gateway Layer**
-   - Rate limiting and throttling
-   - Authentication and authorization
-   - Request validation
-   - Load balancing
+    - Rate limiting and throttling
+    - Authentication and authorization
+        * JWT/Oauth token
+    - Request validation
+    - Load balancing
 
 2. **Transaction Processing Service**
    - Transaction creation and signing
@@ -233,10 +234,210 @@ graph LR
 - Rate limiting to prevent DoS attacks
 - Transaction amount limits and anomaly detection
 
+          
+# User Flow and Error Handling in High-TPS Stablecoin Transfer System
+
+
+## Normal User Request Flow
+
+### 1. User Sends Request
+
+A typical user request would look like:
+
+```json
+POST /api/v1/transfers
+{
+  "from": "0x1234...abcd",  // User's wallet address
+  "to": "0x5678...efgh",    // Recipient's wallet address
+  "amount": "100.00",       // Amount to transfer
+  "token": "USDC",          // Stablecoin type
+  "priority": "normal",     // Transaction priority (affects gas price)
+  "idempotencyKey": "uuid-1234-5678" // Prevents duplicate submissions
+}
+```
+
+### 2. API Gateway Processing
+
+The API Gateway:
+- Authenticates the user (JWT/OAuth token validation)
+- Validates the request format and parameters
+- Checks rate limits for the user
+- Load balances to an available server
+
+**Response to User:**
+The system doesn't make the user wait for blockchain confirmation. Instead, it returns an immediate acknowledgment:
+
+```json
+{
+  "status": "accepted",
+  "transferId": "tr-12345",
+  "estimatedCompletionTime": "30 seconds",
+  "trackingUrl": "/api/v1/transfers/tr-12345"
+}
+```
+
+This allows the user to continue their activities while tracking the transaction status separately.
+
+### 3. Service Processing
+
+Depending on the request type:
+
+**Transaction Processing Service:**
+- Creates and signs the transaction
+- Estimates appropriate gas fees
+- Obtains the next nonce from the Nonce Management System
+- Submits the transaction to the queue
+
+**Wallet Management Service:**
+- Verifies sufficient balance
+- Updates internal balance records (optimistic update)
+- Tracks transaction in user history
+
+### 4. Blockchain Interaction
+
+- The Blockchain Interaction Layer sends the transaction to RPC nodes
+- Transaction is broadcast to the blockchain network
+- System monitors for confirmations
+
+### 5. Status Updates to User
+
+**Websocket/Server-Sent Events:**
+The system uses real-time communication channels to update the user:
+```
+ws://api.example.com/ws/transfers/tr-12345
+```
+A single server might support 10,000-100,000 concurrent WebSocket connections depending on hardware
+
+**Webhook Callbacks:**
+For applications, the system can send webhook notifications to a registered URL:
+```
+POST https://user-app.example.com/callbacks/transfers
+{
+  "transferId": "tr-12345",
+  "status": "confirmed",
+  "blockNumber": 15243687,
+  "transactionHash": "0xabc..."
+}
+```
+
+**HTTP Polling Endpoint:**
+For clients that can't use websockets:
+```
+GET /api/v1/transfers/tr-12345
+```
+
+Response:
+```json
+{
+  "transferId": "tr-12345",
+  "status": "pending", // pending, confirmed, failed
+  "confirmations": 2,
+  "transactionHash": "0xabc...",
+  "blockNumber": 15243687,
+  "estimatedCompletionTime": "10 seconds remaining"
+}
+```
+
+## Error Handling Strategies
+
+### 1. Pre-Submission Errors
+
+**Validation Errors:**
+```json
+{
+  "status": "error",
+  "code": "VALIDATION_ERROR",
+  "message": "Invalid recipient address format",
+  "details": {
+    "field": "to",
+    "reason": "Not a valid Ethereum address"
+  }
+}
+```
+
+**Insufficient Funds:**
+```json
+{
+  "status": "error",
+  "code": "INSUFFICIENT_FUNDS",
+  "message": "Insufficient balance for transfer",
+  "details": {
+    "available": "50.00 USDC",
+    "required": "100.00 USDC"
+  }
+}
+```
+
+### 2. Transaction Processing Errors
+
+**Nonce Conflicts:**
+- System automatically retries with corrected nonce
+- No user action required
+- Status updates reflect "processing" with details
+
+**Gas Price Spikes:**
+- For extreme spikes, system may notify user:
+```json
+{
+  "status": "pending_approval",
+  "code": "HIGH_GAS_PRICE",
+  "message": "Network congestion detected",
+  "options": {
+    "proceed": {
+      "estimatedFee": "5.00 USD",
+      "estimatedDelay": "none"
+    },
+    "wait": {
+      "estimatedFee": "1.50 USD",
+      "estimatedDelay": "~30 minutes"
+    }
+  }
+}
+```
+
+### 3. Blockchain-Level Errors
+
+**Transaction Dropped from Mempool:**
+- System automatically resubmits with higher gas price
+- Updates status to "resubmitted"
+- Tracks multiple submission attempts
+
+**Network Partition/RPC Failure:**
+- System fails over to alternate RPC providers
+- Implements circuit breaker if all providers fail
+- Returns service degradation notice to user
+
+### 4. System-Level Error Recovery
+
+**Transaction Reconciliation:**
+- Periodic job checks for transactions stuck in "pending" state
+- Compares on-chain state with internal records
+- Automatically resolves discrepancies
+
+**Dead Letter Queue:**
+- Failed transactions after max retries go to DLQ
+- Operations team can manually resolve or refund
+- User receives notification of manual intervention
+
+## Error Notification Channels
+
+The system uses the same channels for error notifications as for status updates:
+
+1. **Websocket/SSE:** Real-time error notifications
+2. **Webhook Callbacks:** For application integration
+3. **Email/Push Notifications:** For critical errors requiring user action
+4. **In-app Notifications:** For mobile/web applications
+
 ## Conclusion
 
-This high-throughput stablecoin transfer system balances performance, reliability, and cost-efficiency through careful architecture design. The hybrid wallet approach, sophisticated nonce management, and multi-tier transaction queueing enable the system to achieve 10k TPS while maintaining transaction integrity and optimizing gas usage.
+This comprehensive approach ensures:
+- Users receive immediate feedback on their requests
+- Transactions are reliably processed even during network congestion
+- Users can track transaction status in real-time
+- Errors are handled gracefully with appropriate recovery mechanisms
+- The system maintains data consistency between internal state and blockchain state
 
-The system's resilience to network congestion and gas price volatility is ensured through intelligent backpressure mechanisms and a robust RPC provider strategy, making it suitable for production-grade financial applications.
+The design prioritizes user experience by providing immediate responses while handling the complexities of blockchain transactions behind the scenes.
+
 
         
