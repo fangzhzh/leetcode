@@ -104,4 +104,21 @@ int upper_bound(int[]nums, int target) {
 
 
 
+🧾 Given list:
+
+list = [1, 4, 4, 6, 7]
+        0  1  2  3  4
+
+
+
+
+📌 Final Answers:
+
+
+| Query            | Result |
+|------------------|--------|
+| lower_bound(4)   | 1      |
+| upper_bound(4)   | 3      |
+| upper_bound(5)   | 3      |
+| lower_bound(5)   | 3      |
 
