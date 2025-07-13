@@ -1,16 +1,16 @@
 # Monotonic Stack
 ## Algorithm Idea
-1. A monotonic stack is a stack that maintains elements in either strictly increasing or strictly decreasing order
+A monotonic stack is a stack that maintains elements in either strictly increasing or strictly decreasing order
    - For next greater element: maintain decreasing order (pop when current > stack top)
    - For next smaller element: maintain increasing order (pop when current < stack top)
 
-2. Key Operations:
+* Key Operations:
    - When pushing a new element:
      * Compare with stack top
      * Pop elements that violate the order
      * Push new element
    
-3. Common Patterns:
+* Common Patterns:
    ```python
    # Next Greater Element pattern
    stack = []  # stores indices

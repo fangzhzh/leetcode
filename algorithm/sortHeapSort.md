@@ -1,6 +1,6 @@
 # heap sort 堆排序
 Heap sort is a comparison-based sorting technique based on Binary Heap data structure.
-* 二叉堆
+## 二叉堆
 
 堆其实就是利用完全二叉树的结构来维护的一维数组，但堆并不一定是完全二叉树
 
