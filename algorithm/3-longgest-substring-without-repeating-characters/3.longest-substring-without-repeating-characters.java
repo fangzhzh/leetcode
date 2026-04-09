@@ -118,3 +118,33 @@ class Solution {
 }
 // @lc code=end
 
+// Version 3 
+// also slicing window, using set to count duplication, 
+// left, right to keep the windows,
+class Solution {
+    // tc O(n)
+    // sc O(1)
+    public int lengthOfLongestSubstring(String s) {
+        // [l,r] 
+        // prove: s[k] == s[r+1], max(s[0,r+1]) = max(s[k+1, r+1])
+        // 如果s[k] == s[r+1], 那么包含s[r+1]的最长字串必然从k+1开始，因为如果包含s[k]，那么s[r+1]就重复了
+        // 左边界只进不退，因为被淘汰的点，已经不能够再产生更长的串
+        // 本质上这是一个单调性论证：当右端点向右扩展遇到冲突时，左端点必须前进，而前进跳过的所有候选起点都是"已被淘汰"的。
+
+
+        int l = 0, r = 0, len = 0;
+        Set<Character> set = new HashSet<>();
+        while(r < s.length()) {
+            char c = s.charAt(r);
+            while(set.contains(c)) {
+                set.remove(s.charAt(l));
+                l++;
+            }
+            set.add(c);
+            len = Math.max(len, r - l + 1);
+            r++;
+        }
+        return len;
+    }
+}
+

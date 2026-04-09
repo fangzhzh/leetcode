@@ -10,30 +10,31 @@ class Solution {
        return longestPalindromeExpand(s);
     }
 
+    // 回文题目两个核心
+    // 1. 中心扩展法
+    // 2. 奇偶两种中心，n的字符串，有n个字符中心(奇数)和n-1个间隙中心(偶数)
     private String longestPalindromeExpand(String s) {
         // 每个字符[i,i],[i,i+1]往外扩展，遇到s[i] != s[j]即可停止
         // [b,b,b,b,b,a,b,b,b,b,b,a]
         //       <--- ^ ------>
-        int start = 0;
-        int len = 0;
+        String result = "";
         for(int i = 0; i < s.length(); i++) {
             // char c = s.charAt(i);
-            int len1 = expand(s, i, i);
-            int len2 = expand(s, i, i+1);
-            int tmp  = Math.max(len1, len2);
-            if(tmp > len) {
-                len = tmp;
-                start = i - (len-1)/2;
+            String s1 = expand(s, i, i);
+            String s2 = expand(s, i, i+1);
+            String tmp  = s1.length() > s2.length() ? s1 : s2;
+            if(tmp.length() > result.length()) {
+                result = tmp;
             }
         }
-        return s.substring(start, start + len);
+        return result;
 
     }
 
-    private int expand(String s, int l , int r) {
+    private String expand(String s, int l , int r) {
         for(; l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r); l--, r++) {
         }
-        return r-l-1;
+        return s.substring(l+1, r);
     }
 
     private String longestPalindromeDp(String s) {
