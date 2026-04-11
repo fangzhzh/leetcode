@@ -112,3 +112,31 @@ class Solution {
     }
 }
 // @lc code=end
+
+
+// expand version
+// core idea, every palindromic has a center. 
+class Solution {
+    public int countSubstrings(String s) {
+        if(s == null || s.length() == 0) {
+            return 0;
+        }
+        int ans = 0;
+        for(int i = 0; i < s.length(); i++) {
+            ans += expand(s, i, i);
+            ans += expand(s, i, i+1);
+        }
+        return ans;
+    }
+
+    // abc
+    // aba
+    // aaa
+    int expand(String s, int l, int r) {
+        int ans = 0;
+        for(; l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r); l--, r++) {
+            ans++;
+        }
+        return ans;
+    }
+}

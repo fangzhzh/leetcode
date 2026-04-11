@@ -57,6 +57,7 @@ class Solution {
 // @lc code=end
 
 
+
 /**
  * ## solution 2, DP
  * - dp(i) represents whether the s[0, i-1] is segmented for string ending in i-1
@@ -81,3 +82,32 @@ class Solution {
     }
 }
 
+// dp 解法二，push
+// 请参考 algorithm/dynamicProgramming.md 讲述，在直球可行性问题的时候，pull 往往比 push 更快，今早砍掉无用分支。
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s == null || s.length() == 0 || wordDict.size() == 0) return false;
+        int n = s.length();
+        boolean dp[] = new boolean[n+1];
+        Set<String> set = new HashSet(wordDict);
+
+        for(int i = 1; i <= n; i++) {
+            if(set.contains(s.substring(0,i))) {
+                dp[i] = true;
+            }
+        }
+
+        for(int i = 1; i < n; i++) {
+            if(!dp[i]) {
+                continue;
+            }
+            for(int j = i+1; j <= n; j++) {
+                if(set.contains(s.substring(i,j))) {
+                    dp[j] = dp[i];
+                }
+            }
+        }
+        return dp[n];
+    }
+}
