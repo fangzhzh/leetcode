@@ -4,10 +4,33 @@
  * [20] Valid Parentheses
  */
 
+import java.util.Stack;
+
 // @lc code=start
 class Solution {
-// time O(n) n is the length of the string
-    // space O(n)
+    // 方法 1：神仙解法（压入反向括号法）
+    // 时间复杂度: O(n), 空间复杂度: O(n)
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                stack.push(')');
+            } else if (c == '{') {
+                stack.push('}');
+            } else if (c == '[') {
+                stack.push(']');
+            } else if (stack.isEmpty() || stack.pop() != c) {
+                return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+/* 
+class Solution_Old {
+    // 方法 2：经典的 switch-case 写法（正向匹配）
+    // 这是你之前写的逻辑非常严密的版本
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         for(int i = 0; i < s.length(); i++) {
@@ -16,34 +39,26 @@ class Solution {
                 case '(':
                 case '[':
                 case '{':
-                stack.push(c);
-                break;
+                    stack.push(c);
+                    break;
                 case ')':
-                if(stack.isEmpty() || stack.peek() != '(') {
-                    return false;
-                } else {
+                    if(stack.isEmpty() || stack.peek() != '(') return false;
                     stack.pop();
-                }
-                break;
+                    break;
                 case '}':
-                if(stack.isEmpty() || stack.peek() != '{') {
-                    return false;
-                } else {
+                    if(stack.isEmpty() || stack.peek() != '{') return false;
                     stack.pop();
-                }
-                break;
+                    break;
                 case ']':
-                if(stack.isEmpty() || stack.peek() != '[') {
-                    return false;
-                } else {
+                    if(stack.isEmpty() || stack.peek() != '[') return false;
                     stack.pop();
-                }
-                break;
+                    break;
+                default:
+                    return false;
             }
         }
         return stack.isEmpty();
     }
-    
 }
+*/
 // @lc code=end
-
