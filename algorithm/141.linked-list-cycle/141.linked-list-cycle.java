@@ -49,3 +49,13 @@ public class Solution {
 }
 // @lc code=end
 
+    public boolean hasCycle(ListNode head) {
+        if(head == null) return false;
+        ListNode slow = head, fast = head; // 1. 起跑线
+        while(fast != null && fast.next != null) { // 2. 预备
+            slow = slow.next; 
+            fast = fast.next.next; // 3. 跑
+            if(slow == fast) return true; // 4. 比较
+        }
+        return false;
+    }
