@@ -1,3 +1,4 @@
 typing/*
 *.swp
 *.class
+.vscode

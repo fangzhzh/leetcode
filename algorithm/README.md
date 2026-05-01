@@ -94,7 +94,7 @@
 ## 🔀 排序算法 
 * [排序算法与其无处不在的应用](./sort.md)
 ## 数学 Math
-* [数学题目基础及API](./mathAPI.md)
+* [数学之美 (The Beauty of Math)](./mathBeauty.md)
 ## 状态压缩
 # 特殊算法
 ## [Morris 遍历](./miscellaneous.md)

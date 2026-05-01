@@ -122,6 +122,6 @@ PriorityQueue<ListNode> queue  = new PriorityQueue<>(lists.length,
 ```
 
 
-## [Priority 实现](./sortHeapSort.md)
+## [Priority 实现](./binaryHeap_priorityQueue.md)
 
 
