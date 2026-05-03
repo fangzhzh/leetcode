@@ -126,3 +126,45 @@ class Solution {
     }
 }
 // @lc code=end
+ 
+// version 3
+// Phase 1: Locate the absolute minimum element (pivot) to identify the boundary between the high and low monotonic tracks.
+// (利用寻找绝对最小值，将旋转数组降维切分为两条纯粹的单调递增轨道)
+
+// Phase 2: Determine the target's track by comparing it against the absolute ceiling of the low track (nums[n-1]), isolating the search space to a single strictly monotonic segment.
+// (通过与低轨天花板进行对比，判定 target 归属的轨道，将搜索空间严格隔离到单一的单调区间)
+
+// Phase 3: Execute standard binary search (Discrete Existence Checking) within the isolated monotonic domain.
+// (在隔离出的绝对单调区间内，执行标准的二分存在性检测
+class Solution {
+    public int search(int[] nums, int target) {
+        int l = 0, r = nums.length -1;
+        while(l < r) {
+            int m = (l+r)/2;
+            if(nums[m] < nums[r]) {
+                r = m;
+            } else {
+                l = m+1;
+            }
+        }
+        int minIdx = l;
+        l = 0;
+        r = nums.length - 1;
+        if(target > nums[r]) {
+            r = minIdx -1;
+        } else {
+            l = minIdx;
+        }
+        while(l <= r) {
+            int m = (l+r)/2;
+            if(nums[m] < target) {
+                l = m+1;
+            } else if(nums[m] > target){
+                r = m-1;
+            } else {
+                return m;
+            }
+        }
+        return -1; // version 2
+    }
+}
