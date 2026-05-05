@@ -187,3 +187,26 @@ $$ \text{Min}_i = \min(nums[i], \ nums[i] \times \text{Max}_{i-1}, \ nums[i] \ti
 * **代码范式**：`while (L + 1 < R)`
 * **本质剖析**：这**不是**第三套逻辑，它是**模型 2** 在工程上为了“逃避引力”而产生的安全变体。
 * **物理意义**：当区间被夹逼到只剩 2 个相邻元素时，强制提前停止。因为它直接跳过了最危险的 2 元素极限状态，所以**彻底免疫了死循环黑洞**，不用再记忆任何向上/向下取整。代价是循环结束后，区间内还剩 L 和 R 两个候选人，必须手动写两行 `if` 进行最终校验。
+
+---
+
+## 10. 回溯算法中的对称性破缺 (Symmetry Breaking in Backtracking)
+
+> 参考实现：[39. Combination Sum](./39.combination-sum/39.combination-sum.java)
+
+在组合问题（如 Combination Sum）中，解的集合对元素的顺序不敏感——`[2, 3]` 和 `[3, 2]` 是同一个组合。若对此不加约束，回溯算法将以"全排列"的方式穷举，产生大量重复解。
+
+### 代数机制：`index` 参数的单调性约束
+
+回溯函数签名中的 `index` 参数，是一种**强制施加的单调递增约束**：
+
+```java
+helper(candidates, i, target - candidates[i], cur, res);
+//                ^ 传入 i 而非 0，强制下一层只能选 candidates[i] 及之后的元素
+```
+
+这个约束的数学效果是：将搜索空间从**所有排列（Permutations）**压缩到**唯一的有序子集（Canonical Combinations）**。
+
+每一种合法组合只会以其唯一的、单调不减的"范式表示"（Canonical Representation）被生成一次，**打破了排列之间的置换对称性（Permutation Symmetry）**，从而在数学上保证了结果集合的无重复性（Uniqueness）。
+
+这与物理学中的**对称性破缺（Symmetry Breaking）**同构：原本对称的系统（所有排列等价），通过引入一个方向性约束（`i` 的单调性），坍缩到一个唯一的、确定的低对称态（唯一的有序表示）。

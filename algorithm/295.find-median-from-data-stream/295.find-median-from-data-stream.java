@@ -158,3 +158,31 @@ class MedianFinder {
  */
 // @lc code=end
 
+class MedianFinder {
+
+    // 先进small heap，这样不平衡的时候时候，小的才能被推到另一个大顶堆
+    // 所有值陷进去小顶堆的情况
+    // 小顶堆堆最小值， 就是输入的后半段的最小值（中间）
+    // 大顶堆的最大值，就是前半段的最大值（中间）
+    private PriorityQueue<Integer> bq = new PriorityQueue<>((a,b)->a-b);
+    private PriorityQueue<Integer> sq = new PriorityQueue<>((a,b)->b-a);
+    public MedianFinder() {
+        
+    }
+    
+    public void addNum(int num) {
+        bq.offer(num); // 先用大顶堆，洗一下数据
+        sq.offer(bq.poll()); // 放进小顶堆
+        if(sq.size() > bq.size()) { // 平衡
+            bq.offer(sq.poll());
+        }
+    }
+    
+    public double findMedian() {
+        if(sq.size() == bq.size()) {
+            return (bq.peek() + sq.peek()) / 2.0;
+        } else {
+            return bq.peek();
+        }
+    }
+}
