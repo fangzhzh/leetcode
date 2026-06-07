@@ -1,4 +1,29 @@
 # Concurrency concepts
+
+## Big Picture
+
+Concurrency is the broader problem domain. It studies how multiple tasks can make progress in overlapping time periods while still coordinating correctly around shared resources, ordering, cancellation, failures, and performance.
+
+Multithreading is one implementation technique for concurrency. It means using multiple threads of execution inside one process. But concurrency can also be implemented with multiple processes, event loops, coroutines, non-blocking I/O, actors, channels, message queues, or distributed coordination.
+
+Many of them are about **coordination under overlap**: how tasks share state safely, communicate with each other, wait for conditions, avoid races, recover from failures, shut down gracefully, and keep throughput predictable.
+
+## Where These Problems Fit
+
+- **Shared-state concurrency**: multiple tasks access the same mutable data, so we need mutual exclusion, memory visibility, atomic operations, or immutable data.
+- **Task coordination**: tasks wait for signals, hand off work, enforce ordering, coordinate shutdown, or implement producer-consumer pipelines.
+- **Task execution and scheduling**: work is submitted, queued, batched, retried, cancelled, timed out, or processed by worker pools.
+- **Message-passing concurrency**: tasks communicate by sending data through queues, channels, actors, streams, or event pipelines.
+- **Async I/O concurrency**: one or a few execution units handle many waiting I/O operations through event loops, callbacks, futures, or promises.
+- **Parallel computing**: multiple CPU cores work at the same time to speed up CPU-bound work.
+- **Distributed concurrency**: multiple machines or services coordinate through locks, leases, idempotency, versioning, transactions, or consensus.
+
+## Language Mapping
+
+- **Java**: thread-based shared-memory concurrency is the main interview focus. Know [JMM](JVMMemoryModel.md), [`volatile`](volatile.md), [`synchronized`](javaSynchronized.md), [Lock](JavaLock.md), CAS, `BlockingQueue`, `ExecutorService`, and thread-safe collections. → 详见 [Thread Pool](threadpool.md)、[HashMap & ConcurrentHashMap](HashMap.md)
+- **Python**: split the topic into `threading` for I/O-bound shared-memory tasks, `multiprocessing` for CPU-bound parallelism, and `asyncio` for event-loop based concurrency.
+- **Go**: the common model is goroutines plus channels, with `sync.Mutex`, `sync.RWMutex`, `sync.WaitGroup`, `sync.Cond`, `sync/atomic`, and `context` for coordination and cancellation.
+
 ```mermaid
 graph LR
     A[Concurrent Programming] --> B[Concurrency Models]
@@ -86,604 +111,31 @@ graph LR
     I --> I3[Lock Contention]
     I --> I4[False Sharing]
 ```
-# Learn Concurrency with examples
-
-[[hashMapRealWorldProblem.md]]
-
-## Problem 1
-
-```java
-/*
-We are a currency exchange that maintains the current exchange rates between currencies. A user can come to us with some amount in one currency and request the equivalent amount in a different currency. Given a list of exchange rates between currencies, write a function that calculates currency rate between any 2 currencies.
-
-(GBP, EUR, 10)     - read as "1 GBP equals 10 EUR"
-(EUR, USD, 1.1)    - "1 EUR equals 1.1 USD"
-(USD, JPY, 108.3)
-(CNY, RUB, 14.6)
-*/
-
-/*
-We are a currency exchange that maintains the current exchange rates between currencies. A user can come to us with some amount in one currency and request the equivalent amount in a different currency. Given a list of exchange rates between currencies, write a function that calculates currency rate between any 2 currencies.
-
-(GBP, EUR, 10)     - read as "1 GBP equals 10 EUR"
-(EUR, USD, 1.1)    - "1 EUR equals 1.1 USD"
-(USD, JPY, 108.3)
-(CNY, RUB, 14.6)
-*/
-
-
-data  class CurrencyExchange(val source: String, val target: String, val rate: Double) {
-
-}
-
-class CurrencyExchanger{
-    private val currencyExchangeGraph: MutableMap<String, MutableMap<String, Double>> = HashMap()
-    
-    private fun addExchangeRate(exchangeRate: CurrencyExchange) {
-        val (source, target, rate) = exchangeRate
-        currencyExchangeGraph.computeIfAbsent(source, {HashMap()})[target] =
-            rate
-        currencyExchangeGraph.computeIfAbsent(target, {HashMap()})[source] = 1.0 / rate
-    }
-    fun currencyGraphBuild(currenciesExchanges: Array<CurrencyExchange>) {
-        currenciesExchanges.forEach {
-            addExchangeRate(it)
-        }
-    }
-    fun getCurrencyRate(source: String, target: String): Double {
-        val visited: MutableMap<String, Boolean> = HashMap()
-        return getCurrencyRate(source, target, visited)
-    }
-    fun getCurrencyRate(source: String, target: String, visited: MutableMap<String, Boolean>): Double {
-        if(visited.getOrDefault(source, false)) {
-            return -1.0;
-        }
-        if(!currencyExchangeGraph.containsKey(source) || !currencyExchangeGraph.containsKey(target)) {
-            return -1.0;
-        }
-        return getCurrencyRateDFS(source, target, visited)
-    }
-
-    private fun getCurrencyRateDFS(source: String, target: String, visited: MutableMap<String, Boolean>): Double {
-        // Graph, BFS, DFS
-        visited[source] = true
-        currencyExchangeGraph[source]?.let {
-                sourceMap ->
-            if(sourceMap.getOrDefault(target, -1.0) != -1.0) {
-                return sourceMap[target]!!
-            }
-            for(neighbour in sourceMap.keys) {
-                val neighbourRate = getCurrencyRate(neighbour, target, visited);
-                if(neighbourRate != -1.0) {
-                    return sourceMap[neighbour]!! * neighbourRate
-                }
-            }
-        }
-        return -1.0;
-    }
-
-}
-
-internal object Solution {
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val currencyExchanger = CurrencyExchanger()
-        val records = arrayOf<CurrencyExchange>(
-            CurrencyExchange("GBP", "EUR", 10.0),
-            CurrencyExchange("EUR", "USD", 1.1),
-            CurrencyExchange("USD", "JPY", 108.3),
-            CurrencyExchange("CNY", "RUB", 104.6)
-        )
-        currencyExchanger.currencyGraphBuild(records)
-        var ans = currencyExchanger.getCurrencyRate("GBP", "EUR")
-        println("GBP->EUR:$ans")
-        ans = currencyExchanger.getCurrencyRate("GBP", "USD")
-        println("GBP->USD:$ans")
-        ans = currencyExchanger.getCurrencyRate("GBP", "JPY")
-        println("GBP->JPY:$ans")
-        ans = currencyExchanger.getCurrencyRate("GBP", "CNY")
-        println("GBP->CNY:$ans")
-    }
-}
-
-```
-## Question 2. Operator Assignment
-```java
-/*
-When assigning a task to an operator, we want to assign it to the operator with the fewest tasks, and if there are multiple operators with the same number of tasks, assign to the operator having most ilde time, if idel time are same, assign alphbeta by name.
-
-
-- Initializes with a set of available operators.
-- set_limit(operator_name, n)
-  Sets an operator’s limit.
-- assign(conversation_id)
-  Assigns a given conversation to the next available operator.
-- get_assignment_queue(n)
-  Returns the list of possible operators in the order they will be assigned to conversations, not real assignment yet.
-*/
-```
-### Code
-
-```kotlin
-import java.util.PriorityQueue
-import kotlin.concurrent.timerTask
-
-data class Operator(
-    val name: String, var capability: Int = 0, var workLoad: Int = 0, var lastOpTime: Long = 0L
-): Comparable<Operator>  {
-    override fun compareTo(other: Operator): Int {
-        if(this.workLoad != other.workLoad) {
-            return this.workLoad - other.workLoad
-        }
-        if(this.lastOpTime != other.lastOpTime) {
-            return (this.lastOpTime - other.lastOpTime).toInt()
-        }
-        return this.name.compareTo(other.name)
-    }
-
-}
-
-// a, 3
-// b, 3
-// c, 2
-
-// assign("1") => a
-// assign("1") => b
-// assign("1") => a
-class TaskAssigner {
-    private val operators: MutableMap<String, Operator> = HashMap()
-    private val availableOperators: PriorityQueue<Operator> = PriorityQueue()
-
-    constructor(operatorNames: List<String>) {
-        operatorNames.forEach {
-            val op = Operator(name = it)
-            operators.put(it, op)
-            availableOperators.add(op)
-        }
-    }
-
-    fun set_limit(operator_name: String, n: Int) {
-        operators[operator_name]?.let {
-            it.capability = n
-            availableOperators.remove(it)
-            it.capability = n
-            availableOperators.add(it)
-        }
-    }
-
-    fun assign(conversation_id: String): String? {
-        var bestOp: Operator? = null;
-        val tmpQueue = PriorityQueue<Operator>()
-        while(!availableOperators.isEmpty()) {
-            val op = availableOperators.poll()
-            if(op.workLoad < op.capability) {
-                bestOp = op;
-                break
-            }
-            tmpQueue.add(op)
-        }
-        availableOperators.addAll(tmpQueue)
-        if (bestOp == null) {
-            return null
-        }
-        availableOperators.remove(bestOp)
-        bestOp.lastOpTime = System.currentTimeMillis()
-        bestOp.workLoad+=1
-        availableOperators.add(bestOp)
-        return bestOp.name
-    }
-
-    fun get_assignment_queue(n: Int): List<String> {
-        val res = ArrayList<String>()
-        val tmpOperator = HashMap<String, Operator>()
-        operators.forEach {
-            tmpOperator.put(it.key, it.value.copy())
-        }
-        val tmpQueue = PriorityQueue<Operator>()
-        tmpQueue.addAll(tmpOperator.values)
-        for (i in 0 until n) {
-            val op = tmpQueue.poll()
-            if(op.workLoad >= op.capability) {
-                continue;
-            }
-            res.add(op.name)
-            tmpQueue.remove(op)
-            op.workLoad++
-            op.lastOpTime = System.currentTimeMillis()
-            tmpQueue.add(op)
-        }
-        return res
-    }
-}
-```
-
-
-## Question 3
-
-```java
-/**
-- concurrency, multithread, event uploader
-- Ordered processing through sequence numbers
-- No event loss during failures
-- Strict batch size of 100 (except final batch)
- */
-class UploadManagerChannel {
-    // FIFO
-    val channel = Channel<String>(100)
-    val scope = CoroutineScope<newSingleThreadExecutor>();
-
-
-    fun addEvent(event: String) {
-        scope.launch{
-          print(1)//
-          channel.offer(event);// suspend function
-          print(5)
-        }
-    }
-
-    suspend fun upload() {
-        // handle uploading
-        scope.launch {
-          print(2)
-          val array = Array<String>;
-          while(!channel.isEmpty()) {
-            array.add(channel.poll())
-          }
-          // array => bytecode
-          Network.post(array
-            /* what */,
-          onSuccess = { response ->
-            // ?
-
-          },
-          onFailure = { error ->
-              print(3)
-              // ?
-              val newArray = Array<String>;
-              while(!channel.isEmpty()) {
-                newArray.add(channel.poll())
-              }
-              for(String event: array) {
-                channel.offer(event)
-              }
-
-              for(String event: newArray) {
-                channel.offer(event);
-              }
-
-
-          })
-
-        }
-    }
-}
-
-// This is the network request tool you can use for posting data and you don't need to care about its implementation.
-class Network {
-  fun post(data, onSuccess, onFailure);
-}
-```
-
-
-### Channel solution
-```java
-class UploadManagerChannel {
-    // FIFO
-    val channel = Channel<String>(100)
-    val scope = CoroutineScope<newSingleThreadExecutor>();
-
-
-    fun addEvent(event: String) {
-        scope.launch{
-          print(1)//
-          channel.offer(event);// suspend function
-          print(5)
-        }
-    }
-
-    suspend fun upload() {
-        // handle uploading
-        scope.launch {
-          print(2)
-          val array = Array<String>;
-          while(!channel.isEmpty()) {
-            array.add(channel.poll())
-          }
-          // array => bytecode
-          Network.post(array
-            /* what */,
-          onSuccess = { response ->
-            // ?
-
-          },
-          onFailure = { error ->
-              print(3)
-              // ?
-              val newArray = Array<String>;
-              while(!channel.isEmpty()) {
-                newArray.add(channel.poll())
-              }
-              for(String event: array) {
-                channel.offer(event)
-              }
-
-              for(String event: newArray) {
-                channel.offer(event);
-              }
-
-
-          })
-
-        }
-    }
-}
-```
-### Improved Channel solution
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.random.Random
-
-data class Event(val content: String, val seq: Int)
-object Network {
-    fun post(
-        events: List<Event>,
-        onSuccess: (String) -> Unit,
-        onFailure: (Throwable) -> Unit
-    ) {
-        // Simulate async network call
-        GlobalScope.launch {
-            try {
-                delay(50) // simulate latency
-                val rdm = Random.nextInt()
-                if(rdm % 2 == 0) {
-                    onSuccess("Uploaded ${events.size} events")
-                } else {
-                    onFailure(Exception("$rdm"))
-                }
-            } catch (e: Exception) {
-                onFailure(e)
-            }
-        }
-    }
-}
-class UploadManagerChannelImproved {
-    // FIFO
-    private val channel = Channel<List<Event>>(capacity = Channel.UNLIMITED)
-    private val scope = CoroutineScope(newSingleThreadContext("Single"))
-    private val events = mutableListOf<Event>();
-    private val mutex = Mutex()
-    private var sequence = 0
-
-    init {
-        scope.launch {
-            for(event in channel) {
-                this@UploadManagerChannelImproved.processEvent(batch = event)
-            }
-        }
-
-        scope.launch {
-            while(true) {
-                mutex.withLock {
-                    if(events.size >= 100) {
-                        val batch = mutableListOf<Event>()
-                        batch.addAll(events.take(100))
-                        events.drop(100)
-                        channel.send(batch)
-                    }
-                }
-                delay(100)
-            }
-        }
-    }
-
-    suspend fun addEvent(event: String) {
-        mutex.withLock {
-            val newE = Event(content = event, seq = sequence)
-            events.add(newE)
-            sequence++
-        }
-    }
-
-    suspend fun processEvent(batch: List<Event>) {
-        var retried = 0;
-        var expontial = 100L;
-
-        while (retried < 3) {
-            try {
-                upload(batch)
-                return
-            } catch (e:Throwable ) {
-                retried++
-                if(retried >= 3) {
-                    scope.launch {
-                        println("$batch failed and readded")
-                        mutex.withLock {
-                            events.addAll(batch)
-                            val cache  = events.sortedBy { it.seq }
-                            events.clear()
-                            events.addAll(cache)
-                        }
-                    }
-                }
-                delay(expontial)
-                expontial *= 2;
-            }
-
-        }
-
-    }
-
-
-
-    suspend fun upload(batch: List<Event>) {
-        val array = batch.sortedBy { it.seq }
-        // array => bytecode
-        Network.post(array
-            /* what */,
-            onSuccess = { response: String ->
-                // ?
-                println("$response success")
-
-            },
-            onFailure = { error: Throwable ->
-                println("Upload failed: ${error.message}")
-                throw error;
-            })
-
-    }
-
-    fun shutdown() {
-        runBlocking {
-            mutex.withLock {
-                channel.send(events)
-            }
-            delay(1000)
-            channel.close()
-            scope.cancel()     
-        }
-    }
-}
-```
-
-### Thread solution
-```kotlin
-import kotlinx.coroutines.processNextEventInCurrentThread
-import java.lang.Thread.sleep
-
-
-class UploadManagerChannelNoCoroutine {
-    private val events = mutableListOf<Event>();
-    private val mutex = Object()
-    private var sequence = 0
-    
-
-    fun addEvent(name: String) {
-        synchronized(mutex) {
-            events.add(Event(name, seq = sequence))
-            sequence++
-        }
-    }
-
-
-    fun uploadBatch() {
-        var retries = 0
-        var delay = 100
-        synchronized(mutex) {
-            val batch = events.take(100).toList()
-            val cache = events.drop(100)
-            events.clear()
-            events.addAll(cache)
-        }
-        while(retries < 3) {
-            try{
-                upload(batch)
-                return
-            } catch (e: Throwable) {
-                retries++
-                if(retries >= 3) {
-                    synchronized(mutex) {
-                        events.addAll(0, batch)
-                    }
-                    return
-                }
-                sleep(delay.toLong())
-                delay*=2
-            }
-        }
-
-    }
-    fun upload(batch: List<Event>) {
-        Network.post(batch
-            /* what */,
-            onSuccess = { response: String ->
-                // ?
-                println("$response success")
-
-            },
-            onFailure = { error: Throwable ->
-                println("Upload failed: ${error.message}")
-                throw error
-            })
-    }
-
-    fun shutdown() {
-        synchronized(mutex) {
-            if (events.isNotEmpty()) {
-                upload(events)
-                sleep(1000L)
-            }
-        }
-    }
-}
-```
-### Current collection solution
-```normal
-class UploadManagerThread {
-    // FIFO
-    val queue1 = ConcurrencyLinkedList(100);
-    val queue2 = ConcurrencyLinkedList(100);
-    val memoryQueue = ConcurrencyLinkedList();
-    // val apiServer = APIServer();
-
-    fun addEvent2(event: String) {
-        // handle adding event
-        if(q1) {
-          if(queue1.size() < 100) {
-            queue1.add(event);
-            return
-          }
-
-        } else {
-          if(queue2.size() < 100) {
-            queue2.add(event);
-            return
-          }
-        }
-        memoryQueue.add(event)
-
-    }
-
-// upload(50) --10--> onFailure
-// 50,10
-// 10, 50
-
-    fun upload2() {
-      val curQ = if(q1)
-      val array = Array<String>;
-          while(String event: queue) {
-            array.add(event)
-          };
-      Network.post(
-            /* what */,
-          onSuccess = { response ->
-            // ?
-
-          },
-          onFailure = { error ->
-              print(3)
-              // ?
-              val newArray = Array<String>;
-              while(!channel.isEmpty()) {
-                newArray.add(channel.poll())
-              }
-              for(String event: array) {
-                channel.offer(event)
-              }
-
-              for(String event: newArray) {
-                channel.offer(event);
-              }
-
-
-          })
-    }
-}
-```
-# Concurrency Challenges          
+# 面试编程题
+
+> 🔗 并发相关的面试编程题（含多种解法对比）已单独整理，见 **[concurrencyProblems.md](concurrencyProblems.md)**
+>
+> | 题目 | 核心考点 | 备注 |
+> |------|---------|------|
+> | [Problem 1 — Currency Exchange](concurrencyProblems.md) | 图 DFS + 并发安全 follow-up | ⚠️ 本质是图论题 |
+> | [Problem 2 — Operator Assignment](concurrencyProblems.md) | PriorityQueue 调度、线程安全 | 优先队列经典题 |
+> | [Problem 3 — Event Uploader](concurrencyProblems.md) | Producer-Consumer、重试、Channel vs Thread | 核心并发设计题 |
+>
+> 更多 HashMap 并发场景见 → [hashMapRealWorldProblem.md](hashMapRealWorldProblem.md)
+
+> **相关深入资料（本地文件）：**
+> - [JVMMemoryModel.md](JVMMemoryModel.md) — JMM、happens-before、可见性、重排序、MESI 协议
+> - [volatile.md](volatile.md) — volatile 三大特性、内存屏障、DCL 单例
+> - [javaSynchronized.md](javaSynchronized.md) — synchronized 原理、对象头、锁升级（偏向→轻量→重量）、锁消除/粗化
+> - [JavaLock.md](JavaLock.md) — ReentrantLock、ReadWriteLock、公平锁、CAS、ABA 问题、分布式锁
+> - [threadpool.md](threadpool.md) — 线程池原理、参数、BlockingQueue、ThreadLocal
+> - [HashMap.md](HashMap.md) — ConcurrentHashMap JDK7/8 实现、CAS+synchronized 配合
+> - [Singleton.md](Singleton.md) — 各语言单例实现（含 DCL+volatile）
+> - [IO.md](IO.md) — BIO/NIO/AIO，Java IO 模型
+> - [eventDemultiplexer.md](eventDemultiplexer.md) — epoll/kqueue/IOCP 事件多路复用
+> - [javaConcurrencyStory.md](javaConcurrencyStory.md) — 并发概念故事串联
+> - [androidAsyncMultipleThreading.md](androidAsyncMultipleThreading.md) — Android 异步演进（Thread→Handler→Coroutines）
+> - [androidBackgroundScheduler.md](androidBackgroundScheduler.md) — WorkManager/AlarmManager/JobScheduler 等
 ## 1. Read-Write Conflicts
 
 **Challenge:** Managing concurrent reads and writes to shared data structures without sacrificing performance or correctness.
@@ -729,6 +181,8 @@ class UploadManagerThread {
 
 ## 2. Atomic Operations
 
+> 🔗 深入原理见 [JavaLock.md § CAS原理](JavaLock.md) 和 [JVMMemoryModel.md § 原子性问题](JVMMemoryModel.md)
+
 **Challenge:** Ensuring that complex operations involving multiple steps appear atomic to other threads.
 
 **General Solutions:**
@@ -752,6 +206,8 @@ class UploadManagerThread {
   ```
 
 ## 3. Deadlock Prevention
+
+> 🔗 锁的完整分类与原理见 [JavaLock.md](JavaLock.md)
 
 **Challenge:** Avoiding situations where threads wait indefinitely for resources held by each other.
 
@@ -797,6 +253,8 @@ class UploadManagerThread {
   ```
 
 ## 4. Thread-Safe Collections
+
+> 🔗 ConcurrentHashMap 详细实现（JDK 7 分段锁 / JDK 8 CAS+synchronized）见 [HashMap.md § ConcurrentHashMap的实现](HashMap.md)
 
 **Challenge:** Using appropriate thread-safe collections for different access patterns.
 
@@ -845,6 +303,8 @@ class UploadManagerThread {
 
 ## 5. Non-Blocking Algorithms
 
+> 🔗 CAS 原理与 ABA 问题见 [JavaLock.md § CAS原理](JavaLock.md)；volatile 如何配合 CAS 保证可见性见 [volatile.md](volatile.md)
+
 **Challenge:** Implementing lock-free algorithms for high-throughput scenarios.
 
 **General Solutions:**
@@ -887,7 +347,17 @@ class UploadManagerThread {
   ```
 
 
+## 6. Synchronization Primitives Deep Dive
+
+> 🔗 以下主题在独立文件中有完整讲解：
+> - **synchronized** 原理、对象头 Mark Word、锁升级过程 → [javaSynchronized.md](javaSynchronized.md)
+> - **volatile** 可见性、有序性、内存屏障 → [volatile.md](volatile.md)
+> - **ReentrantLock / ReadWriteLock / 公平锁** → [JavaLock.md](JavaLock.md)
+> - **JMM happens-before 规则** → [JVMMemoryModel.md](JVMMemoryModel.md)
+
 ## 7. Thread Confinement
+
+> 🔗 ThreadLocal 的工作原理与内存泄漏风险见 [threadpool.md § ThreadLocal](threadpool.md)
 
 **Challenge:** Avoiding shared mutable state by confining data to specific threads.
 
@@ -1120,3 +590,536 @@ class UploadManagerThread {
       }
   }
   ```
+## 阻塞队列
+
+> 🔗 BlockingQueue 各实现对比（ArrayBlockingQueue / LinkedBlockingQueue / SynchronousQueue / DelayQueue / PriorityBlockingQueue）及有界/无界队列详解见 [threadpool.md § Blocking queue](threadpool.md)
+
+## thread pool
+
+> 🔗 线程池完整内容见 [threadpool.md](threadpool.md)，包括：
+> - 线程池工作原理与参数（核心线程数、最大线程数、队列、拒绝策略）
+> - 四种内置线程池类型（Fixed / Cached / Single / Scheduled）
+> - Executor 框架与 ExecutorService
+> - 线程池正确关闭（`shutdown` vs `shutdownNow`）
+> - 代码实现参考：[SimpleThreadPool.java](SimpleThreadPool.java)
+
+## 消息队列
+
+> 消息队列（MQ）是分布式系统中进程间解耦的通信机制，与线程间的 BlockingQueue 形成对比：
+> - **线程级**：`BlockingQueue`（同进程内）→ 见 [threadpool.md](threadpool.md)
+> - **进程/服务级**：Kafka、RabbitMQ、RocketMQ 等（跨服务异步通信）→ 见 [backend.md](backend.md)
+
+## Async I/O & Event-Driven Concurrency
+
+> 🔗 以下文件覆盖了异步 IO 和事件驱动模型：
+> - **Java BIO / NIO / AIO** → [IO.md](IO.md)
+> - **epoll / kqueue / IOCP 事件多路复用** → [eventDemultiplexer.md](eventDemultiplexer.md)
+> - **Android 异步演进**（Thread → Handler → AsyncTask → Coroutines）→ [androidAsyncMultipleThreading.md](androidAsyncMultipleThreading.md)
+> - **Android 后台调度**（WorkManager / AlarmManager / JobScheduler）→ [androidBackgroundScheduler.md](androidBackgroundScheduler.md)
+
+## 单例模式与并发
+
+> 单例是并发中最经典的模式之一，涉及 DCL（Double-Checked Locking）和 `volatile`。
+> 🔗 完整实现见 [Singleton.md](Singleton.md)，原理解释见 [JVMMemoryModel.md § 单例模式的内存语义](JVMMemoryModel.md)
+
+---
+
+# 11. Liveness Issues：活跃性问题详解
+
+Mermaid 图中提到了 Livelock 和 Starvation，以下展开具体说明。
+
+## 11.1 Livelock（活锁）
+
+**定义**：两个或多个线程都在响应对方的动作而不断改变自己的状态，但整体没有任何进展——与死锁不同，线程并没有被阻塞，而是在"忙碌"地什么都没做。
+
+**经典类比**：两个人在走廊相遇，都往同一侧让路，然后又同时往另一侧让路，永远无法通过。
+
+```java
+// Livelock 示例：两个线程互相"礼让"
+public class LivelockExample {
+    static class Spoon {
+        private Diner owner;
+        public synchronized void use(Diner user) {
+            System.out.println(user.name + " is using the spoon");
+        }
+    }
+
+    static class Diner {
+        String name;
+        boolean isHungry = true;
+
+        Diner(String name) { this.name = name; }
+
+        // 互相谦让 -> 活锁
+        public void eatWith(Spoon spoon, Diner spouse) {
+            while (isHungry) {
+                if (spoon.owner != this) {
+                    try { Thread.sleep(1); } catch (InterruptedException e) {}
+                    continue;
+                }
+                // 如果配偶也饿了，先让给对方
+                if (spouse.isHungry) {
+                    System.out.println(name + ": You eat first, " + spouse.name);
+                    spoon.owner = spouse; // 把勺子让给对方 -> 对方也会让回来
+                    continue;
+                }
+                spoon.use(this);
+                isHungry = false;
+                spoon.owner = spouse;
+            }
+        }
+    }
+}
+```
+
+**解决方案**：
+- 引入**随机退避**（random backoff）：线程等待随机时间后再重试，打破对称性
+- 指定优先级或主从关系，避免完全对称的礼让逻辑
+
+```java
+// 随机退避打破活锁
+private static final Random RANDOM = new Random();
+
+public void retryWithBackoff(Runnable action, int maxRetries) throws InterruptedException {
+    for (int i = 0; i < maxRetries; i++) {
+        try {
+            action.run();
+            return;
+        } catch (ConflictException e) {
+            // 随机等待 0~100ms，打破对称性
+            Thread.sleep(RANDOM.nextInt(100));
+        }
+    }
+    throw new RuntimeException("Max retries exceeded");
+}
+```
+
+---
+
+## 11.2 Starvation（饥饿）
+
+**定义**：某个线程因为长期得不到所需资源（CPU、锁）而无法推进，通常是因为其他高优先级线程持续占用资源。
+
+**常见场景**：
+- 使用非公平锁时，某些线程永远抢不到锁
+- 线程优先级设置不当，低优先级线程被饿死
+- `synchronized` 唤醒时 `notifyAll()` 后某线程总是竞争失败
+
+```java
+// 饥饿示例：非公平锁下低优先级线程被饿死
+public class StarvationExample {
+    private final ReentrantLock unfairLock = new ReentrantLock(false); // 非公平
+
+    public void criticalSection(String threadName) {
+        unfairLock.lock();
+        try {
+            System.out.println(threadName + " acquired lock");
+            // 模拟短暂工作
+        } finally {
+            unfairLock.unlock();
+        }
+    }
+}
+
+// 解决方案：使用公平锁
+public class FairLockExample {
+    // 公平锁：按等待顺序授予锁，防止饥饿
+    private final ReentrantLock fairLock = new ReentrantLock(true); // fair=true
+
+    public void criticalSection() {
+        fairLock.lock();
+        try {
+            // 保证所有等待线程轮流获得执行机会
+        } finally {
+            fairLock.unlock();
+        }
+    }
+}
+```
+
+**Starvation vs Deadlock vs Livelock 对比**：
+
+| 问题 | 线程状态 | 是否有进展 | 典型原因 | 解决思路 |
+|------|---------|-----------|---------|---------|
+| **Deadlock** | 阻塞 | 无 | 循环等待锁 | 锁排序、超时、避免嵌套锁 |
+| **Livelock** | 运行 | 无 | 互相响应陷入循环 | 随机退避、打破对称 |
+| **Starvation** | 部分运行 | 部分有 | 资源分配不公平 | 公平锁、优先级调整 |
+
+---
+
+# 12. CountDownLatch / CyclicBarrier / Semaphore
+
+这三个是 `java.util.concurrent` 中的**同步辅助工具**，面试高频考点。
+
+## 12.1 CountDownLatch（倒计时门闩）
+
+**语义**：一次性的，count 减到 0 后所有等待线程被释放，不可重置。
+
+**核心方法**：
+- `countDown()`：计数器 -1（通常由工作线程调用）
+- `await()`：阻塞直到计数到 0（通常由主线程或汇总线程调用）
+- `await(timeout, unit)`：带超时版本
+
+**典型场景**：主线程等待所有子任务完成后再汇总。
+
+```java
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class CountDownLatchExample {
+
+    // 场景：并行初始化多个服务，全部就绪后才开放请求
+    public void initServices() throws InterruptedException {
+        int serviceCount = 3;
+        CountDownLatch latch = new CountDownLatch(serviceCount);
+        ExecutorService executor = Executors.newFixedThreadPool(serviceCount);
+
+        String[] services = {"DatabaseService", "CacheService", "MessageQueueService"};
+        for (String service : services) {
+            executor.submit(() -> {
+                try {
+                    System.out.println(service + " initializing...");
+                    Thread.sleep(1000); // 模拟初始化耗时
+                    System.out.println(service + " ready");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    latch.countDown(); // 无论成功失败都必须 countDown，否则主线程永久阻塞
+                }
+            });
+        }
+
+        latch.await(); // 主线程阻塞，等待 count 归零
+        System.out.println("All services ready, start accepting requests");
+        executor.shutdown();
+    }
+}
+```
+
+> ⚠️ **陷阱**：`countDown()` 必须放在 `finally` 块中，否则异常会导致主线程永久阻塞。
+
+---
+
+## 12.2 CyclicBarrier（循环屏障）
+
+**语义**：可重用的，所有参与方都到达屏障点后，才一起继续，然后屏障自动重置。
+
+**核心方法**：
+- `await()`：到达屏障点并等待其他参与方
+- 构造时可传入 `barrierAction`：所有线程到齐后触发的回调
+
+**与 CountDownLatch 的关键区别**：
+
+| | CountDownLatch | CyclicBarrier |
+|--|----------------|---------------|
+| **可重用** | ❌ 一次性 | ✅ 可重置 |
+| **等待方向** | 主线程等工作线程 | 线程互相等待 |
+| **计数触发** | count 降为 0 | 所有方到达屏障 |
+| **典型场景** | 等待多任务完成 | 多阶段并行计算 |
+
+```java
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
+public class CyclicBarrierExample {
+
+    // 场景：多线程分批次处理数据，每批完成后汇总，再处理下一批
+    public void parallelCompute(int[][] data) {
+        int threadCount = 4;
+        // 所有线程到齐后执行 barrierAction（可选）
+        CyclicBarrier barrier = new CyclicBarrier(threadCount, () ->
+            System.out.println("=== Phase complete, merging results ===")
+        );
+
+        for (int i = 0; i < threadCount; i++) {
+            final int partitionId = i;
+            new Thread(() -> {
+                for (int phase = 0; phase < 3; phase++) { // 3 个阶段
+                    try {
+                        // 每个线程处理自己的数据分区
+                        processPartition(data[partitionId], phase);
+                        System.out.println("Thread " + partitionId + " finished phase " + phase);
+
+                        barrier.await(); // 等待所有线程完成当前阶段，然后一起进入下一阶段
+                        // CyclicBarrier 自动重置，可直接进入下一轮
+                    } catch (InterruptedException | BrokenBarrierException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void processPartition(int[] partition, int phase) throws InterruptedException {
+        Thread.sleep(100); // 模拟计算
+    }
+}
+```
+
+---
+
+## 12.3 Semaphore（信号量）
+
+**语义**：控制同时访问某资源的**线程数量**，许可证池——`acquire()` 获取许可，`release()` 归还许可。
+
+**典型场景**：限流、连接池、资源池。
+
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+
+    // 场景 1：数据库连接池，最多允许 10 个线程同时持有连接
+    private final Semaphore connectionPool = new Semaphore(10, true); // fair=true 防止饥饿
+
+    public void executeQuery(String sql) throws InterruptedException {
+        connectionPool.acquire(); // 获取一个许可（没有则阻塞）
+        try {
+            // 使用连接执行 SQL
+            doQuery(sql);
+        } finally {
+            connectionPool.release(); // 归还许可，必须在 finally 中
+        }
+    }
+
+    // 场景 2：限流器，控制 QPS
+    private final Semaphore rateLimiter = new Semaphore(100); // 每批最多 100 个并发请求
+
+    public boolean tryHandleRequest(Runnable handler) {
+        // tryAcquire 非阻塞：拿不到直接返回 false（限流拒绝）
+        if (!rateLimiter.tryAcquire()) {
+            return false; // 触发限流
+        }
+        try {
+            handler.run();
+            return true;
+        } finally {
+            rateLimiter.release();
+        }
+    }
+
+    // 场景 3：Semaphore(1) 实现互斥锁（但推荐用 ReentrantLock）
+    private final Semaphore mutex = new Semaphore(1);
+
+    public void mutualExclusion() throws InterruptedException {
+        mutex.acquire();
+        try {
+            // 临界区
+        } finally {
+            mutex.release();
+        }
+    }
+
+    private void doQuery(String sql) { /* ... */ }
+}
+```
+
+**Semaphore vs Lock 区别**：
+- `Semaphore` 许可证可以跨线程 release（A 线程 acquire，B 线程 release）
+- `ReentrantLock` 只能由持锁线程解锁
+
+---
+
+# 13. CompletableFuture & Future
+
+## 13.1 Future 的局限性
+
+`Future` 是 Java 5 引入的，获取异步计算结果，但有明显缺陷：
+
+```java
+ExecutorService executor = Executors.newFixedThreadPool(4);
+
+// Future 的问题：get() 是阻塞的，无法非阻塞地组合多个 Future
+Future<String> future = executor.submit(() -> {
+    Thread.sleep(1000);
+    return "result";
+});
+
+// ❌ 问题 1：get() 会阻塞当前线程，丧失异步优势
+String result = future.get(); // 阻塞
+
+// ❌ 问题 2：无法链式组合（result 需要做进一步处理）
+// ❌ 问题 3：无法手动完成或触发回调
+// ❌ 问题 4：多个 Future 的组合极其繁琐
+```
+
+## 13.2 CompletableFuture 核心用法
+
+Java 8 引入，解决了上述所有问题：
+
+```java
+import java.util.concurrent.*;
+
+public class CompletableFutureExamples {
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    // ── 1. 基础创建 ──────────────────────────────────────────────────
+    public void basics() throws Exception {
+        // supplyAsync：有返回值的异步任务
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            return fetchFromDB(); // 在线程池中执行
+        }, executor);
+
+        // runAsync：无返回值
+        CompletableFuture<Void> voidFuture = CompletableFuture.runAsync(() -> {
+            sendMetrics();
+        }, executor);
+
+        // 手动完成（用于测试或桥接回调 API）
+        CompletableFuture<String> manualFuture = new CompletableFuture<>();
+        manualFuture.complete("manual result");
+    }
+
+    // ── 2. 链式转换：thenApply / thenCompose ────────────────────────
+    public void chaining() {
+        CompletableFuture<Integer> pipeline = CompletableFuture
+            .supplyAsync(() -> fetchUserId())          // String userId
+            .thenApply(userId -> fetchUser(userId))    // thenApply：同步转换，类似 map
+            .thenApply(user -> user.getAge());         // 继续链式
+
+        // thenCompose：异步转换，避免嵌套 CompletableFuture，类似 flatMap
+        CompletableFuture<String> composed = CompletableFuture
+            .supplyAsync(() -> fetchUserId())
+            .thenCompose(userId ->                     // 返回另一个 CompletableFuture
+                CompletableFuture.supplyAsync(() -> fetchUserDetails(userId))
+            );
+    }
+
+    // ── 3. 组合多个 Future ───────────────────────────────────────────
+    public void combining() throws Exception {
+        CompletableFuture<String> userFuture = CompletableFuture.supplyAsync(() -> fetchUser("id1"));
+        CompletableFuture<String> orderFuture = CompletableFuture.supplyAsync(() -> fetchOrders("id1"));
+
+        // thenCombine：等待两个 Future 都完成，合并结果
+        CompletableFuture<String> combined = userFuture.thenCombine(
+            orderFuture,
+            (user, orders) -> "User: " + user + ", Orders: " + orders
+        );
+
+        // allOf：等待所有 Future 完成（无返回值，需手动 join）
+        CompletableFuture<Void> allDone = CompletableFuture.allOf(userFuture, orderFuture);
+        allDone.thenRun(() -> System.out.println("All done"));
+
+        // anyOf：任意一个完成即触发
+        CompletableFuture<Object> firstDone = CompletableFuture.anyOf(userFuture, orderFuture);
+        System.out.println("First result: " + firstDone.get());
+    }
+
+    // ── 4. 异常处理 ──────────────────────────────────────────────────
+    public void errorHandling() {
+        CompletableFuture<String> future = CompletableFuture
+            .supplyAsync(() -> {
+                if (Math.random() > 0.5) throw new RuntimeException("fetch failed");
+                return "data";
+            })
+            // exceptionally：出错时提供默认值（类似 catch）
+            .exceptionally(ex -> {
+                System.err.println("Error: " + ex.getMessage());
+                return "default data";
+            });
+
+        CompletableFuture<String> future2 = CompletableFuture
+            .supplyAsync(() -> fetchFromDB())
+            // handle：无论成功失败都执行（类似 finally + 转换）
+            .handle((result, ex) -> {
+                if (ex != null) return "fallback";
+                return result.toUpperCase();
+            });
+    }
+
+    // ── 5. 超时控制（Java 9+）────────────────────────────────────────
+    public void timeout() throws Exception {
+        CompletableFuture<String> future = CompletableFuture
+            .supplyAsync(() -> slowOperation())
+            .orTimeout(3, TimeUnit.SECONDS)           // 超时则抛 TimeoutException
+            .exceptionally(ex -> "timeout fallback");
+
+        // completeOnTimeout：超时时用默认值完成（不抛异常）
+        CompletableFuture<String> future2 = CompletableFuture
+            .supplyAsync(() -> slowOperation())
+            .completeOnTimeout("default", 3, TimeUnit.SECONDS);
+    }
+
+    // ── 6. 实际场景：并行聚合多个服务调用 ──────────────────────────
+    public UserProfile getUserProfile(String userId) {
+        // 三个独立服务并行调用，全部完成后聚合
+        CompletableFuture<UserInfo> userInfoFuture =
+            CompletableFuture.supplyAsync(() -> userService.getUser(userId), executor);
+        CompletableFuture<List<Order>> ordersFuture =
+            CompletableFuture.supplyAsync(() -> orderService.getOrders(userId), executor);
+        CompletableFuture<List<Review>> reviewsFuture =
+            CompletableFuture.supplyAsync(() -> reviewService.getReviews(userId), executor);
+
+        return CompletableFuture.allOf(userInfoFuture, ordersFuture, reviewsFuture)
+            .thenApply(v -> new UserProfile(
+                userInfoFuture.join(),   // join() 不抛 checked exception
+                ordersFuture.join(),
+                reviewsFuture.join()
+            ))
+            .orTimeout(5, TimeUnit.SECONDS)
+            .exceptionally(ex -> UserProfile.empty())
+            .join();
+    }
+
+    // 辅助方法（省略实现）
+    private String fetchFromDB() { return "db_result"; }
+    private String fetchUserId() { return "user_123"; }
+    private String fetchUser(String id) { return "User"; }
+    private String fetchUserDetails(String id) { return "Details"; }
+    private String fetchOrders(String id) { return "Orders"; }
+    private void sendMetrics() {}
+    private String slowOperation() { try { Thread.sleep(5000); } catch (InterruptedException e) {} return "slow"; }
+    private int fetchUser(Object o) { return 25; }
+}
+```
+
+## 13.3 thenApply vs thenCompose vs thenCombine 对比
+
+| 方法 | 输入 | 输出 | 类比 |
+|------|------|------|------|
+| `thenApply(f)` | `T` → `U`（同步函数） | `CompletableFuture<U>` | `Stream.map` |
+| `thenCompose(f)` | `T` → `CompletableFuture<U>` | `CompletableFuture<U>`（扁平化） | `Stream.flatMap` |
+| `thenCombine(other, f)` | 两个 Future 的结果 | `CompletableFuture<V>` | zip 两个流 |
+| `thenAccept(f)` | `T`（消费，无返回值） | `CompletableFuture<Void>` | `Stream.forEach` |
+
+---
+
+# 14. 面试高频对比总结
+
+## synchronized vs ReentrantLock
+
+> 🔗 详细实现见 [javaSynchronized.md § Synchronized vs Lock](javaSynchronized.md) 和 [JavaLock.md](JavaLock.md)
+
+| 特性 | `synchronized` | `ReentrantLock` |
+|------|---------------|-----------------|
+| **使用方式** | 关键字，自动加锁/解锁 | 显式 `lock()` / `unlock()` |
+| **可中断等待** | ❌ | ✅ `lockInterruptibly()` |
+| **超时尝试** | ❌ | ✅ `tryLock(timeout)` |
+| **公平性** | ❌ 非公平 | ✅ 可选公平锁 |
+| **多条件变量** | 一个（wait/notify） | ✅ 多个 `Condition` |
+| **锁状态查询** | ❌ | ✅ `isLocked()`, `getQueueLength()` |
+| **性能（高竞争）** | JDK6+ 差距不大 | 稍好 |
+| **推荐场景** | 简单互斥 | 需要高级功能时 |
+
+## CountDownLatch vs CyclicBarrier vs Semaphore
+
+| | CountDownLatch | CyclicBarrier | Semaphore |
+|--|----------------|---------------|-----------|
+| **可重用** | ❌ | ✅ | ✅ |
+| **等待语义** | 主线程等子线程 | 线程互相等待 | 限制并发数 |
+| **计数归零动作** | 释放所有 await | 执行 barrierAction | 不适用 |
+| **典型用途** | 服务初始化、测试 | 多阶段计算 | 限流、连接池 |
+
+## Future vs CompletableFuture
+
+| | `Future` | `CompletableFuture` |
+|--|----------|---------------------|
+| **获取结果** | `get()`（阻塞） | `thenApply` 等（非阻塞回调） |
+| **链式组合** | ❌ | ✅ |
+| **异常处理** | try-catch `get()` | `exceptionally` / `handle` |
+| **多个组合** | 非常繁琐 | `allOf` / `anyOf` |
+| **手动完成** | ❌ | ✅ `complete()` |
+| **超时控制** | `get(timeout)` 阻塞 | `orTimeout`（Java 9，非阻塞）|
+

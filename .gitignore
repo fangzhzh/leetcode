@@ -2,3 +2,7 @@ typing/*
 *.swp
 *.class
 .vscode
+.tmp.drive*
+*.class
+temp/*
+csFAQ/temp/

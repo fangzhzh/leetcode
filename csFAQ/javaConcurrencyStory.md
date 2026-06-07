@@ -1,6 +1,8 @@
 # Story
 [Google note book Java Thread Pools and Concurrency Guide](https://notebooklm.google.com/notebook/448c2ea8-ad9d-4c2a-a9d0-2aa5b12ec5bf?_gl=1*7g0aos*_ga*MTM4MjA2OTQ3Ny4xNzQwMDI4NTQx*_ga_W0LDH41ZCB*MTc0MDk5MzczNi40LjEuMTc0MDk5Mzc0MC41Ni4wLjA.)
+
 ## Covered Conecpts:
+
 JMM |  Thread | memory visibliity | volatile | synchronized | Lock | thread pool | blocking queue | executor framework | lock coarsening | lock elimination | memory barriers | happens-before | CAS | AtomicStampedReference
 ## Story
 Imagine a bustling coffee shop where multiple baristas (threads) are preparing orders (tasks).

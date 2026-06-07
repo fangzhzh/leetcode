@@ -170,5 +170,17 @@ class Solution {
     
 }
 // @lc code=end
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        return reverseList(head, null);
+    }
 
+    ListNode reverseList(ListNode cur, ListNode prev) {
+        if(cur == null) return prev;
+        ListNode next = cur.next;
+        cur.next = prev;
+        return reverseList(next, cur);
+    }
+
+}
 
