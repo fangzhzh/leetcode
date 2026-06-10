@@ -76,3 +76,28 @@ class Solution {
 }
 
 
+class Solution {
+    public int numDecodings(String s) {
+        int n = s.length();
+        // init
+        // at ith digit, how many ways to decode it, 前i个字符的解码方案总数
+        int[] dp = new int[n+1];
+        dp[0] = 1;
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;
+        // process
+        for(int i = 2; i <= n; i++) {
+            int oneD = s.charAt(i-1) - '0';
+            if(oneD >= 1 && oneD <= 9) {
+                dp[i] += dp[i-1];
+            }
+
+            int twoD = (s.charAt(i-2)-'0') * 10 +  oneD;
+            if(twoD >= 10 && twoD <= 26) {
+                dp[i] += dp[i-2];
+            }
+        }
+         
+         return dp[n];
+    }
+}
+

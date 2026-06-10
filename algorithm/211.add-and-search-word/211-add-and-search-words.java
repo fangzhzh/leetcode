@@ -71,3 +71,55 @@ class WordDictionary {
  * obj.addWord(word);
  * boolean param_2 = obj.search(word);
  */
+
+
+class WordDictionary {
+    WordDictionary[] children = new WordDictionary[26];
+    boolean isWord = false;
+    public WordDictionary() {
+        
+    }
+    
+    public void addWord(String word) {
+    	WordDictionary cur = this;
+		for(int i = 0; i < word.length(); i++) {
+			if(cur.children[word.charAt(i)-'a'] == null) {
+				cur.children[word.charAt(i)-'a'] = new WordDictionary();
+			}
+			cur = cur.children[word.charAt(i)-'a'];
+		}
+        cur.isWord = true;
+    }
+    
+    public boolean search(String word) {
+    	if(word.length() == 0) {
+    		return isWord;
+    	}
+    	WordDictionary cur = this;
+        char c = word.charAt(0);
+        if(c == '.') {
+            for(WordDictionary child : cur.children) {
+                if(child != null && child.search(word.substring(1))) {
+                    return true;
+                }
+            }
+        } else {
+            if(cur.children[c-'a'] == null) {
+                return false;
+            } else {
+                if(cur.children[c-'a'].search(word.substring(1))) {
+                    return true;
+                }
+            }
+            
+        }
+		return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
