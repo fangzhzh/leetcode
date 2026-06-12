@@ -131,6 +131,11 @@ class Solution {
  * 
  * Your runtime beats 54.74 % of java submissions
  */
+
+// 重新定义递归函数返回值语义:
+// 状态 1（完整解决）：如果子树同时包含 $p$ 和 $q$，返回他们的 LCA。
+// 状态 2（部分解决）：如果子树只包含 $p$ 或 $q$ 中的一个，返回 找到的那个目标节点（$p$ 或 $q$）。
+// 状态 3（未解决）：如果子树既不包含 $p$ 也不包含 $q$，返回 null。
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root == null)  return null;
