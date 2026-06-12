@@ -451,3 +451,105 @@ List<String> list = new ArrayList(set);
 - The general contract of `int nextInt(int n)` is that one int value in the specified range is pseudorandomly generated and returned.
 	* The method call returns the next integer number from the sequence
 - The `Math.random()` method returns a double value with a positive sign, greater than or equal to 0.0 and less than 1.0.
+
+---
+
+## Doubly Linked List (DLL) & LRU Cache
+
+### Doubly Linked List (DLL)
+- **Unique Power**: $O(1)$ removal of a node when you already have the pointer (because it has `prev`).
+- **Standard Template**: Always use **Sentinel Nodes** (Dummy Head and Dummy Tail) to eliminate null pointer checks and simplify logic.
+
+```java
+class Node {
+    int key, value;
+    Node prev, next;
+    Node(int k, int v) { this.key = k; this.value = v; }
+}
+// Initialization: 
+// head = new Node(0, 0); tail = new Node(0, 0);
+// head.next = tail; tail.prev = head;
+```
+
+### LRU Cache (LeetCode 146)
+- **Concept**: HashMap + Doubly Linked List.
+- **HashMap**: Stores `key -> Node` for $O(1)$ lookup.
+- **DLL**: Maintains usage order for $O(1)$ move/delete.
+
+#### 1. Manual Implementation (Highly recommended for Interviews)
+```java
+class LRUCache {
+    class Node {
+        int key, value;
+        Node prev, next;
+        Node(int k, int v) { this.key = k; this.value = v; }
+    }
+
+    private Map<Integer, Node> map = new HashMap<>();
+    private Node head, tail; // Sentinels
+    private int capacity;
+
+    public LRUCache(int cap) {
+        this.capacity = cap;
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+        head.next = tail; tail.prev = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        Node node = map.get(key);
+        remove(node);      // 1. Detach from current position
+        addToHead(node);   // 2. Move to most recently used (head)
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            remove(map.get(key));
+        }
+        Node node = new Node(key, value);
+        map.put(key, node);
+        addToHead(node);
+        
+        if (map.size() > capacity) {
+            Node last = tail.prev; // The real LRU node
+            remove(last);
+            map.remove(last.key);
+        }
+    }
+
+    // --- Helper Methods: The O(1) Muscle Memory ---
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void addToHead(Node node) {
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+}
+```
+
+#### 2. LinkedHashMap Implementation (The "Shortcut")
+```java
+import java.util.LinkedHashMap;
+
+class LRUCache extends LinkedHashMap<Integer, Integer> {
+    private int capacity;
+    public LRUCache(int capacity) {
+        // true means access-order, false means insertion-order
+        super(capacity, 0.75f, true); 
+        this.capacity = capacity;
+    }
+    
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
+        return size() > capacity;
+    }
+}
+```
+

@@ -6,3 +6,4 @@ typing/*
 *.class
 temp/*
 csFAQ/temp/
+csFAQ/concurrency_game/
