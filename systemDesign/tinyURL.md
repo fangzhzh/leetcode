@@ -27,8 +27,8 @@
 
 ![500M新链接估算过成](./graphs/500MTinyURLEstimate.drawio.svg)
 
-## Databae
-Read only, so no sql is better
+## Database
+Read only, so no SQL is better
 
 ## Basic design and Algorithm
 
@@ -65,14 +65,14 @@ String ---Hash---> 128 bit hash bytes value --base64 encode----> 21+ characters 
 
 * base64
 
-    each bas64 character encodes 6 bits
+    each base64 character encodes 6 bits
 
 We got 21 characters. We chose the first 6-8 letters for keys.
 
 
-### Generationg keys offline
+### Generating keys offline
 
-A standalone Key Generation Service(KGS) generates random 6-8 letters before hand and store them in a database.
+A standalone Key Generation Service (KGS) generates random 6-8 letters beforehand and stores them in a database.
 
 ![KGS](./graphs/KGS.drawio.svg)
 
@@ -89,11 +89,11 @@ A standalone Key Generation Service(KGS) generates random 6-8 letters before han
 (Hash,key) in memory or MemCached
 
 * How much cache we hold
-20% daily traiffice
+20% daily traffic
 
 LRU
 
-~[shortUrl cache](./graphs/shortenUrlCaches.drawio.svg)
+![shortUrl cache](./graphs/shortenUrlCaches.drawio.svg)
 
 
 ## Purging or DB cleanup
