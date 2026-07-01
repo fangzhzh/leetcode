@@ -143,3 +143,31 @@ class Solution2:
             union(x, y)
         return isConnected(source, destination)
 
+
+# BFS Solution (Python)
+class Solution3:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if source == destination:
+            return True
+
+        # 建图：邻接表
+        graph = [[] for _ in range(n)]
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        # BFS
+        queue = deque([source])
+        visited = [False] * n
+        visited[source] = True
+
+        while queue:
+            cur = queue.popleft()
+            for neighbor in graph[cur]:
+                if neighbor == destination:
+                    return True
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    queue.append(neighbor)
+
+        return False
